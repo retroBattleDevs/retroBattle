@@ -1,0 +1,4 @@
+# Here should be entered file or folders
+# that we don't won to upload on the Github repository
+.vs/
+out/
