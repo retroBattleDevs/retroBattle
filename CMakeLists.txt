@@ -12,12 +12,13 @@ endif()
 project ("retroBattle")
 
 # Fügen Sie der ausführbaren Datei dieses Projekts eine Quelle hinzu.
-add_executable (retroBattle "retroBattle.cpp" "retroBattle.h")
+add_executable (retroBattle "retroBattle.cpp" "retroBattle.h"  "headers/metrics.h" "source/metrics.cpp")
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET retroBattle PROPERTY CXX_STANDARD 20)
 endif()
 
+target_include_directories(retroBattle PUBLIC "${PROJECT_SOURCE_DIR}/")
 target_include_directories(retroBattle PUBLIC "${PROJECT_SOURCE_DIR}/external_libraries/PDCurses")
 target_link_libraries(retroBattle PRIVATE "${PROJECT_SOURCE_DIR}/external_libraries/PDCurses/wincon/pdcurses.lib")
 

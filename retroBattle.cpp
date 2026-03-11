@@ -1,8 +1,4 @@
-﻿#include <iostream>
-#include <Windows.h>
-#include "external_libraries/PDCurses/curses.h"
-#include <time.h>
-#include <cstdint>
+﻿#include "retroBattle.h"
 
 void drawBox(int &y, int &x) {
 	attron(COLOR_PAIR(1));
@@ -14,7 +10,7 @@ void drawBox(int &y, int &x) {
 	attroff(COLOR_PAIR(1));
 	mvprintw(y, x, "#");
 }
-void keyDispatcher(const char c, int &y, int &x) {
+void keyDispatcher(metrics &mtr, const char c, int &y, int &x) {
 	switch (c) {
 		case 'a':
 			x--;
@@ -28,6 +24,14 @@ void keyDispatcher(const char c, int &y, int &x) {
 		case 's':
 			y++;
 			break;
+		case 'm':
+			if (!mtr.displayWindow) {
+				mtr.displayWindow = 1;
+			} else {
+				mtr.displayWindow = 0;
+				delwin(mtr.win);
+				mtr.win = nullptr;
+			}
 	}
 }
 void initWindowsAPI(void) {
@@ -52,28 +56,42 @@ int main() {
 
 	initPDCurses();
 
+	metrics mtr = { 0 };
+	initTimeCounter(mtr);
+
 	int _rows = 0,
 		_cols = 0;
 	getmaxyx(stdscr, _rows, _cols);
-	int centerY = _rows / 2,
-		centerX = _cols / 2;
+
 
 	init_pair(1, COLOR_GREEN, COLOR_BLACK);
 
 	int x = 10, y = 10;
 
+	float time_diff = 0;
 	while (1) {
+
+		updateTimeCounter(mtr);
+		calculateFPS(mtr);
 
 		// Drawing of the Entities goes here.
 		drawBox(y, x);
 		mvprintw(0, 0, "y: %d    x: %d", y, x);
 
+		displayMetrics(mtr);
+
 		int c = getch(stdin);
-		keyDispatcher(c, y, x);
+		keyDispatcher(mtr, c, y, x);
 
 		// Collision detection and response goes here.
 
 		// Update Entities with new positions and update animations to be drawn at the next iteration goes here.
+
+		/* Sleep so much as we need to keep us at 60 fps. */
+		time_diff = mtr.deltaTime > 0.016666 ? 0 : (0.016666 - mtr.deltaTime) * 100000;
+		usleep(time_diff);
+
+		// clear screen
 		wclear(stdscr);
 	}
 
