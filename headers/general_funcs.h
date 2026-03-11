@@ -1,0 +1,4 @@
+#ifndef GENERAL_FUNCS
+#define GENERAL_FUNCS
+
+#endif // !GENERAL_FUNCS
