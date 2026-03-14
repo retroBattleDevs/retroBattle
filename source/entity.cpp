@@ -1,4 +1,4 @@
-#include "Entity.h"
+#include "entity.h"
 #include <iostream>
 
 Entity::Entity() {
@@ -42,5 +42,5 @@ Entity& Entity::operator=(Entity&& other) noexcept {
 }
 
 void Entity::drawSelf() const {
-	std::cout << "Drawing something" << std::endl;
+	std::cout << "Drawing Entity by ID" << id << std::endl;
 }
