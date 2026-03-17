@@ -1,5 +1,5 @@
 #include <iostream>
-#include "../headers/vektor2D.h"
+#include "headers/Vec2D.h"
 
 using namespace std;
 
