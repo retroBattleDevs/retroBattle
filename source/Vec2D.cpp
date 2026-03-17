@@ -1,4 +1,4 @@
-#include "../headers/vektor2D.h" 
+#include "headers/Vec2D.h" 
 #include <iostream>
 // Erzeugt einen Vec2d-Punkt und initialisiert die Koordinaten
 Vec2d::Vec2d(float xValue, float yValue) : x(xValue), y(yValue) {} //Member Initializer List

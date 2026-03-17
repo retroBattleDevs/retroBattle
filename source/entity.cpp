@@ -1,10 +1,10 @@
-#include "entity.h"
+#include "headers/Entity.h"
 #include <iostream>
 
 Entity::Entity() {
-	position = { 0,0 };
-	min = { 0,0 };
-	max = { 0,0 };
+	position = Vec2d(0, 0);
+	min = Vec2d(0, 0);
+	max = Vec2d(0, 0);
 	id = 0;
 }
 Entity::~Entity(){

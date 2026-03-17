@@ -12,7 +12,7 @@ endif()
 project ("retroBattle")
 
 # Fügen Sie der ausführbaren Datei dieses Projekts eine Quelle hinzu.
-add_executable (retroBattle "retroBattle.cpp" "retroBattle.h"  "headers/metrics.h" "source/metrics.cpp" "headers/entity.h" "source/entity.cpp" "source/vector2D.cpp" "vektor2D_test.cpp")
+add_executable (retroBattle "retroBattle.cpp" "source/metrics.cpp" "source/Entity.cpp" "source/vec2D.cpp" "vec2D_test.cpp")
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET retroBattle PROPERTY CXX_STANDARD 20)
