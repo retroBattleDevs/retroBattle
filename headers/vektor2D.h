@@ -1,0 +1,27 @@
+#pragma once
+#ifndef  VEC2D_H
+#define  VEC2D_H
+
+class Vec2d {
+
+public:
+
+	float x;
+	float y;
+
+	explicit Vec2d(float xValue = 0.0f, float yValue = 0.0f); //constructor
+
+	~Vec2d(); //destructor
+
+	Vec2d(const Vec2d& other); //Kopierkonstruktor
+
+	Vec2d& operator=(const Vec2d& other);//Kopierzuweisungsoperator
+
+	Vec2d operator+(const Vec2d& other) const; //v1+v2
+	Vec2d operator-(const Vec2d& other) const; //v1-v2
+	Vec2d operator*(float scalar) const; //v1*scalar
+
+	/*Vec2d(Vec2d&& other) noexcept; //Move konstruktor, nicht nötig
+	Vec2d& operator=(Vec2d&& other) noexcept;//Move Zuweisungsoperator*/
+};
+#endif
