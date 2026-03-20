@@ -40,9 +40,11 @@ Vec2d Vec2d::operator*(float scalar) const
     return Vec2d(x * scalar, y * scalar);
 }
 
-/*Move constructor, nicht nötig
+//Move constructor
 Vec2d::Vec2d(Vec2d&& other) noexcept // noexcept garantiert eine sichere Verschiebung ohne Risiko von Datenverlust.
     : x(other.x), y(other.y) {
+    other.x = 0.0f; 
+    other.y = 0.0f;
 }
 
 // Move assignment operator
@@ -52,6 +54,16 @@ Vec2d& Vec2d::operator=(Vec2d&& other) noexcept
     {
         x = other.x;
         y = other.y;
+        other.x = 0.0f;
+        other.y = 0.0f;
     }
     return *this;
-}*/
+}
+
+//Skalarprodukts 
+float Vec2d::dot(const Vec2d& other) const {
+    return (x * other.x) + (y * other.y);
+    // Ergebnis > 0: Winkel < 90° (Gleiche Richtung)
+    // Ergebnis = 0: Winkel = 90° (Orthogonal / Senkrecht)
+    // Ergebnis < 0: Winkel > 90° (Entgegengesetzte Richtung)
+}

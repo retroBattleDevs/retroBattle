@@ -21,7 +21,10 @@ public:
 	Vec2d operator-(const Vec2d& other) const; //v1-v2
 	Vec2d operator*(float scalar) const; //v1*scalar
 
-	/*Vec2d(Vec2d&& other) noexcept; //Move konstruktor, nicht nötig
-	Vec2d& operator=(Vec2d&& other) noexcept;//Move Zuweisungsoperator*/
+	Vec2d(Vec2d&& other) noexcept; //Move konstruktor
+	Vec2d& operator=(Vec2d&& other) noexcept;//Move Zuweisungsoperator
+
+	float dot(const Vec2d& other) const; // dot prudukt
+
 };
 #endif
