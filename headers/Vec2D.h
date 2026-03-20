@@ -24,7 +24,7 @@ public:
 	Vec2d(Vec2d&& other) noexcept; //Move konstruktor
 	Vec2d& operator=(Vec2d&& other) noexcept;//Move Zuweisungsoperator
 
-	float dot(const Vec2d& other) const; // dot prudukt
+	float dot(const Vec2d& other) const; // Skalarprudukt
 
 };
 #endif

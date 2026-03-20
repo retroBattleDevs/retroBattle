@@ -34,12 +34,24 @@ int mainVector() {
     Vec2d v6 = v1 * 2.0f;
     std::cout << "v1 * 2 = v6: (" << v6.x << ", " << v6.y << ")" << std::endl;
 
-    /*6. Move Constructor Test, nicht nötig
+    // 6. Move Constructor Test
     Vec2d v_temp(10.0f, 20.0f);
     Vec2d v7(std::move(v_temp)); // v_temp -> v7
-    std::cout << "v7 (new): (" << v7.x << ", " << v7.y << ")" << std::endl;*/
+    std::cout << "v7 (new): (" << v7.x << ", " << v7.y << ")" << std::endl;
 
     std::cout << "Test completed" << std::endl;
+
+    // 7. Skalarprodukt (Dot Product) Test
+    Vec2d v_dot1(1.0f, 0.0f); // Zeigt nach rechts
+    Vec2d v_dot2(0.0f, 1.0f); // Zeigt nach oben (Orthogonal/Senkrecht)
+    Vec2d v_dot3(2.0f, 0.0f); // Zeigt ebenfalls nach rechts (Gleiche Richtung)
+
+    float result1 = v_dot1.dot(v_dot2); // Erwartet: 0 (Da die Vektoren senkrecht zueinander stehen)
+    float result2 = v_dot1.dot(v_dot3); // Erwartet: 2 (Berechnung: 1*2 + 0*0)
+
+    std::cout << "--- Test neuer Funktionen ---" << std::endl;
+    std::cout << "Skalarprodukt (orthogonal): " << result1 << " (Erwartet: 0)" << std::endl;
+    std::cout << "Skalarprodukt (gleiche Richtung): " << result2 << " (Erwartet: 2)" << std::endl;
 
     return 0;
 }
