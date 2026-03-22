@@ -71,6 +71,8 @@ int main() {
 	float time_diff = 0;
 	while (1) {
 
+		
+
 		updateTimeCounter(mtr);
 		calculateFPS(mtr);
 
@@ -84,6 +86,14 @@ int main() {
 		keyDispatcher(mtr, c, y, x);
 
 		// Collision detection and response goes here.
+
+		/* battle class test using temp entity child class
+		BattleManager test;
+		Entity* hero = new TestEntity(100,100,20,10);
+		Entity* enemy = new TestEntity(10, 10, 20, 5);
+		test.startBattle(hero,enemy,2);
+		*/
+		
 
 		// Update Entities with new positions and update animations to be drawn at the next iteration goes here.
 

@@ -13,3 +13,5 @@
 
 // TODO: Verweisen Sie hier auf zusätzliche Header, die Ihr Programm erfordert.
 #include "headers/entity.h"
+#include "headers/BattleManager.h"
+#include "headers/TestEntity.h" //temp entity type class for battle manager testing
