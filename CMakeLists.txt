@@ -12,7 +12,9 @@ endif()
 project ("retroBattle")
 
 # Fügen Sie der ausführbaren Datei dieses Projekts eine Quelle hinzu.
+
 add_executable (retroBattle "retroBattle.cpp" "source/metrics.cpp" "source/Entity.cpp" "source/vec2D.cpp" "vec2D_test.cpp")
+
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET retroBattle PROPERTY CXX_STANDARD 20)
@@ -22,4 +24,4 @@ target_include_directories(retroBattle PUBLIC "${PROJECT_SOURCE_DIR}/")
 target_include_directories(retroBattle PUBLIC "${PROJECT_SOURCE_DIR}/external_libraries/PDCurses")
 target_link_libraries(retroBattle PRIVATE "${PROJECT_SOURCE_DIR}/external_libraries/PDCurses/wincon/pdcurses.lib")
 
-# TODO: Fügen Sie bei Bedarf Tests hinzu, und installieren Sie Ziele.
+# TODO: Fügen Sie bei Bedarf Tests hinzu, und installieren Sie Ziele. 

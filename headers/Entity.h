@@ -1,13 +1,19 @@
 #pragma once
-#include "Vec2d.h"
+#include "headers/Vec2D.h"
 
 class Entity {
 
-private:
+protected:
 	Vec2d position;
 	Vec2d min;
 	Vec2d max;
 	int id;
+
+
+	int health;
+	int	hitPoints;
+	int	attack;
+	int defence;
 
 public:
 	Entity();
@@ -26,12 +32,12 @@ public:
 
 
 	//Rule of Five
-	~Entity();
+	virtual ~Entity();
 	Entity(const Entity& other);
 	Entity& operator=(const Entity& other);
 	Entity(Entity&& other) noexcept;
 	Entity& operator=(Entity&& other) noexcept;
 
-	virtual void drawSelf() const;
+	virtual void drawSelf() const = 0;
 
 };
