@@ -39,6 +39,7 @@ private:
 	void performMove(int selectedMove,int selectedTarget);
 	void nextTurn();
 	int checkWinner();
+	void cleanMem();
 
 public:
 	BattleManager();
