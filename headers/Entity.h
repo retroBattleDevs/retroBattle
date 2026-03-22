@@ -19,7 +19,7 @@ public:
 	Entity();
 	// Testing Julian
 	Entity(int id, Vec2d min, Vec2d max, Vec2d position);
-	void drawTesting() const;
+
 	Vec2d getPosition() const;
 	Vec2d getMin() const;
 	Vec2d getMax() const;
@@ -38,5 +38,6 @@ public:
 	Entity(Entity&& other) noexcept;
 	Entity& operator=(Entity&& other) noexcept;
 
-	void drawSelf() const;
+	virtual void drawSelf() const;
+	void drawTesting() const;
 };

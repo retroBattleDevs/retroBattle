@@ -1,66 +1,31 @@
 ﻿#include "retroBattle.h"
 
-void drawBox(int &y, int &x) {
-	attron(COLOR_PAIR(1));
-	mvprintw(y - 2, x - 2, "#####");
-	mvprintw(y - 1, x - 2, "#   #");
-	mvprintw(y, x - 2, "#   #");
-	mvprintw(y + 1, x - 2, "#   #");
-	mvprintw(y + 2, x - 2, "#####");
-	attroff(COLOR_PAIR(1));
-	mvprintw(y, x, "#");
-}
-
-void keyDispatcher(metrics &mtr, const char c, int &y, int &x) {
+void keyDispatcher(metrics& mtr, const char c, Entity *player) {
+	Vec2d position = player->getPosition();
 	switch (c) {
 		case 'a':
-			x--;
+			position.x--;
 			break;
 		case 'd':
-			x++;
+			position.x++;
 			break;
 		case 'w':
-			y--;
+			position.y--;
 			break;
 		case 's':
-			y++;
+			position.y++;
 			break;
 		case 'm':
 			if (!mtr.displayWindow) {
 				mtr.displayWindow = 1;
-			} else {
+			}
+			else {
 				mtr.displayWindow = 0;
 				delwin(mtr.win);
 				mtr.win = nullptr;
 			}
-	}
-}
-
-Vec2d keyDispatcherEntity(metrics& mtr, const char c, Vec2d& position) {
-	switch (c) {
-	case 'a':
-		position.x--;
-		return position;
-	case 'd':
-		position.x++;
-		return position;
-	case 'w':
-		position.y--;
-		return position;
-	case 's':
-		position.y++;
-		return position;
-	case 'm':
-		if (!mtr.displayWindow) {
-			mtr.displayWindow = 1;
-		}
-		else {
-			mtr.displayWindow = 0;
-			delwin(mtr.win);
-			mtr.win = nullptr;
-		}
-		return position;
-	}
+    }
+	player->setPosition(position);
 }
 
 void initWindowsAPI(void) {
@@ -119,34 +84,25 @@ int main() {
 		enemy3.drawTesting();
 		enemy4.drawTesting();
 
-		//drawBox(y, x);
-		//mvprintw(0, 0, "y: %d    x: %d", y, x);
-
 		displayMetrics(mtr);
 
-		int c = getch(stdin);
-		//keyDispatcher(mtr, c, y, x);
-
 		// Collision detection and response goes here.
-		bool collision = collisionDetectionBoundinBoxArray(player, enemies);
+		bool collision = collisionDetectionBoundinBoxArray(&player, enemies);
 		if (collision) {
 			mvprintw(0,40, "Collision!!");
-			refresh();
+			//refresh();
 		}
 
-		if (collisionDetectionCircles(player, enemy) == true) {
+		if (collisionDetectionCircles(&player, &enemy) == true) {
 			mvprintw(0, 40, "Circle Collision!!");
-			refresh();
+			//refresh();
 		}
 
 		// Update Entities with new positions and update animations to be drawn at the next iteration goes here.
-		Vec2d currPos = player.getPosition();
-
-		mvprintw(0, 0, "y: %f    x: %f", currPos.y, currPos.x);
+		mvprintw(0, 0, "y: %f    x: %f", player.getPosition().x, player.getPosition().y);
 		refresh();
-		keyDispatcherEntity(mtr, c, currPos);
-		player.setPosition(currPos);
-
+		int c = getch(stdin);
+		keyDispatcher(mtr, c, &player);
 
 		// Sleep so much as we need to keep us at 60 fps. 
 		time_diff = mtr.deltaTime > 0.016666 ? 0 : (0.016666 - mtr.deltaTime) * 100000;

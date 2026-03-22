@@ -12,15 +12,15 @@ float calculateAbsoluteDistance(float point1, float point2) {
 	return sqrtf(distance * distance);
 }
 
-bool collisionDetectionBoundinBox(Entity e1, Entity e2) {
-	Vec2d e1Min = e1.getMin();
-	Vec2d e1Max = e1.getMax();
-	Vec2d e1CurrPos = e1.getPosition();
+bool collisionDetectionBoundinBox(Entity *e1, Entity *e2) {
+	Vec2d e1Min = e1->getMin();
+	Vec2d e1Max = e1->getMax();
+	Vec2d e1CurrPos = e1->getPosition();
 
-	Vec2d e2Min = e2.getMin();
-	Vec2d e2Max = e2.getMax();
+	Vec2d e2Min = e2->getMin();
+	Vec2d e2Max = e2->getMax();
 
-	Vec2d e2CurrPos = e2.getPosition();
+	Vec2d e2CurrPos = e2->getPosition();
 
 	// calculate distance between centers
 	float distanceX = calculateAbsoluteDistance(e1CurrPos.x, e2CurrPos.x);
@@ -36,10 +36,10 @@ bool collisionDetectionBoundinBox(Entity e1, Entity e2) {
 	return false;
 }
 
-bool collisionDetectionBoundinBoxArray(Entity e1, Entity* e2) {
-	Vec2d e1Min = e1.getMin();
-	Vec2d e1Max = e1.getMax();
-	Vec2d e1CurrPos = e1.getPosition();
+bool collisionDetectionBoundinBoxArray(Entity *e1, Entity *e2) {
+	Vec2d e1Min = e1->getMin();
+	Vec2d e1Max = e1->getMax();
+	Vec2d e1CurrPos = e1->getPosition();
 
 	while (e2 != nullptr) { // laeuft weiter mit garbage pointer
 
@@ -70,19 +70,19 @@ bool collisionDetectionBoundinBoxArray(Entity e1, Entity* e2) {
 /*
  If the Absolute Distance is less than the combined radii -> Collision
 */
-float getRadius(Entity entity) {
-	Vec2d vec2dMin = entity.getMin();
-	Vec2d vec2dMax = entity.getMax();
+float getRadius(Entity *entity) {
+	Vec2d vec2dMin = entity->getMin();
+	Vec2d vec2dMax = entity->getMax();
 
 	return (calculateWidthHeight(vec2dMax.y, vec2dMin.y) / 2);
 }
 
-bool collisionDetectionCircles(Entity e1, Entity e2) {
+bool collisionDetectionCircles(Entity *e1, Entity *e2) {
 	float combinedRadii = getRadius(e1) + getRadius(e2);
 	
 	// Get current position and absolute distance between these points
-	Vec2d e1CurrentPos = e1.getPosition();
-	Vec2d e2CurrentPos = e2.getPosition();
+	Vec2d e1CurrentPos = e1->getPosition();
+	Vec2d e2CurrentPos = e2->getPosition();
 
 	float absoluteDistanceX = calculateAbsoluteDistance(e1CurrentPos.x, e2CurrentPos.x);
 	float absoluteDistanceY = calculateAbsoluteDistance(e1CurrentPos.y, e2CurrentPos.y);

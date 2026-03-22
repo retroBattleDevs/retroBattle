@@ -22,6 +22,11 @@ Entity::Entity(int id, Vec2d min, Vec2d max, Vec2d position) {
 	this->min = min;
 	this->max = max;
 	this->position = position;
+
+	health = 100;
+	hitPoints = 100;
+	attack = 10;
+	defence = 5;
 }
 
 Entity::~Entity() = default;
@@ -91,7 +96,6 @@ void Entity::drawTesting() const {
 	attroff(COLOR_PAIR(1));
 	mvprintw(position.y, position.x, "#");
 }
-
 Vec2d Entity::getPosition() const {
 	return position;
 }
