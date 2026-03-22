@@ -74,6 +74,8 @@ int main() {
 
 	while (1) {
 
+		
+
 		updateTimeCounter(mtr);
 		calculateFPS(mtr);
 
@@ -97,6 +99,14 @@ int main() {
 			mvprintw(0, 40, "Circle Collision!!");
 			//refresh();
 		}
+
+		/* battle class test using temp entity child class
+		BattleManager test;
+		Entity* hero = new TestEntity(100,100,20,10);
+		Entity* enemy = new TestEntity(10, 10, 20, 5);
+		test.startBattle(hero,enemy,2);
+		*/
+		
 
 		// Update Entities with new positions and update animations to be drawn at the next iteration goes here.
 		mvprintw(0, 0, "y: %f    x: %f", player.getPosition().x, player.getPosition().y);

@@ -82,6 +82,38 @@ Entity& Entity::operator=(Entity&& other) noexcept {
 	return *this;
 }
 
+int Entity::getHealth() {
+	return this->health;
+}
+
+int Entity::getHitPoints() {
+	return this->hitPoints;
+}
+
+int Entity::getAttack() {
+	return this->attack;
+}
+
+int Entity::getDefence() {
+	return this->defence;
+}
+
+void Entity::setHealth(int h) {
+	this->health = h;
+}
+
+void Entity::setHitPoints(int hp) {
+	this->hitPoints = hp;
+}
+
+void Entity::setAttack(int a) {
+	this->attack = a;
+}
+
+void Entity::setDefence(int d) {
+	this->defence = d;
+}
+
 void Entity::drawSelf() const {
 	std::cout << "Drawing Entity with ID" << id << std::endl;
 }

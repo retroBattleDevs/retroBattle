@@ -13,7 +13,7 @@ project ("retroBattle")
 
 # Fügen Sie der ausführbaren Datei dieses Projekts eine Quelle hinzu.
 
-add_executable (retroBattle "retroBattle.cpp" "source/metrics.cpp" "source/Entity.cpp" "source/vec2D.cpp" "vec2D_test.cpp")
+add_executable (retroBattle "retroBattle.cpp" "source/metrics.cpp" "source/Entity.cpp" "source/vec2D.cpp" "vec2D_test.cpp" "source/BattleManager.cpp" "headers/TestEntity.h" "source/TestEntity.cpp")
 
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)

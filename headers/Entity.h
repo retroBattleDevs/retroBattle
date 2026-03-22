@@ -38,6 +38,15 @@ public:
 	Entity(Entity&& other) noexcept;
 	Entity& operator=(Entity&& other) noexcept;
 
-	virtual void drawSelf() const;
+	int getHealth();
+	int	getHitPoints();
+	int	getAttack();
+	int getDefence();
+	void setHealth(int h);
+	void setHitPoints(int hp);
+	void setAttack(int a);
+	void setDefence(int d);
+
+	virtual void drawSelf() const = 0;
 	void drawTesting() const;
 };
