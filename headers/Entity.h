@@ -38,6 +38,5 @@ public:
 	Entity(Entity&& other) noexcept;
 	Entity& operator=(Entity&& other) noexcept;
 
-	virtual void drawSelf() const = 0;
-
+	void drawSelf() const;
 };
