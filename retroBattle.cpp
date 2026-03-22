@@ -1,39 +1,33 @@
 ﻿#include "retroBattle.h"
 
-void drawBox(int &y, int &x) {
-	attron(COLOR_PAIR(1));
-	mvprintw(y - 2, x - 2, "#####");
-	mvprintw(y - 1, x - 2, "#   #");
-	mvprintw(y, x - 2, "#   #");
-	mvprintw(y + 1, x - 2, "#   #");
-	mvprintw(y + 2, x - 2, "#####");
-	attroff(COLOR_PAIR(1));
-	mvprintw(y, x, "#");
-}
-void keyDispatcher(metrics &mtr, const char c, int &y, int &x) {
+void keyDispatcher(metrics& mtr, const char c, Entity *player) {
+	Vec2d position = player->getPosition();
 	switch (c) {
 		case 'a':
-			x--;
+			position.x--;
 			break;
 		case 'd':
-			x++;
+			position.x++;
 			break;
 		case 'w':
-			y--;
+			position.y--;
 			break;
 		case 's':
-			y++;
+			position.y++;
 			break;
 		case 'm':
 			if (!mtr.displayWindow) {
 				mtr.displayWindow = 1;
-			} else {
+			}
+			else {
 				mtr.displayWindow = 0;
 				delwin(mtr.win);
 				mtr.win = nullptr;
 			}
-	}
+    }
+	player->setPosition(position);
 }
+
 void initWindowsAPI(void) {
 	HWND hwnd = GetConsoleWindow();
 	HWND owner = GetWindow(hwnd, GW_OWNER);
@@ -51,7 +45,7 @@ void initPDCurses(void) {
 }
 int main() {
 	using namespace std;
-
+	
 	initWindowsAPI();
 
 	initPDCurses();
@@ -69,6 +63,15 @@ int main() {
 	int x = 10, y = 10;
 
 	float time_diff = 0;
+	// Entity
+	Entity player(1, Vec2d(3.0, 3.0), Vec2d(5.0, 5.0), Vec2d(30.0, 30.0));
+	
+	Entity enemy(2, Vec2d(10.0, 10.0), Vec2d(20.0, 20.0), Vec2d(20.0, 20.0));
+	Entity enemy2(3, Vec2d(10.0, 10.0), Vec2d(20.0, 20.0), Vec2d(20.0, 30.0));
+	Entity enemy3(4, Vec2d(10.0, 10.0), Vec2d(20.0, 20.0), Vec2d(45.0, 15.0));
+	Entity enemy4(5, Vec2d(10.0, 10.0), Vec2d(20.0, 20.0), Vec2d(50.0, 20.0));
+	Entity enemies[4] = { enemy, enemy2, enemy3, enemy4 };
+
 	while (1) {
 
 		
@@ -77,15 +80,25 @@ int main() {
 		calculateFPS(mtr);
 
 		// Drawing of the Entities goes here.
-		drawBox(y, x);
-		mvprintw(0, 0, "y: %d    x: %d", y, x);
+		player.drawTesting();
+		enemy.drawTesting();
+		enemy2.drawTesting();
+		enemy3.drawTesting();
+		enemy4.drawTesting();
 
 		displayMetrics(mtr);
 
-		int c = getch(stdin);
-		keyDispatcher(mtr, c, y, x);
-
 		// Collision detection and response goes here.
+		bool collision = collisionDetectionBoundinBoxArray(&player, enemies);
+		if (collision) {
+			mvprintw(0,40, "Collision!!");
+			//refresh();
+		}
+
+		if (collisionDetectionCircles(&player, &enemy) == true) {
+			mvprintw(0, 40, "Circle Collision!!");
+			//refresh();
+		}
 
 		/* battle class test using temp entity child class
 		BattleManager test;
@@ -96,8 +109,12 @@ int main() {
 		
 
 		// Update Entities with new positions and update animations to be drawn at the next iteration goes here.
+		mvprintw(0, 0, "y: %f    x: %f", player.getPosition().x, player.getPosition().y);
+		refresh();
+		int c = getch(stdin);
+		keyDispatcher(mtr, c, &player);
 
-		/* Sleep so much as we need to keep us at 60 fps. */
+		// Sleep so much as we need to keep us at 60 fps. 
 		time_diff = mtr.deltaTime > 0.016666 ? 0 : (0.016666 - mtr.deltaTime) * 100000;
 		usleep(time_diff);
 
@@ -106,6 +123,6 @@ int main() {
 	}
 
 	endwin();
-
+	
 	return 0;
 }
