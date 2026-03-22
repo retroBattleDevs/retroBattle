@@ -17,6 +17,20 @@ protected:
 
 public:
 	Entity();
+	// Testing Julian
+	Entity(int id, Vec2d min, Vec2d max, Vec2d position);
+	void drawTesting() const;
+	Vec2d getPosition() const;
+	Vec2d getMin() const;
+	Vec2d getMax() const;
+	int getId() const;
+
+	void setPosition(Vec2d newPosition);
+	void setMin(Vec2d newMin);
+	void setMax(Vec2d newMax);
+	void setId(int newId); // fraglich ob das nötig ist
+
+
 	//Rule of Five
 	virtual ~Entity();
 	Entity(const Entity& other);
