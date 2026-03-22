@@ -3,7 +3,6 @@
 #define BATTLEMANAGER_H
 
 #include "headers/Entity.h"
-#include "TestEntity.h"
 #include <vector>
 #include <iostream>
 #include <curses.h>

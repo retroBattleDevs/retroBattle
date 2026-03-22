@@ -47,6 +47,6 @@ public:
 	void setAttack(int a);
 	void setDefence(int d);
 
-	virtual void drawSelf() const = 0;
+	void drawSelf() const;
 	void drawTesting() const;
 };
