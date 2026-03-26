@@ -74,8 +74,6 @@ int main() {
 
 	while (1) {
 
-		
-
 		updateTimeCounter(mtr);
 		calculateFPS(mtr);
 
@@ -91,13 +89,11 @@ int main() {
 		// Collision detection and response goes here.
 		bool collision = collisionDetectionBoundinBoxArray(&player, enemies);
 		if (collision) {
-			mvprintw(0,40, "Collision!!");
-			//refresh();
+			mvprintw(0, 40, "Collision!!");
 		}
 
 		if (collisionDetectionCircles(&player, &enemy) == true) {
 			mvprintw(0, 40, "Circle Collision!!");
-			//refresh();
 		}
 
 		// battle class test using temp entity child class
