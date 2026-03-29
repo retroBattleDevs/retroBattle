@@ -1,10 +1,8 @@
 #include <iostream>
 #include "headers/Vec2D.h"
 
+void runVectorTests() {
 
-using namespace std;
-
-int mainVector() {
     std::cout << "--- Vec2d Class Test ---" << std::endl;
 
     // 1. Constructor Test
@@ -53,5 +51,4 @@ int mainVector() {
     std::cout << "Skalarprodukt (orthogonal): " << result1 << " (Erwartet: 0)" << std::endl;
     std::cout << "Skalarprodukt (gleiche Richtung): " << result2 << " (Erwartet: 2)" << std::endl;
 
-    return 0;
-}
+} 

@@ -54,6 +54,7 @@ int main() {
 
 	initWindowsAPI();
 
+
 	initPDCurses();
 
 	metrics mtr = { 0 };
