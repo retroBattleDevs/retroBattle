@@ -9,7 +9,7 @@
 #include "headers/metrics.h"
 #include "headers/general_funcs.h"
 
-
-
 // TODO: Verweisen Sie hier auf zusätzliche Header, die Ihr Programm erfordert.
 #include "headers/entity.h"
+#include "headers/BattleManager.h"
+#include "headers/Vec2D.h"
