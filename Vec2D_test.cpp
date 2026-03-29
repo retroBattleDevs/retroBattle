@@ -51,4 +51,15 @@ void runVectorTests() {
     std::cout << "Skalarprodukt (orthogonal): " << result1 << " (Erwartet: 0)" << std::endl;
     std::cout << "Skalarprodukt (gleiche Richtung): " << result2 << " (Erwartet: 2)" << std::endl;
 
+    //Zusammengesetzte Zuweisungsoperatoren Test
+    Vec2d v_comp(12.0f, 8.0f);
+    v_comp += Vec2d(2, 2);  // (14, 10)
+    v_comp -= Vec2d(4, 0);  // (10, 10)
+    v_comp *= 2.0f;         // (20, 20)
+    v_comp /= 4.0f;         // (5, 5)
+    std::cout << "v_comp final: (" << v_comp.x << ", " << v_comp.y << std::endl;
+    // Sicherheitscheck: Division durch Null
+    v_comp /= 0.0f;
+    std::cout << "Nach /= 0: (" << v_comp.x << ", " << v_comp.y << ") (No Crash)" << std::endl;
+
 } 

@@ -39,6 +39,13 @@ Vec2d Vec2d::operator*(float scalar) const
 {
     return Vec2d(x * scalar, y * scalar);
 }
+// Operator overloads
+Vec2d Vec2d::operator/(float scalar) const {
+    if (scalar != 0.0f) {
+        return Vec2d(x / scalar, y / scalar);
+    }
+    return Vec2d(0.0f, 0.0f); 
+}
 
 //Move constructor
 Vec2d::Vec2d(Vec2d&& other) noexcept // noexcept garantiert eine sichere Verschiebung ohne Risiko von Datenverlust.
@@ -66,4 +73,35 @@ float Vec2d::dot(const Vec2d& other) const {
     // Ergebnis > 0: Winkel < 90° (Gleiche Richtung)
     // Ergebnis = 0: Winkel = 90° (Orthogonal / Senkrecht)
     // Ergebnis < 0: Winkel > 90° (Entgegengesetzte Richtung)
+}
+
+//Zusammengesetzte Zuweisungsoperatoren
+// v1 += v2
+Vec2d& Vec2d::operator+=(const Vec2d& other) {
+    x += other.x;
+    y += other.y;
+    return *this;
+}
+
+// v1 -= v2
+Vec2d& Vec2d::operator-=(const Vec2d& other) {
+    x -= other.x;
+    y -= other.y;
+    return *this;
+}
+
+// v1 *= scalar
+Vec2d& Vec2d::operator*=(float scalar) {
+    x *= scalar;
+    y *= scalar;
+    return *this;
+}
+
+// v1 /= scalar
+Vec2d& Vec2d::operator/=(float scalar) {
+    if (scalar != 0.0f) {
+        x /= scalar;
+        y /= scalar;
+    }
+    return *this;
 }
