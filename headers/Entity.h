@@ -7,6 +7,7 @@ protected:
 	Vec2d position;
 	Vec2d min;
 	Vec2d max;
+	static int nextId;
 	int id;
 
 
@@ -38,10 +39,10 @@ public:
 	Entity(Entity&& other) noexcept;
 	Entity& operator=(Entity&& other) noexcept;
 
-	int getHealth();
-	int	getHitPoints();
-	int	getAttack();
-	int getDefence();
+	int getHealth() const;
+	int	getHitPoints() const;
+	int	getAttack() const;
+	int getDefence() const;
 	void setHealth(int h);
 	void setHitPoints(int hp);
 	void setAttack(int a);
@@ -49,4 +50,8 @@ public:
 
 	void drawSelf() const;
 	void drawTesting() const;
+	void move(Vec2d delta);
+	void takeDamage(int damage);
+	void heal(int amount);
+	bool isAlive() const;
 };
