@@ -1,10 +1,8 @@
 #include <iostream>
 #include "headers/Vec2D.h"
 
+void runVectorTests() {
 
-using namespace std;
-
-int mainVector() {
     std::cout << "--- Vec2d Class Test ---" << std::endl;
 
     // 1. Constructor Test
@@ -34,12 +32,34 @@ int mainVector() {
     Vec2d v6 = v1 * 2.0f;
     std::cout << "v1 * 2 = v6: (" << v6.x << ", " << v6.y << ")" << std::endl;
 
-    /*6. Move Constructor Test, nicht nötig
+    // 6. Move Constructor Test
     Vec2d v_temp(10.0f, 20.0f);
     Vec2d v7(std::move(v_temp)); // v_temp -> v7
-    std::cout << "v7 (new): (" << v7.x << ", " << v7.y << ")" << std::endl;*/
+    std::cout << "v7 (new): (" << v7.x << ", " << v7.y << ")" << std::endl;
 
     std::cout << "Test completed" << std::endl;
 
-    return 0;
-}
+    // 7. Skalarprodukt (Dot Product) Test
+    Vec2d v_dot1(1.0f, 0.0f); // Zeigt nach rechts
+    Vec2d v_dot2(0.0f, 1.0f); // Zeigt nach oben (Orthogonal/Senkrecht)
+    Vec2d v_dot3(2.0f, 0.0f); // Zeigt ebenfalls nach rechts (Gleiche Richtung)
+
+    float result1 = v_dot1.dot(v_dot2); // Erwartet: 0 (Da die Vektoren senkrecht zueinander stehen)
+    float result2 = v_dot1.dot(v_dot3); // Erwartet: 2 (Berechnung: 1*2 + 0*0)
+
+    std::cout << "--- Test neuer Funktionen ---" << std::endl;
+    std::cout << "Skalarprodukt (orthogonal): " << result1 << " (Erwartet: 0)" << std::endl;
+    std::cout << "Skalarprodukt (gleiche Richtung): " << result2 << " (Erwartet: 2)" << std::endl;
+
+    //Zusammengesetzte Zuweisungsoperatoren Test
+    Vec2d v_comp(12.0f, 8.0f);
+    v_comp += Vec2d(2, 2);  // (14, 10)
+    v_comp -= Vec2d(4, 0);  // (10, 10)
+    v_comp *= 2.0f;         // (20, 20)
+    v_comp /= 4.0f;         // (5, 5)
+    std::cout << "v_comp final: (" << v_comp.x << ", " << v_comp.y << std::endl;
+    // Sicherheitscheck: Division durch Null
+    v_comp /= 0.0f;
+    std::cout << "Nach /= 0: (" << v_comp.x << ", " << v_comp.y << ") (No Crash)" << std::endl;
+
+} 
