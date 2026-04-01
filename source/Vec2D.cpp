@@ -1,5 +1,7 @@
 #include "headers/Vec2D.h" 
 #include <iostream>
+#include <cmath>
+
 // Erzeugt einen Vec2d-Punkt und initialisiert die Koordinaten
 Vec2d::Vec2d(float xValue, float yValue) : x(xValue), y(yValue) {} //Member Initializer List
 
@@ -104,4 +106,22 @@ Vec2d& Vec2d::operator/=(float scalar) {
         y /= scalar;
     }
     return *this;
+}
+
+//Der Absolutbetrag
+float Vec2d::length() const {
+    return std::sqrt((x * x) + (y * y));
+}
+
+//Manhattan-Distanz
+float Vec2d::manhattanDist(const Vec2d& other) const {
+    return std::abs(x - other.x) + std::abs(y - other.y);
+}
+
+//Vektornormierung
+void Vec2d::normalize() {
+    float len = length();
+    if (len > 0.0f) {
+        *this /= len;
+    }
 }
