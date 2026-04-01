@@ -33,5 +33,14 @@ public:
 	Vec2d& operator*=(float scalar); // v1 *= scalar
 	Vec2d& operator/=(float scalar); // v1 /= scalar
 
+	//Absolutbetrag
+	float length() const;
+
+	//Manhattan-Distanz
+	float manhattanDist(const Vec2d& other) const;
+
+	//Vektornormierung (Macht den Vektor 1 Einheit lang)
+	void normalize();
+
 };
 #endif
