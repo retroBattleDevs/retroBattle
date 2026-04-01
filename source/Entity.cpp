@@ -1,7 +1,4 @@
 #include "headers/Entity.h"
-#include <iostream>
-
-#include "external_libraries/PDCurses/curses.h"
 
 int Entity::nextId = 1;
 
