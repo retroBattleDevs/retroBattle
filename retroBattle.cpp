@@ -72,11 +72,6 @@ int main() {
 	Entity enemy4(5, Vec2d(10.0, 10.0), Vec2d(20.0, 20.0), Vec2d(50.0, 20.0));
 	Entity enemies[4] = { enemy, enemy2, enemy3, enemy4 };
 
-	
-
- 
-	
-
 	while (1) {
 
 		updateTimeCounter(mtr);
@@ -88,10 +83,6 @@ int main() {
 		enemy2.drawTesting();
 		enemy3.drawTesting();
 		enemy4.drawTesting();
-
-	
-
-	
 
 		displayMetrics(mtr);
 
@@ -109,7 +100,6 @@ int main() {
 		BattleManager test;
 		//test.startBattle(&player, &enemy, 2);
 		
-
 		// Update Entities with new positions and update animations to be drawn at the next iteration goes here.
 		mvprintw(0, 0, "y: %f    x: %f", player.getPosition().x, player.getPosition().y);
 		refresh();
