@@ -27,7 +27,6 @@ void keyDispatcher(metrics& mtr, const char c, Entity *player) {
     }
 	player->setPosition(position);
 }
-
 void initWindowsAPI(void) {
 	HWND hwnd = GetConsoleWindow();
 	HWND owner = GetWindow(hwnd, GW_OWNER);
@@ -47,7 +46,7 @@ int main() {
 	using namespace std;
 	
 	initWindowsAPI();
-
+	drawLogo(50, 20);
 	initPDCurses();
 
 	metrics mtr = { 0 };
@@ -56,7 +55,6 @@ int main() {
 	int _rows = 0,
 		_cols = 0;
 	getmaxyx(stdscr, _rows, _cols);
-
 
 	init_pair(1, COLOR_GREEN, COLOR_BLACK);
 
@@ -100,9 +98,9 @@ int main() {
 		BattleManager test;
 		//test.startBattle(&player, &enemy, 2);
 		
-
 		// Update Entities with new positions and update animations to be drawn at the next iteration goes here.
 		mvprintw(0, 0, "y: %f    x: %f", player.getPosition().x, player.getPosition().y);
+		//mvprintw(0, 0, "_rows: %d    _cols: %d", _rows, _cols);
 		refresh();
 		int c = getch(stdin);
 		keyDispatcher(mtr, c, &player);

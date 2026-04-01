@@ -2,6 +2,7 @@
 #define GENERAL_FUNCS
 
 // TODO: Verweisen Sie hier auf zusätzliche Header, die Ihr Programm erfordert.
+#include <iostream>
 #include "headers/Entity.h"
 
 float calculateWidthHeight(float max, float min);

@@ -21,8 +21,9 @@ add_executable (
 	"source/vec2D.cpp" 
 	"vec2D_test.cpp" 
 	"source/general_funcs.cpp"
+	"source/draw_funcs.cpp"
 	"source/BattleManager.cpp" 
-)
+ "headers/draw_funcs.h")
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET retroBattle PROPERTY CXX_STANDARD 20)

@@ -1,7 +1,4 @@
 #include "headers/Entity.h"
-#include <iostream>
-
-#include "external_libraries/PDCurses/curses.h"
 
 Entity::Entity() {
 

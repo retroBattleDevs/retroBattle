@@ -1,6 +1,9 @@
 #pragma once
 #include "headers/Vec2D.h"
 
+#include <iostream>
+#include "external_libraries/PDCurses/curses.h"
+
 class Entity {
 
 protected:
