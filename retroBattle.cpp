@@ -100,7 +100,6 @@ int main() {
 		BattleManager test;
 		//test.startBattle(&player, &enemy, 2);
 		
-
 		// Update Entities with new positions and update animations to be drawn at the next iteration goes here.
 		mvprintw(0, 0, "y: %f    x: %f", player.getPosition().x, player.getPosition().y);
 		refresh();
