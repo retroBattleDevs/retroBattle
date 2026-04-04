@@ -13,6 +13,11 @@ Entity::Entity() {
 	hitPoints = 100;
 	attack = 10;
 	defence = 5;
+	speed = 10;
+
+	attackBuffStage = 0;
+	defenceBuffStage = 0;
+	speedBuffStage = 0;
 }
 
 
@@ -28,6 +33,11 @@ Entity::Entity(int id, Vec2d min, Vec2d max, Vec2d position) {
 	hitPoints = 100;
 	attack = 10;
 	defence = 5;
+	speed = 10;
+
+	attackBuffStage = 0;
+	defenceBuffStage = 0;
+	speedBuffStage = 0;
 }
 
 Entity::~Entity() = default;
@@ -42,6 +52,11 @@ Entity::Entity(const Entity& other) {
 	hitPoints = other.hitPoints;
 	attack = other.attack;
 	defence = other.defence;
+	speed = other.speed;
+
+	attackBuffStage = 0;
+	defenceBuffStage = 0;
+	speedBuffStage = 0;
 }
 Entity& Entity::operator=(const Entity& other) {
 	if (this != &other) {
@@ -54,6 +69,11 @@ Entity& Entity::operator=(const Entity& other) {
 		hitPoints = other.hitPoints;
 		attack = other.attack;
 		defence = other.defence;
+		speed = other.speed;
+
+		attackBuffStage = 0;
+		defenceBuffStage = 0;
+		speedBuffStage = 0;
 	}
 	return *this;
 }
@@ -67,6 +87,11 @@ Entity::Entity(Entity&& other) noexcept {
 	hitPoints = other.hitPoints;
 	attack = other.attack;
 	defence = other.defence;
+	speed = other.speed;
+
+	attackBuffStage = 0;
+	defenceBuffStage = 0;
+	speedBuffStage = 0;
 }
 Entity& Entity::operator=(Entity&& other) noexcept {
 	if (this != &other) {
@@ -79,6 +104,11 @@ Entity& Entity::operator=(Entity&& other) noexcept {
 		hitPoints = other.hitPoints;
 		attack = other.attack;
 		defence = other.defence;
+		speed = other.speed;
+
+		attackBuffStage = 0;
+		defenceBuffStage = 0;
+		speedBuffStage = 0;
 	}
 	return *this;
 }
@@ -97,6 +127,10 @@ int Entity::getAttack() const {
 
 int Entity::getDefence() const {
 	return this->defence;
+}
+
+int Entity::getSpeed() const{
+	return this->speed;
 }
 
 
@@ -126,6 +160,12 @@ void Entity::setDefence(int d) {
 	if (d < 0) d = 0;
 	defence = d;
 }
+
+void Entity::setSpeed(int s){
+	if (s < 0) s = 0;
+	speed = s;
+}
+
 
 void Entity::drawSelf() const {
 	std::cout << "Entity ID: " << id << "\n";
@@ -178,7 +218,8 @@ void Entity::move(Vec2d delta) {
 	position.y += delta.y;
 }
 void Entity::takeDamage(int damage) {
-	int actualDamage = damage - defence;
+	int currentDef = getFinalDefence();
+	int actualDamage = damage - currentDef;
 	if (actualDamage < 0) {
 		actualDamage = 0;
 	}
@@ -196,4 +237,53 @@ void Entity::heal(int amount) {
 }
 bool Entity::isAlive()const {
 	return health > 0;
+}
+
+void Entity::modifyAttackBuffStage(int amount){
+	attackBuffStage += amount;
+	if (attackBuffStage < -5)
+		attackBuffStage = -5;
+	if (attackBuffStage > 5)
+		attackBuffStage = 5;
+}
+
+void Entity::modifyDefenceBuffStage(int amount){
+	defenceBuffStage += amount;
+	if (defenceBuffStage < -5)
+		defenceBuffStage = -5;
+	if (defenceBuffStage > 5)
+		defenceBuffStage = 5;
+}
+
+void Entity::modifySpeedBuffStage(int amount){
+	speedBuffStage += amount;
+	if (speedBuffStage < -5)
+		speedBuffStage = -5;
+	if (speedBuffStage > 5)
+		speedBuffStage = 5;
+}
+
+void Entity::resetBuffStages(){
+	attackBuffStage = 0;
+	speedBuffStage = 0;
+	defenceBuffStage = 0;
+}
+
+float Entity::getStatMultiplier(int stage) const {
+	return 1.0f + (stage * 0.20f);
+}
+
+int Entity::getFinalAttack() const {
+	int final = (int)(attack * getStatMultiplier(attackBuffStage));
+	return (final < 1) ? 1 : final;
+}
+
+int Entity::getFinalDefence() const {
+	int final = (int)(defence * getStatMultiplier(defenceBuffStage));
+	return (final < 1) ? 1 : final;
+}
+
+int Entity::getFinalSpeed() const {
+	int final = (int)(speed * getStatMultiplier(speedBuffStage));
+	return (final < 1) ? 1 : final;
 }

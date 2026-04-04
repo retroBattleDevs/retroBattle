@@ -8,6 +8,8 @@
 #include <curses.h>
 #include <Windows.h>
 #include <string>
+#include <algorithm>
+#include "headers/SubMoves.h";
 
 enum BattleState {
 	moveSelect,
@@ -20,24 +22,34 @@ private:
 	int turnCounter;
 	int totalEntities;
 	int currentTurn;
+	int roundCounter;
 	BattleState currentState;
 	std::vector<Entity*> entityList;
-	void DrawUI();
+	std::vector<BattleMove*> availableMoves;
+	//order index mapping
+	std::vector<int> turnOrder;
+
+	//prints
+	void DrawUI(int selectedMove, int selectedTarget);
 	void printLog(std::string strg);
 	void printELog(std::string strg);
-	void printMoveLog(int selectedMove, int selectedTarget);
 	void printHeroStats();
 	void printHeroMoves(int selectedMove);
 	void printEnemyStats(int selectedTarget);
+	std::string getShortType(MoveCategory cat);
+
+	//checkers and actions
 	void changeState(BattleState state);
+	void calculateTurnOrder();
 	bool isValidMove(int selectedMove);
 	bool isValidTarget(int selectedTarget);
 	void moveSelectAction(int& selectedMove,int input);
-	void targetSelectAction(int& selectedTarget,int input);
+	void targetSelectAction(int& selectedMove, int& selectedTarget, int input);
 	void performMoveAction(int selectedMove, int selectedTarget);
 	void performMove(int selectedMove,int selectedTarget);
 	void nextTurn();
 	int checkWinner();
+	bool isHerosTurn() const;
 	void cleanMem();
 
 public:

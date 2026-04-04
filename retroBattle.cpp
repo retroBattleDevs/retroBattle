@@ -56,7 +56,10 @@ int main() {
 		_cols = 0;
 	getmaxyx(stdscr, _rows, _cols);
 
+	//color pairs
 	init_pair(1, COLOR_GREEN, COLOR_BLACK);
+	init_pair(2, COLOR_RED, COLOR_BLACK);
+	init_pair(3, COLOR_CYAN, COLOR_BLACK);
 
 	int x = 10, y = 10;
 
@@ -94,8 +97,10 @@ int main() {
 			mvprintw(0, 40, "Circle Collision!!");
 		}
 
-		// battle class test using temp entity child class
-		BattleManager test;
+		// battle class test
+		//BattleManager test;
+		//test turn order with different speeds
+		//enemy.setSpeed(12);
 		//test.startBattle(&player, &enemy, 2);
 		
 		// Update Entities with new positions and update animations to be drawn at the next iteration goes here.
