@@ -23,7 +23,7 @@ add_executable (
 	"source/general_funcs.cpp"
 	"source/draw_funcs.cpp"
 	"source/BattleManager.cpp" 
- "headers/draw_funcs.h")
+ "headers/draw_funcs.h" "source/BattleMove.cpp" "headers/SubMoves.h" "source/SubMoves.cpp")
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET retroBattle PROPERTY CXX_STANDARD 20)

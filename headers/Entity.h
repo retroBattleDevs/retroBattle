@@ -18,6 +18,19 @@ protected:
 	int	hitPoints;
 	int	attack;
 	int defence;
+	int speed;
+
+	//vars for buffs ranging from -5 to 5 stating from 0
+	//1 represends 20% stat increase
+	//-1 represends -20% stat decrease
+	//5 -> 100% (double)
+	//-5 -> -100% (zero)
+	//for example entity has 10 attack and buffStage 2,
+	//final attack will be 10+(10 * (20% * 2)) = 10+4 = 4
+	//At the start of each battle the BuffStages are set to 0
+	int attackBuffStage;
+	int defenceBuffStage;
+	int speedBuffStage;
 
 public:
 	Entity();
@@ -46,10 +59,12 @@ public:
 	int	getHitPoints() const;
 	int	getAttack() const;
 	int getDefence() const;
+	int getSpeed() const;
 	void setHealth(int h);
 	void setHitPoints(int hp);
 	void setAttack(int a);
 	void setDefence(int d);
+	void setSpeed(int s);
 
 	void drawSelf() const;
 	void drawTesting() const;
@@ -57,4 +72,14 @@ public:
 	void takeDamage(int damage);
 	void heal(int amount);
 	bool isAlive() const;
+
+	//buff methods
+	void modifyAttackBuffStage(int amount);
+	void modifyDefenceBuffStage(int amount);
+	void modifySpeedBuffStage(int amount);
+	void resetBuffStages();
+	float getStatMultiplier(int stage) const;
+	int getFinalAttack() const;
+	int getFinalDefence() const;
+	int getFinalSpeed() const;
 };
