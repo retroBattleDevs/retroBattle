@@ -12,5 +12,8 @@
 
 // TODO: Verweisen Sie hier auf zusätzliche Header, die Ihr Programm erfordert.
 #include "headers/entity.h"
+#include "headers/Player.h"
+#include "headers/Enemy.h"
 #include "headers/BattleManager.h"
 #include "headers/Vec2D.h"
+#include "headers/EntityManager.h"

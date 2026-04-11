@@ -64,14 +64,19 @@ int main() {
 	int x = 10, y = 10;
 
 	float time_diff = 0;
-	// Entity
-	Entity player(1, Vec2d(3.0, 3.0), Vec2d(5.0, 5.0), Vec2d(30.0, 30.0));
+	// Entity  
+	Entity* player = new Player(1, Vec2d(3.0, 3.0), Vec2d(5.0, 5.0), Vec2d(30.0, 30.0));
 	
-	Entity enemy(2, Vec2d(10.0, 10.0), Vec2d(20.0, 20.0), Vec2d(20.0, 20.0));
-	Entity enemy2(3, Vec2d(10.0, 10.0), Vec2d(20.0, 20.0), Vec2d(20.0, 30.0));
-	Entity enemy3(4, Vec2d(10.0, 10.0), Vec2d(20.0, 20.0), Vec2d(45.0, 15.0));
-	Entity enemy4(5, Vec2d(10.0, 10.0), Vec2d(20.0, 20.0), Vec2d(50.0, 20.0));
-	Entity enemies[4] = { enemy, enemy2, enemy3, enemy4 };
+	Entity* enemy1 = new Enemy(2, Vec2d(10.0, 10.0), Vec2d(20.0, 20.0), Vec2d(20.0, 20.0));
+	Entity* enemy2 = new Enemy(3, Vec2d(10.0, 10.0), Vec2d(20.0, 20.0), Vec2d(20.0, 30.0));
+	Entity* enemy3 = new Enemy(4, Vec2d(10.0, 10.0), Vec2d(20.0, 20.0), Vec2d(45.0, 15.0));
+	//Entity enemy3(4, Vec2d(10.0, 10.0), Vec2d(20.0, 20.0), Vec2d(45.0, 15.0));
+	//Entity enemy4(5, Vec2d(10.0, 10.0), Vec2d(20.0, 20.0), Vec2d(50.0, 20.0));
+
+	std::vector<Entity*> entities = { player, enemy1 };
+	EntityManager entityManager(entities);
+	entityManager.add(enemy2);
+	entityManager.add(enemy3);
 
 	while (1) {
 
@@ -79,21 +84,25 @@ int main() {
 		calculateFPS(mtr);
 
 		// Drawing of the Entities goes here.
+		entityManager.renderAll();
+		/*
 		player.drawTesting();
 		enemy.drawTesting();
 		enemy2.drawTesting();
 		enemy3.drawTesting();
 		enemy4.drawTesting();
+		*/
 
 		displayMetrics(mtr);
 
-		// Collision detection and response goes here.
-		bool collision = collisionDetectionBoundinBoxArray(&player, enemies);
-		if (collision) {
+		// Collision detection and response goes here
+		/*
+		if (collisionDetectionBoundinBox(entityManager.getPlayer(), entityManager.getEnemies())) {
 			mvprintw(0, 40, "Collision!!");
 		}
+		*/
 
-		if (collisionDetectionCircles(&player, &enemy) == true) {
+		if (circleCollisionDetection(entityManager.getPlayer(), entityManager.getEnemies())) {
 			mvprintw(0, 40, "Circle Collision!!");
 		}
 
@@ -104,11 +113,12 @@ int main() {
 		//test.startBattle(&player, &enemy, 2);
 		
 		// Update Entities with new positions and update animations to be drawn at the next iteration goes here.
-		mvprintw(0, 0, "y: %f    x: %f", player.getPosition().x, player.getPosition().y);
+		mvprintw(0, 0, "y: %f    x: %f", entityManager.getPlayer()->getPosition().x, entityManager.getPlayer()->getPosition().y);
+		
 		//mvprintw(0, 0, "_rows: %d    _cols: %d", _rows, _cols);
 		refresh();
 		int c = getch(stdin);
-		keyDispatcher(mtr, c, &player);
+		keyDispatcher(mtr, c, entityManager.getPlayer());
 
 		// Sleep so much as we need to keep us at 60 fps. 
 		time_diff = mtr.deltaTime > 0.016666 ? 0 : (0.016666 - mtr.deltaTime) * 100000;

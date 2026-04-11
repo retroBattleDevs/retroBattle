@@ -287,3 +287,7 @@ int Entity::getFinalSpeed() const {
 	int final = (int)(speed * getStatMultiplier(speedBuffStage));
 	return (final < 1) ? 1 : final;
 }
+
+EntityTypes::Type Entity::getType() const {
+	return EntityTypes::Type::Entity;
+}
