@@ -4,6 +4,14 @@
 #include <iostream>
 #include "external_libraries/PDCurses/curses.h"
 
+namespace EntityTypes {
+	enum Type {
+		Player,
+		Enemy,
+		Entity
+	};
+}
+
 class Entity {
 
 protected:
@@ -33,8 +41,8 @@ protected:
 	int speedBuffStage;
 
 public:
+
 	Entity();
-	// Testing Julian
 	Entity(int id, Vec2d min, Vec2d max, Vec2d position);
 
 	Vec2d getPosition() const;
@@ -45,8 +53,9 @@ public:
 	void setPosition(Vec2d newPosition);
 	void setMin(Vec2d newMin);
 	void setMax(Vec2d newMax);
-	void setId(int newId); // fraglich ob das nötig ist
+	void setId(int newId); 
 
+	virtual EntityTypes::Type getType() const;
 
 	//Rule of Five
 	virtual ~Entity();
