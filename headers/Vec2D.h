@@ -20,8 +20,27 @@ public:
 	Vec2d operator+(const Vec2d& other) const; //v1+v2
 	Vec2d operator-(const Vec2d& other) const; //v1-v2
 	Vec2d operator*(float scalar) const; //v1*scalar
+	Vec2d operator/(float scalar) const; // Skalardivision
 
-	/*Vec2d(Vec2d&& other) noexcept; //Move konstruktor, nicht nötig
-	Vec2d& operator=(Vec2d&& other) noexcept;//Move Zuweisungsoperator*/
+	Vec2d(Vec2d&& other) noexcept; //Move konstruktor
+	Vec2d& operator=(Vec2d&& other) noexcept;//Move Zuweisungsoperator
+
+	float dot(const Vec2d& other) const; // Skalarprudukt
+
+	//Zusammengesetzte Zuweisungsoperatoren (verändern den aktuellen Vektor direkt)
+	Vec2d& operator+=(const Vec2d& other); // v1 += v2
+	Vec2d& operator-=(const Vec2d& other); // v1 -= v2
+	Vec2d& operator*=(float scalar); // v1 *= scalar
+	Vec2d& operator/=(float scalar); // v1 /= scalar
+
+	//Absolutbetrag
+	float length() const;
+
+	//Manhattan-Distanz
+	float manhattanDist(const Vec2d& other) const;
+
+	//Vektornormierung (Macht den Vektor 1 Einheit lang)
+	void normalize();
+
 };
 #endif

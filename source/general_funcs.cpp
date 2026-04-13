@@ -1,6 +1,7 @@
 #include "headers/general_funcs.h"
 
 #include <cmath>
+#include <vector>
 
 float calculateWidthHeight(float max, float min) {
 	return max - min;
@@ -12,6 +13,82 @@ float calculateAbsoluteDistance(float point1, float point2) {
 	return sqrtf(distance * distance);
 }
 
+/*
+This function should be used
+*/
+bool collisionDetectionBoundinBox(Entity* player, std::vector<Entity*> enemies) {
+	Vec2d playerMin = player->getMin();
+	Vec2d playerMax = player->getMax();
+	Vec2d playerCurrentPosition = player->getPosition();
+
+	for (auto& enemy : enemies) {
+		Vec2d enemyMin = enemy->getMin();
+		Vec2d enemyMax = enemy->getMax();
+		Vec2d enemyCurrentPosition = enemy->getPosition();
+
+		// calculate distance between centers
+		// calculate distance between centers
+		float distanceX = calculateAbsoluteDistance(playerCurrentPosition.x, enemyCurrentPosition.x);
+		float distanceY = calculateAbsoluteDistance(playerCurrentPosition.y, enemyCurrentPosition.y);
+
+		// calculate combined half width and height
+		float combinedHalfWidth = (calculateWidthHeight(playerMax.x, playerMin.x) + calculateWidthHeight(enemyMax.x, enemyMin.x)) / 2;
+		float combinedHalfHeigth = (calculateWidthHeight(playerMax.y, playerMin.y) + calculateWidthHeight(enemyMax.y, enemyMin.y)) / 2;
+
+		if ((distanceX < combinedHalfWidth) && (distanceY < combinedHalfHeigth)) {
+			return true;
+		}
+	}
+	return false;
+}
+
+
+// Radius is currently biggest part of hitbox, the half height
+/*
+ If the Absolute Distance is less than the combined radii -> Collision
+*/
+float getRadius(Entity *entity) {
+	Vec2d vec2dMin = entity->getMin();
+	Vec2d vec2dMax = entity->getMax();
+
+	return (calculateWidthHeight(vec2dMax.y, vec2dMin.y) / 2);
+}
+
+bool circleCollisionDetection(Entity* player, std::vector<Entity*> enemies) {
+	Vec2d playerCurrentPosition = player->getPosition();
+	float playerRadius = getRadius(player);
+
+	for (auto& enemy : enemies) {
+		Vec2d enemyCurrentPosition = enemy->getPosition();
+
+		float absoluteDistanceX = calculateAbsoluteDistance(playerCurrentPosition.x, enemyCurrentPosition.x);
+		float absoluteDistanceY = calculateAbsoluteDistance(playerCurrentPosition.y, enemyCurrentPosition.y);
+		float combinedRadii = playerRadius + getRadius(enemy);
+
+		if ((absoluteDistanceX < combinedRadii) && (absoluteDistanceY < combinedRadii)) {
+			return true;
+		}
+	}
+	return false;
+}
+
+/*
+bool collisionDetectionCircles(Entity *e1, Entity *e2) {
+	float combinedRadii = getRadius(e1) + getRadius(e2);
+	
+	// Get current position and absolute distance between these points
+	Vec2d e1CurrentPos = e1->getPosition();
+	Vec2d e2CurrentPos = e2->getPosition();
+
+	float absoluteDistanceX = calculateAbsoluteDistance(e1CurrentPos.x, e2CurrentPos.x);
+	float absoluteDistanceY = calculateAbsoluteDistance(e1CurrentPos.y, e2CurrentPos.y);
+
+	if ((absoluteDistanceX < combinedRadii) && (absoluteDistanceY < combinedRadii)) {
+		return true;
+	}
+
+	return false;
+}
 bool collisionDetectionBoundinBox(Entity *e1, Entity *e2) {
 	Vec2d e1Min = e1->getMin();
 	Vec2d e1Max = e1->getMax();
@@ -65,31 +142,4 @@ bool collisionDetectionBoundinBoxArray(Entity *e1, Entity *e2) {
 	}
 	return false;
 }
-
-// Radius is currently biggest part of hitbox, the half height
-/*
- If the Absolute Distance is less than the combined radii -> Collision
 */
-float getRadius(Entity *entity) {
-	Vec2d vec2dMin = entity->getMin();
-	Vec2d vec2dMax = entity->getMax();
-
-	return (calculateWidthHeight(vec2dMax.y, vec2dMin.y) / 2);
-}
-
-bool collisionDetectionCircles(Entity *e1, Entity *e2) {
-	float combinedRadii = getRadius(e1) + getRadius(e2);
-	
-	// Get current position and absolute distance between these points
-	Vec2d e1CurrentPos = e1->getPosition();
-	Vec2d e2CurrentPos = e2->getPosition();
-
-	float absoluteDistanceX = calculateAbsoluteDistance(e1CurrentPos.x, e2CurrentPos.x);
-	float absoluteDistanceY = calculateAbsoluteDistance(e1CurrentPos.y, e2CurrentPos.y);
-
-	if ((absoluteDistanceX < combinedRadii) && (absoluteDistanceY < combinedRadii)) {
-		return true;
-	}
-
-	return false;
-}

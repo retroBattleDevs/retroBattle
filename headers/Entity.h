@@ -1,12 +1,24 @@
 #pragma once
 #include "headers/Vec2D.h"
 
+#include <iostream>
+#include "external_libraries/PDCurses/curses.h"
+
+namespace EntityTypes {
+	enum Type {
+		Player,
+		Enemy,
+		Entity
+	};
+}
+
 class Entity {
 
 protected:
 	Vec2d position;
 	Vec2d min;
 	Vec2d max;
+	static int nextId;
 	int id;
 
 
@@ -14,10 +26,23 @@ protected:
 	int	hitPoints;
 	int	attack;
 	int defence;
+	int speed;
+
+	//vars for buffs ranging from -5 to 5 stating from 0
+	//1 represends 20% stat increase
+	//-1 represends -20% stat decrease
+	//5 -> 100% (double)
+	//-5 -> -100% (zero)
+	//for example entity has 10 attack and buffStage 2,
+	//final attack will be 10+(10 * (20% * 2)) = 10+4 = 4
+	//At the start of each battle the BuffStages are set to 0
+	int attackBuffStage;
+	int defenceBuffStage;
+	int speedBuffStage;
 
 public:
+
 	Entity();
-	// Testing Julian
 	Entity(int id, Vec2d min, Vec2d max, Vec2d position);
 
 	Vec2d getPosition() const;
@@ -28,8 +53,9 @@ public:
 	void setPosition(Vec2d newPosition);
 	void setMin(Vec2d newMin);
 	void setMax(Vec2d newMax);
-	void setId(int newId); // fraglich ob das nötig ist
+	void setId(int newId); 
 
+	virtual EntityTypes::Type getType() const;
 
 	//Rule of Five
 	virtual ~Entity();
@@ -38,15 +64,31 @@ public:
 	Entity(Entity&& other) noexcept;
 	Entity& operator=(Entity&& other) noexcept;
 
-	int getHealth();
-	int	getHitPoints();
-	int	getAttack();
-	int getDefence();
+	int getHealth() const;
+	int	getHitPoints() const;
+	int	getAttack() const;
+	int getDefence() const;
+	int getSpeed() const;
 	void setHealth(int h);
 	void setHitPoints(int hp);
 	void setAttack(int a);
 	void setDefence(int d);
+	void setSpeed(int s);
 
 	void drawSelf() const;
 	void drawTesting() const;
+	void move(Vec2d delta);
+	void takeDamage(int damage);
+	void heal(int amount);
+	bool isAlive() const;
+
+	//buff methods
+	void modifyAttackBuffStage(int amount);
+	void modifyDefenceBuffStage(int amount);
+	void modifySpeedBuffStage(int amount);
+	void resetBuffStages();
+	float getStatMultiplier(int stage) const;
+	int getFinalAttack() const;
+	int getFinalDefence() const;
+	int getFinalSpeed() const;
 };
