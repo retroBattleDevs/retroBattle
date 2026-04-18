@@ -114,9 +114,14 @@ int main() {
 		
 		// Update Entities with new positions and update animations to be drawn at the next iteration goes here.
 		mvprintw(0, 0, "y: %f    x: %f", entityManager.getPlayer()->getPosition().x, entityManager.getPlayer()->getPosition().y);
+
+		mvprintw(1, 0, "Direction X: %.2f    Direction Y: %.2f",
+			entityManager.getPlayer()->getDirection().x,
+			entityManager.getPlayer()->getDirection().y);
 		
 		//mvprintw(0, 0, "_rows: %d    _cols: %d", _rows, _cols);
 		refresh();
+
 		int c = getch(stdin);
 		keyDispatcher(mtr, c, entityManager.getPlayer());
 

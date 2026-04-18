@@ -18,6 +18,8 @@ Entity::Entity() {
 	attackBuffStage = 0;
 	defenceBuffStage = 0;
 	speedBuffStage = 0;
+
+	direction = Vec2d(0, 1);
 }
 
 
@@ -38,6 +40,8 @@ Entity::Entity(int id, Vec2d min, Vec2d max, Vec2d position) {
 	attackBuffStage = 0;
 	defenceBuffStage = 0;
 	speedBuffStage = 0;
+
+	direction = Vec2d(0, 1);
 }
 
 Entity::~Entity() = default;
@@ -202,6 +206,10 @@ int Entity::getId() const {
 }
 
 void Entity::setPosition(Vec2d newPosition) {
+	Vec2d diff = newPosition - position;
+	if (diff.x != 0.0f || diff.y != 0.0f) {
+		direction = diff;
+		direction.normalize();}
 	position = newPosition;
 }
 
@@ -214,6 +222,10 @@ void Entity::setMax(Vec2d newMax) {
 }
 
 void Entity::move(Vec2d delta) {
+	if (delta.x != 0.0f || delta.y != 0.0f) {
+		direction = delta;
+		direction.normalize();}
+
 	position.x += delta.x;
 	position.y += delta.y;
 }
@@ -290,4 +302,8 @@ int Entity::getFinalSpeed() const {
 
 EntityTypes::Type Entity::getType() const {
 	return EntityTypes::Type::Entity;
+}
+
+Vec2d Entity::getDirection() const {
+	return direction;
 }

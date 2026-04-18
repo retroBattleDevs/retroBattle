@@ -40,6 +40,8 @@ protected:
 	int defenceBuffStage;
 	int speedBuffStage;
 
+	Vec2d direction;
+
 public:
 
 	Entity();
@@ -91,4 +93,6 @@ public:
 	int getFinalAttack() const;
 	int getFinalDefence() const;
 	int getFinalSpeed() const;
+
+	Vec2d getDirection() const;
 };
