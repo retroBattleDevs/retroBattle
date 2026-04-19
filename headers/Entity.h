@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include "external_libraries/PDCurses/curses.h"
+#include "headers/MersenneTwister.h"
 
 namespace EntityTypes {
 	enum Type {
@@ -95,4 +96,5 @@ public:
 	int getFinalSpeed() const;
 
 	Vec2d getDirection() const;
+	MersenneTwister* rng;
 };
