@@ -20,6 +20,7 @@ Entity::Entity() {
 	speedBuffStage = 0;
 
 	direction = Vec2d(0, 1);
+	rng = new MersenneTwister();
 }
 
 
@@ -42,9 +43,13 @@ Entity::Entity(int id, Vec2d min, Vec2d max, Vec2d position) {
 	speedBuffStage = 0;
 
 	direction = Vec2d(0, 1);
+	rng = new MersenneTwister();
 }
 
-Entity::~Entity() = default;
+Entity::~Entity() {
+	if (rng != nullptr)
+	    delete rng;
+};
 
 Entity::Entity(const Entity& other) {
 	position = other.position;
@@ -61,6 +66,7 @@ Entity::Entity(const Entity& other) {
 	attackBuffStage = 0;
 	defenceBuffStage = 0;
 	speedBuffStage = 0;
+	rng = new MersenneTwister();
 }
 Entity& Entity::operator=(const Entity& other) {
 	if (this != &other) {
