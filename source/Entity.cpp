@@ -28,8 +28,8 @@ Entity::Entity() {
 // Testing Julian
 Entity::Entity(int id, Vec2d min, Vec2d max, Vec2d position) {
 	this->id = id;
-	this->min = min;
-	this->max = max;
+	this->min = position - (min * 0.5);
+	this->max = position + (max * 0.5);
 	this->position = position;
 
 	id = nextId++;
@@ -244,10 +244,12 @@ void Entity::setMax(Vec2d newMax) {
 void Entity::move(Vec2d delta) {
 	if (delta.x != 0.0f || delta.y != 0.0f) {
 		direction = delta;
-		direction.normalize();}
+		direction.normalize();
+	}
 
-	position.x += delta.x;
-	position.y += delta.y;
+	position += delta;
+	min += delta;
+	max += delta;
 }
 void Entity::takeDamage(int damage) {
 	int currentDef = getFinalDefence();

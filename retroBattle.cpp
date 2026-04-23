@@ -20,14 +20,15 @@ void keyDispatcher(metrics& mtr, const char c, EntityManager *mgr) {
 		case 'm':
 			if (!mtr.displayWindow) {
 				mtr.displayWindow = 1;
-			}
-			else {
+			} else {
 				mtr.displayWindow = 0;
 				delwin(mtr.win);
 				mtr.win = nullptr;
 			}
+			break;
 		case 'b':
 			mgr->showBoundingBox = (mgr->showBoundingBox == true) ? false : true;
+			break;
     }
 	player->setPosition(position);
 }
@@ -71,9 +72,9 @@ int main() {
 	// Entity  
 	Entity* player = new Player(1, Vec2d(3.0, 3.0), Vec2d(5.0, 5.0), Vec2d(30.0, 30.0));
 	
-	Entity* enemy1 = new Enemy(2, Vec2d(10.0, 10.0), Vec2d(20.0, 20.0), Vec2d(20.0, 20.0));
-	Entity* enemy2 = new Enemy(3, Vec2d(10.0, 10.0), Vec2d(20.0, 20.0), Vec2d(20.0, 30.0));
-	Entity* enemy3 = new Enemy(4, Vec2d(10.0, 10.0), Vec2d(20.0, 20.0), Vec2d(45.0, 15.0));
+	Entity* enemy1 = new Enemy(2, Vec2d(3.0, 3.0), Vec2d(5.0, 5.0), Vec2d(20.0, 20.0));
+	Entity* enemy2 = new Enemy(3, Vec2d(3.0, 3.0), Vec2d(5.0, 5.0), Vec2d(20.0, 30.0));
+	Entity* enemy3 = new Enemy(4, Vec2d(3.0, 3.0), Vec2d(5.0, 5.0), Vec2d(45.0, 15.0));
 	//Entity enemy3(4, Vec2d(10.0, 10.0), Vec2d(20.0, 20.0), Vec2d(45.0, 15.0));
 	//Entity enemy4(5, Vec2d(10.0, 10.0), Vec2d(20.0, 20.0), Vec2d(50.0, 20.0));
 

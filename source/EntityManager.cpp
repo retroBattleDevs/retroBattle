@@ -45,7 +45,6 @@ void EntityManager::add(Entity* entity) {
 }
 
 void EntityManager::removeEntity(Entity* entity) {
-	// instead of std::vector<Entity*>
 	auto it = std::find(entities.begin(), entities.end(), entity);
 	if (it != entities.end()) {
 		delete* it;
