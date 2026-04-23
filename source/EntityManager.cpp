@@ -4,16 +4,19 @@
 
 EntityManager::EntityManager() {
 	this->entities = std::vector<Entity*>();
+	this->showBoundingBox = false;
 }
 
 EntityManager::EntityManager(std::vector<Entity*> entities) {
 	this->entities = entities;
+	this->showBoundingBox = false;
 }
 
 EntityManager::~EntityManager() = default;
 
 EntityManager::EntityManager(const EntityManager& other) {
 	this->entities = other.entities;
+	this->showBoundingBox = false;
 }
 
 EntityManager& EntityManager::operator=(const EntityManager& other) {
@@ -25,6 +28,7 @@ EntityManager& EntityManager::operator=(const EntityManager& other) {
 
 EntityManager::EntityManager(EntityManager&& other) noexcept {
 	this->entities = other.entities;
+	this->showBoundingBox = false;
 }
 
 EntityManager& EntityManager::operator=(EntityManager&& other) noexcept {
@@ -51,7 +55,13 @@ void EntityManager::removeEntity(Entity* entity) {
 
 void EntityManager::renderAll() const {
 	for (Entity* e : entities) {
-		e->drawTesting();
+		if (showBoundingBox)
+		    e->drawBoundingBox();
+		else
+			e->drawSelf();
+
+		if (e->movement)
+		    e->movement->movingPatern(e->position, e->min, e->max, 1, 1);
 	}
 }
 

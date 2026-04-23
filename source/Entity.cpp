@@ -21,6 +21,7 @@ Entity::Entity() {
 
 	direction = Vec2d(0, 1);
 	rng = new MersenneTwister();
+	movement = nullptr;
 }
 
 
@@ -44,6 +45,7 @@ Entity::Entity(int id, Vec2d min, Vec2d max, Vec2d position) {
 
 	direction = Vec2d(0, 1);
 	rng = new MersenneTwister();
+	movement = nullptr;
 }
 
 Entity::~Entity() {
@@ -66,7 +68,8 @@ Entity::Entity(const Entity& other) {
 	attackBuffStage = 0;
 	defenceBuffStage = 0;
 	speedBuffStage = 0;
-	rng = new MersenneTwister();
+	rng = other.rng;
+	movement = other.movement;
 }
 Entity& Entity::operator=(const Entity& other) {
 	if (this != &other) {
@@ -80,6 +83,8 @@ Entity& Entity::operator=(const Entity& other) {
 		attack = other.attack;
 		defence = other.defence;
 		speed = other.speed;
+		rng = other.rng;
+		movement = other.movement;
 
 		attackBuffStage = 0;
 		defenceBuffStage = 0;
@@ -98,6 +103,8 @@ Entity::Entity(Entity&& other) noexcept {
 	attack = other.attack;
 	defence = other.defence;
 	speed = other.speed;
+	rng = other.rng;
+	movement = other.movement;
 
 	attackBuffStage = 0;
 	defenceBuffStage = 0;
@@ -115,6 +122,8 @@ Entity& Entity::operator=(Entity&& other) noexcept {
 		attack = other.attack;
 		defence = other.defence;
 		speed = other.speed;
+		rng = other.rng;
+		movement = other.movement;
 
 		attackBuffStage = 0;
 		defenceBuffStage = 0;
@@ -176,25 +185,26 @@ void Entity::setSpeed(int s){
 	speed = s;
 }
 
-
-void Entity::drawSelf() const {
-	std::cout << "Entity ID: " << id << "\n";
-	std::cout << "Position: (" << position.x << ", " << position.y << ")\n";
-	std::cout << "Bounding Box Min: (" << min.x << ", " << min.y << ")\n";
-	std::cout << "Bounding Box Max: (" << max.x << ", " << max.y << ")\n";
-}
-
-
-void Entity::drawTesting() const {
+void Entity::drawBoundingBox() const {
 	attron(COLOR_PAIR(1));
-	mvprintw(position.y - 2, position.x - 2, "#####");
-	mvprintw(position.y - 1, position.x - 2, "#   #");
-	mvprintw(position.y, position.x - 2, "#   #");
-	mvprintw(position.y + 1, position.x - 2, "#   #");
-	mvprintw(position.y + 2, position.x - 2, "#####");
+	int i = min.x;
+	while (i <= max.x) {
+		mvprintw(min.y, i, "#");
+		mvprintw(max.y, i, "#");
+		i++;
+	}
+
+	i = min.y;
+	while (i <= max.y) {
+		mvprintw(i, min.x, "#");
+		mvprintw(i, max.x, "#");
+		i++;
+	}
+
 	attroff(COLOR_PAIR(1));
 	mvprintw(position.y, position.x, "#");
 }
+
 Vec2d Entity::getPosition() const {
 	return position;
 }
@@ -215,8 +225,12 @@ void Entity::setPosition(Vec2d newPosition) {
 	Vec2d diff = newPosition - position;
 	if (diff.x != 0.0f || diff.y != 0.0f) {
 		direction = diff;
-		direction.normalize();}
+		direction.normalize();
+	}
 	position = newPosition;
+
+	min += diff;
+	max += diff;
 }
 
 void Entity::setMin(Vec2d newMin) {

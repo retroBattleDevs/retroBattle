@@ -26,7 +26,7 @@ int BattleManager::startBattle(Entity* hero, Entity* enemy, int enemyCount) {
 	entityList.push_back(enemy);
 	for (int i = 1;i < enemyCount;i++) {
 		turnCounter++;
-		entityList.push_back(new Entity(*enemy));
+		entityList.push_back(enemy);
 	}
 
 	totalEntities += enemyCount;
