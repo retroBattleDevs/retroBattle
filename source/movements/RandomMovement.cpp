@@ -53,7 +53,7 @@ void RandomMovement::movingPatern(Vec2d &pos, Vec2d& min, Vec2d& max, int moveAm
         }
     }
 
-    Vec2d diff = pos_cache - pos;
+    Vec2d diff = pos - pos_cache;
     min += diff;
     max += diff;
 }
