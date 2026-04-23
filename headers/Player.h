@@ -7,6 +7,9 @@ class Player : public Entity {
 public:
 	Player();
 	Player(int id, Vec2d min, Vec2d max, Vec2d position);
+	~Player();
+
+	virtual void drawSelf() const override;
 
 	EntityTypes::Type getType() const override;
 	/*

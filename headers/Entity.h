@@ -4,6 +4,7 @@
 #include <iostream>
 #include "external_libraries/PDCurses/curses.h"
 #include "headers/MersenneTwister.h"
+#include "headers/movements/RandomMovement.h"
 
 namespace EntityTypes {
 	enum Type {
@@ -16,12 +17,8 @@ namespace EntityTypes {
 class Entity {
 
 protected:
-	Vec2d position;
-	Vec2d min;
-	Vec2d max;
 	static int nextId;
 	int id;
-
 
 	int health;
 	int	hitPoints;
@@ -78,8 +75,8 @@ public:
 	void setDefence(int d);
 	void setSpeed(int s);
 
-	void drawSelf() const;
-	void drawTesting() const;
+	virtual void drawSelf() const = 0;
+	void drawBoundingBox() const;
 	void move(Vec2d delta);
 	void takeDamage(int damage);
 	void heal(int amount);
@@ -95,6 +92,10 @@ public:
 	int getFinalDefence() const;
 	int getFinalSpeed() const;
 
+	Vec2d position;
+	Vec2d min;
+	Vec2d max;
 	Vec2d getDirection() const;
 	MersenneTwister* rng;
+	Movement* movement;
 };

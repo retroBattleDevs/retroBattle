@@ -1,6 +1,8 @@
 ﻿#include "retroBattle.h"
 
-void keyDispatcher(metrics& mtr, const char c, Entity *player) {
+void keyDispatcher(metrics& mtr, const char c, EntityManager *mgr) {
+
+	Entity *player = mgr->getPlayer();
 	Vec2d position = player->getPosition();
 	switch (c) {
 		case 'a':
@@ -24,6 +26,8 @@ void keyDispatcher(metrics& mtr, const char c, Entity *player) {
 				delwin(mtr.win);
 				mtr.win = nullptr;
 			}
+		case 'b':
+			mgr->showBoundingBox = (mgr->showBoundingBox == true) ? false : true;
     }
 	player->setPosition(position);
 }
@@ -85,13 +89,6 @@ int main() {
 
 		// Drawing of the Entities goes here.
 		entityManager.renderAll();
-		/*
-		player.drawTesting();
-		enemy.drawTesting();
-		enemy2.drawTesting();
-		enemy3.drawTesting();
-		enemy4.drawTesting();
-		*/
 
 		displayMetrics(mtr);
 
@@ -107,10 +104,10 @@ int main() {
 		}
 
 		// battle class test
-		//BattleManager test;
 		//test turn order with different speeds
-		//enemy.setSpeed(12);
-		//test.startBattle(&player, &enemy, 2);
+		//BattleManager test;
+		//Entity *enemy = entityManager.getEnemies()[0];
+		//test.startBattle(entityManager.getPlayer(), enemy, 1);
 		
 		// Update Entities with new positions and update animations to be drawn at the next iteration goes here.
 		mvprintw(0, 0, "y: %f    x: %f", entityManager.getPlayer()->getPosition().x, entityManager.getPlayer()->getPosition().y);
@@ -123,7 +120,7 @@ int main() {
 		refresh();
 
 		int c = getch(stdin);
-		keyDispatcher(mtr, c, entityManager.getPlayer());
+		keyDispatcher(mtr, c, &entityManager);
 
 		// Sleep so much as we need to keep us at 60 fps. 
 		time_diff = mtr.deltaTime > 0.016666 ? 0 : (0.016666 - mtr.deltaTime) * 100000;

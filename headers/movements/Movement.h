@@ -3,18 +3,19 @@
 
 #include <iostream>
 #include "headers/MersenneTwister.h"
-#include "Enums.h"
+#include "headers/Enums.h"
+#include "headers/Vec2D.h"
 
 class Movement {
 public:
     Movement();
     virtual ~Movement();
 
-    virtual void movingPatern(int& x, int& y, int& moveAmountX, int& moveAmountY) = 0;
+    virtual void movingPatern(Vec2d& pos, Vec2d& min, Vec2d& max, int moveAmountX, int moveAmountY) = 0;
 
     MersenneTwister* rng;
     std::string getTypeName() const;
-    std::string MovementName;
+    std::string movementName;
     int type;
 protected:
 

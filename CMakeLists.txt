@@ -29,7 +29,9 @@ add_executable (
 	"source/Player.cpp" 
 	"source/Enemy.cpp" 
 	"source/MersenneTwister.cpp"
- "headers/Movement.h" "headers/Enums.h")
+    "source/movements/RandomMovement.cpp" 
+	"source/movements/Movement.cpp"
+)
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET retroBattle PROPERTY CXX_STANDARD 20)
