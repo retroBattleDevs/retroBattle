@@ -5,7 +5,7 @@
 class Enemy : public Entity {
 public:
 	Enemy();
-	Enemy(int id, Vec2d min, Vec2d max, Vec2d position);
+	Enemy(int id, const int width, const int height, Vec2d position);
 	~Enemy();
 
 	virtual void drawSelf() const override;

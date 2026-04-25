@@ -2,7 +2,7 @@
 
 Enemy::Enemy() : Entity() {}
 
-Enemy::Enemy(int id, Vec2d min, Vec2d max, Vec2d position) : Entity(id, min, max, position) {
+Enemy::Enemy(int id, const int width, const int height, Vec2d position) : Entity(id, width, height, position) {
 	movement = new RandomMovement();
 }
 

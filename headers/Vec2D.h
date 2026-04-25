@@ -41,6 +41,5 @@ public:
 
 	//Vektornormierung (Macht den Vektor 1 Einheit lang)
 	void normalize();
-
 };
 #endif

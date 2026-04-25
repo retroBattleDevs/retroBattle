@@ -43,7 +43,7 @@ protected:
 public:
 
 	Entity();
-	Entity(int id, Vec2d min, Vec2d max, Vec2d position);
+	Entity(int id, const int width, const int height, Vec2d position);
 
 	Vec2d getPosition() const;
 	Vec2d getMin() const;
@@ -95,6 +95,7 @@ public:
 	Vec2d position;
 	Vec2d min;
 	Vec2d max;
+	Vec2d size;
 	Vec2d getDirection() const;
 	MersenneTwister* rng;
 	Movement* movement;

@@ -19,7 +19,7 @@ public:
 	void renderAll() const;
 
 	size_t getEntityCount() const;
-	int showBoundingBox;
+	int showBoundingBox, RUNNING;
 
 	Entity* getPlayer() const;
 	std::vector<Entity*> getEnemies() const;
