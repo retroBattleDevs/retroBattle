@@ -1,6 +1,7 @@
 #include "headers/Entity.h"
 #include "headers/general_funcs.h"
 
+
 int Entity::nextId = 1;
 
 Entity::Entity() {
@@ -29,13 +30,14 @@ Entity::Entity() {
 
 // Testing Julian
 Entity::Entity(int id, const int width, const int height, Vec2d position) {
-	this->id = id;
+	this->id = nextId++;
 	size = Vec2d(width, height);
 	this->min = position - (floorVec2d(size * 0.5));
 	this->max = position + (floorVec2d(size * 0.5));
+
 	this->position = position;
 
-	id = nextId++;
+
 	health = 100;
 	hitPoints = 100;
 	attack = 10;
@@ -228,6 +230,11 @@ int Entity::getId() const {
 	return id;
 }
 
+void Entity::updateBoundingBox(const Vec2d difference) {
+	min += difference;
+	max += difference;
+}
+
 void Entity::setPosition(Vec2d newPosition) {
 	Vec2d diff = newPosition - position;
 	if (diff.x != 0.0f || diff.y != 0.0f) {
@@ -236,8 +243,8 @@ void Entity::setPosition(Vec2d newPosition) {
 	}
 	position = newPosition;
 
-	min += diff;
-	max += diff;
+	updateBoundingBox(diff);
+
 }
 
 void Entity::setMin(Vec2d newMin) {
@@ -255,8 +262,9 @@ void Entity::move(Vec2d delta) {
 	}
 
 	position += delta;
-	min += delta;
-	max += delta;
+
+	updateBoundingBox(delta);
+
 }
 void Entity::takeDamage(int damage) {
 	int currentDef = getFinalDefence();
@@ -336,3 +344,4 @@ EntityTypes::Type Entity::getType() const {
 Vec2d Entity::getDirection() const {
 	return direction;
 }
+
