@@ -1,4 +1,5 @@
 #include "headers/Entity.h"
+#include "headers/general_funcs.h"
 
 int Entity::nextId = 1;
 
@@ -7,6 +8,7 @@ Entity::Entity() {
 	position = Vec2d(0, 0);
 	min = Vec2d(0, 0);
 	max = Vec2d(0, 0);
+	size = Vec2d(0, 0);
 	id = nextId++;
 
 	health = 100;
@@ -26,10 +28,11 @@ Entity::Entity() {
 
 
 // Testing Julian
-Entity::Entity(int id, Vec2d min, Vec2d max, Vec2d position) {
+Entity::Entity(int id, const int width, const int height, Vec2d position) {
 	this->id = id;
-	this->min = position - (min * 0.5);
-	this->max = position + (max * 0.5);
+	size = Vec2d(width, height);
+	this->min = position - (floorVec2d(size * 0.5));
+	this->max = position + (floorVec2d(size * 0.5));
 	this->position = position;
 
 	id = nextId++;
@@ -57,6 +60,7 @@ Entity::Entity(const Entity& other) {
 	position = other.position;
 	min = other.min;
 	max = other.max;
+	size = other.size;
 	id = other.id;
 
 	health = other.health;
@@ -76,6 +80,7 @@ Entity& Entity::operator=(const Entity& other) {
 		position = other.position;
 		min = other.min;
 		max = other.max;
+		size = other.size;
 		id = other.id;
 
 		health = other.health;
@@ -96,6 +101,7 @@ Entity::Entity(Entity&& other) noexcept {
 	position = other.position;
 	min = other.min;
 	max = other.max;
+	size = other.size;
 	id = other.id;
 
 	health = other.health;
@@ -115,6 +121,7 @@ Entity& Entity::operator=(Entity&& other) noexcept {
 		position = other.position;
 		min = other.min;
 		max = other.max;
+		size = other.size;
 		id = other.id;
 
 		health = other.health;

@@ -5,11 +5,13 @@
 EntityManager::EntityManager() {
 	this->entities = std::vector<Entity*>();
 	this->showBoundingBox = false;
+	this->RUNNING = true;
 }
 
 EntityManager::EntityManager(std::vector<Entity*> entities) {
 	this->entities = entities;
 	this->showBoundingBox = false;
+	this->RUNNING = true;
 }
 
 EntityManager::~EntityManager() = default;
@@ -17,6 +19,7 @@ EntityManager::~EntityManager() = default;
 EntityManager::EntityManager(const EntityManager& other) {
 	this->entities = other.entities;
 	this->showBoundingBox = false;
+	this->RUNNING = true;
 }
 
 EntityManager& EntityManager::operator=(const EntityManager& other) {
@@ -29,6 +32,7 @@ EntityManager& EntityManager::operator=(const EntityManager& other) {
 EntityManager::EntityManager(EntityManager&& other) noexcept {
 	this->entities = other.entities;
 	this->showBoundingBox = false;
+	this->RUNNING = true;
 }
 
 EntityManager& EntityManager::operator=(EntityManager&& other) noexcept {

@@ -29,6 +29,8 @@ void keyDispatcher(metrics& mtr, const char c, EntityManager *mgr) {
 		case 'b':
 			mgr->showBoundingBox = (mgr->showBoundingBox == true) ? false : true;
 			break;
+		case 'x':
+			mgr->RUNNING = 0;
     }
 	player->setPosition(position);
 }
@@ -70,11 +72,11 @@ int main() {
 
 	float time_diff = 0;
 	// Entity  
-	Entity* player = new Player(1, Vec2d(3.0, 3.0), Vec2d(5.0, 5.0), Vec2d(30.0, 30.0));
+	Entity* player = new Player(1, 5, 5, Vec2d(30.0, 30.0));
 	
-	Entity* enemy1 = new Enemy(2, Vec2d(3.0, 3.0), Vec2d(5.0, 5.0), Vec2d(20.0, 20.0));
-	Entity* enemy2 = new Enemy(3, Vec2d(3.0, 3.0), Vec2d(5.0, 5.0), Vec2d(20.0, 30.0));
-	Entity* enemy3 = new Enemy(4, Vec2d(3.0, 3.0), Vec2d(5.0, 5.0), Vec2d(45.0, 15.0));
+	Entity* enemy1 = new Enemy(2, 5, 5, Vec2d(20.0, 20.0));
+	Entity* enemy2 = new Enemy(3, 5, 5, Vec2d(20.0, 30.0));
+	Entity* enemy3 = new Enemy(4, 5, 5, Vec2d(45.0, 15.0));
 	//Entity enemy3(4, Vec2d(10.0, 10.0), Vec2d(20.0, 20.0), Vec2d(45.0, 15.0));
 	//Entity enemy4(5, Vec2d(10.0, 10.0), Vec2d(20.0, 20.0), Vec2d(50.0, 20.0));
 
@@ -83,7 +85,7 @@ int main() {
 	entityManager.add(enemy2);
 	entityManager.add(enemy3);
 
-	while (1) {
+	while (entityManager.RUNNING) {
 
 		updateTimeCounter(mtr);
 		calculateFPS(mtr);
@@ -132,6 +134,7 @@ int main() {
 	}
 
 	endwin();
+	clearScreen();
 	
 	return 0;
 }

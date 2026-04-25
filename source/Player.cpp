@@ -2,7 +2,7 @@
 
 Player::Player() : Entity() {}
 
-Player::Player(int id, Vec2d min, Vec2d max, Vec2d position) : Entity(id, min, max, position) {}
+Player::Player(int id, const int width, const int height, Vec2d position) : Entity(id, width, height, position) {}
 
 Player::~Player() {}
 

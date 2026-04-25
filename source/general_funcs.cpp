@@ -3,6 +3,14 @@
 #include <cmath>
 #include <vector>
 
+Vec2d ceilVec2d(Vec2d vec2) {
+	return Vec2d(ceilf(vec2.x), ceilf(vec2.y));
+}
+
+Vec2d floorVec2d(Vec2d vec2) {
+	return Vec2d(floorf(vec2.x), floorf(vec2.y));
+}
+
 float calculateWidthHeight(float max, float min) {
 	return max - min;
 }
