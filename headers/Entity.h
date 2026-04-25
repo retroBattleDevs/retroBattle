@@ -101,8 +101,5 @@ public:
 
 	Movement* movement;
 
-
-	void updateBoundingBox();
-
-
+	void updateBoundingBox(const Vec2d difference);
 };

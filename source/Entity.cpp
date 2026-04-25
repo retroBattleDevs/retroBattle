@@ -230,9 +230,9 @@ int Entity::getId() const {
 	return id;
 }
 
-void Entity::updateBoundingBox() {
-	min = Vec2d(position.x - 2, position.y - 2);
-	max = Vec2d(position.x + 2, position.y + 2);
+void Entity::updateBoundingBox(const Vec2d difference) {
+	min += difference;
+	max += difference;
 }
 
 void Entity::setPosition(Vec2d newPosition) {
@@ -242,9 +242,8 @@ void Entity::setPosition(Vec2d newPosition) {
 		direction.normalize();
 	}
 	position = newPosition;
-	min += diff;
-	max += diff;
-	updateBoundingBox();
+
+	updateBoundingBox(diff);
 
 }
 
@@ -263,10 +262,8 @@ void Entity::move(Vec2d delta) {
 	}
 
 	position += delta;
-	min += delta;
-	max += delta;
 
-	updateBoundingBox();
+	updateBoundingBox(delta);
 
 }
 void Entity::takeDamage(int damage) {

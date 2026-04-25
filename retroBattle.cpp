@@ -77,8 +77,6 @@ int main() {
 	Entity* enemy1 = new Enemy(2, 5, 5, Vec2d(20.0, 20.0));
 	Entity* enemy2 = new Enemy(3, 5, 5, Vec2d(20.0, 30.0));
 	Entity* enemy3 = new Enemy(4, 5, 5, Vec2d(45.0, 15.0));
-	//Entity enemy3(4, Vec2d(10.0, 10.0), Vec2d(20.0, 20.0), Vec2d(45.0, 15.0));
-	//Entity enemy4(5, Vec2d(10.0, 10.0), Vec2d(20.0, 20.0), Vec2d(50.0, 20.0));
 
 	std::vector<Entity*> entities = { player, enemy1 };
 	EntityManager entityManager(entities);
