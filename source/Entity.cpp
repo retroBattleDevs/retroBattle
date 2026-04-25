@@ -230,6 +230,11 @@ int Entity::getId() const {
 	return id;
 }
 
+void Entity::updateBoundingBox() {
+	min = Vec2d(position.x - 2, position.y - 2);
+	max = Vec2d(position.x + 2, position.y + 2);
+}
+
 void Entity::setPosition(Vec2d newPosition) {
 	Vec2d diff = newPosition - position;
 	if (diff.x != 0.0f || diff.y != 0.0f) {
@@ -237,9 +242,10 @@ void Entity::setPosition(Vec2d newPosition) {
 		direction.normalize();
 	}
 	position = newPosition;
-
 	min += diff;
 	max += diff;
+	updateBoundingBox();
+
 }
 
 void Entity::setMin(Vec2d newMin) {
@@ -259,6 +265,9 @@ void Entity::move(Vec2d delta) {
 	position += delta;
 	min += delta;
 	max += delta;
+
+	updateBoundingBox();
+
 }
 void Entity::takeDamage(int damage) {
 	int currentDef = getFinalDefence();
@@ -338,3 +347,4 @@ EntityTypes::Type Entity::getType() const {
 Vec2d Entity::getDirection() const {
 	return direction;
 }
+
