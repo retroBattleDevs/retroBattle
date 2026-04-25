@@ -1,6 +1,7 @@
 #include "headers/Entity.h"
 #include "headers/general_funcs.h"
 
+
 int Entity::nextId = 1;
 
 Entity::Entity() {
@@ -28,18 +29,12 @@ Entity::Entity() {
 
 
 // Testing Julian
-<<<<<<< HEAD
 Entity::Entity(int id, const int width, const int height, Vec2d position) {
-	this->id = id;
+	this->id = nextId++;
 	size = Vec2d(width, height);
 	this->min = position - (floorVec2d(size * 0.5));
 	this->max = position + (floorVec2d(size * 0.5));
-=======
-Entity::Entity(int id, Vec2d min, Vec2d max, Vec2d position) {
-	this->id = nextId++;
-	this->min = min;
-	this->max = max;
->>>>>>> 9b0626b (nextID ausgebessert)
+
 	this->position = position;
 
 
@@ -235,11 +230,6 @@ int Entity::getId() const {
 	return id;
 }
 
-void Entity::updateBoundingBox() {
-	min = Vec2d(position.x - 2, position.y - 2);
-	max = Vec2d(position.x + 2, position.y + 2);
-}
-
 void Entity::setPosition(Vec2d newPosition) {
 	Vec2d diff = newPosition - position;
 	if (diff.x != 0.0f || diff.y != 0.0f) {
@@ -247,13 +237,9 @@ void Entity::setPosition(Vec2d newPosition) {
 		direction.normalize();
 	}
 	position = newPosition;
-<<<<<<< HEAD
 
 	min += diff;
 	max += diff;
-=======
-	updateBoundingBox();
->>>>>>> d2d25fa (updateBoundingBox() hinzugefügt)
 }
 
 void Entity::setMin(Vec2d newMin) {
@@ -270,15 +256,9 @@ void Entity::move(Vec2d delta) {
 		direction.normalize();
 	}
 
-<<<<<<< HEAD
 	position += delta;
 	min += delta;
 	max += delta;
-=======
-	position.x += delta.x;
-	position.y += delta.y;
-	updateBoundingBox();
->>>>>>> d2d25fa (updateBoundingBox() hinzugefügt)
 }
 void Entity::takeDamage(int damage) {
 	int currentDef = getFinalDefence();
@@ -358,4 +338,3 @@ EntityTypes::Type Entity::getType() const {
 Vec2d Entity::getDirection() const {
 	return direction;
 }
-
