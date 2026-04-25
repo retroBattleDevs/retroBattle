@@ -98,5 +98,10 @@ public:
 	Vec2d size;
 	Vec2d getDirection() const;
 	MersenneTwister* rng;
+
 	Movement* movement;
+
+
+	void updateBoundingBox();
+
 };
