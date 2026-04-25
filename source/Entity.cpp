@@ -28,14 +28,21 @@ Entity::Entity() {
 
 
 // Testing Julian
+<<<<<<< HEAD
 Entity::Entity(int id, const int width, const int height, Vec2d position) {
 	this->id = id;
 	size = Vec2d(width, height);
 	this->min = position - (floorVec2d(size * 0.5));
 	this->max = position + (floorVec2d(size * 0.5));
+=======
+Entity::Entity(int id, Vec2d min, Vec2d max, Vec2d position) {
+	this->id = nextId++;
+	this->min = min;
+	this->max = max;
+>>>>>>> 9b0626b (nextID ausgebessert)
 	this->position = position;
 
-	id = nextId++;
+
 	health = 100;
 	hitPoints = 100;
 	attack = 10;
