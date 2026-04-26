@@ -6,12 +6,14 @@ EntityManager::EntityManager() {
 	this->entities = std::vector<Entity*>();
 	this->showBoundingBox = false;
 	this->RUNNING = true;
+	initializeWalkable();
 }
 
 EntityManager::EntityManager(std::vector<Entity*> entities) {
 	this->entities = entities;
 	this->showBoundingBox = false;
 	this->RUNNING = true;
+	initializeWalkable();
 }
 
 EntityManager::~EntityManager() = default;
@@ -63,8 +65,26 @@ void EntityManager::renderAll() const {
 		else
 			e->drawSelf();
 
-		if (e->movement)
-		    e->movement->movingPatern(e->position, e->min, e->max, 1, 1);
+		if (e->movement) {
+			if (canWalkTo(e->getPosition().x, e->getPosition().y)) {
+				e->movement->movingPatern(e->position, e->min, e->max, 1, 1);
+			}
+			else {
+				Vec2d invalidPosition = e->getPosition();
+				if (invalidPosition.x <= minWidth) {
+					e->movement->movingPatern(e->position, e->min, e->max, 1, 0);
+				}
+				else if (invalidPosition.x >= maxWidth) {
+					e->movement->movingPatern(e->position, e->min, e->max, -1, 0);
+				}
+				else if (invalidPosition.y <= minHeight) {
+					e->movement->movingPatern(e->position, e->min, e->max, 0, 1);
+				}
+				else if (invalidPosition.y >= maxHeight) {
+					e->movement->movingPatern(e->position, e->min, e->max, 0, -1);
+				}
+			}
+		}
 	}
 }
 
@@ -89,4 +109,19 @@ std::vector<Entity*> EntityManager::getEnemies() const {
 
 size_t EntityManager::getEntityCount() const {
 	return entities.size();
+}
+
+//---------------------
+
+void EntityManager::initializeWalkable() {
+	for (int x = 0; x < this->maxWidth; x++) {
+		for (int y = 0; y < this->maxHeight; y++) {
+			walkableTerrain[x][y] = true;
+		}
+	}
+}
+
+bool EntityManager::canWalkTo(int x, int y) const {
+	if (x < this->minWidth || x >= this->maxWidth || y < this->minHeight || y >= maxHeight) return false;
+	return walkableTerrain[x][y];
 }

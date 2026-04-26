@@ -27,8 +27,6 @@ Entity::Entity() {
 	movement = nullptr;
 }
 
-
-// Testing Julian
 Entity::Entity(int id, const int width, const int height, Vec2d position) {
 	this->id = nextId++;
 	size = Vec2d(width, height);
@@ -266,6 +264,7 @@ void Entity::move(Vec2d delta) {
 	updateBoundingBox(delta);
 
 }
+
 void Entity::takeDamage(int damage) {
 	int currentDef = getFinalDefence();
 	int actualDamage = damage - currentDef;

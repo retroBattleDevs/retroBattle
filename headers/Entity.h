@@ -78,6 +78,7 @@ public:
 	virtual void drawSelf() const = 0;
 	void drawBoundingBox() const;
 	void move(Vec2d delta);
+
 	void takeDamage(int damage);
 	void heal(int amount);
 	bool isAlive() const;
