@@ -73,14 +73,11 @@ int main() {
 	int x = 10, y = 10;
 
 	float time_diff = 0;
-	// Entity  
+
 	Entity* player = new Player(1, 5, 5, Vec2d(30.0, 30.0));
-	
 	Entity* enemy1 = new Enemy(2, 5, 5, Vec2d(20.0, 20.0));
 	Entity* enemy2 = new Enemy(3, 5, 5, Vec2d(20.0, 30.0));
 	Entity* enemy3 = new Enemy(4, 5, 5, Vec2d(45.0, 15.0));
-	/*
-	*/
 
 	std::vector<Entity*> entities = { player, enemy1, enemy2, enemy3 };
 	EntityManager entityManager(entities);
