@@ -3,6 +3,8 @@
 
 #include "headers/movements/Movement.h"
 
+#include "headers/Entity.h"
+
 class RandomMovement : public Movement {
 public:
     RandomMovement();

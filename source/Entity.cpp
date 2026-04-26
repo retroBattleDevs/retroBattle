@@ -27,8 +27,6 @@ Entity::Entity() {
 	movement = nullptr;
 }
 
-
-// Testing Julian
 Entity::Entity(int id, const int width, const int height, Vec2d position) {
 	this->id = nextId++;
 	size = Vec2d(width, height);
@@ -36,7 +34,6 @@ Entity::Entity(int id, const int width, const int height, Vec2d position) {
 	this->max = position + (floorVec2d(size * 0.5));
 
 	this->position = position;
-
 
 	health = 100;
 	hitPoints = 100;
@@ -161,7 +158,6 @@ int Entity::getSpeed() const{
 	return this->speed;
 }
 
-
 void Entity::setHealth(int h) {
 	if (h < 0) h = 0;
 	if (h > hitPoints) h = hitPoints;
@@ -264,8 +260,8 @@ void Entity::move(Vec2d delta) {
 	position += delta;
 
 	updateBoundingBox(delta);
-
 }
+
 void Entity::takeDamage(int damage) {
 	int currentDef = getFinalDefence();
 	int actualDamage = damage - currentDef;
