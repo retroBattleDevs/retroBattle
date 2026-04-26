@@ -106,12 +106,9 @@ std::vector<Entity*> EntityManager::getEnemies() const {
 	return enemies;
 }
 
-
 size_t EntityManager::getEntityCount() const {
 	return entities.size();
 }
-
-//---------------------
 
 void EntityManager::initializeWalkable() {
 	for (int x = 0; x < this->maxWidth; x++) {
