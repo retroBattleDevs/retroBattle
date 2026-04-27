@@ -83,6 +83,8 @@ int main() {
 	entityManager.add(enemy2);
 	entityManager.add(enemy3);
 
+	BattleManager battleManager;
+
 	while (entityManager.RUNNING) {
 
 		updateTimeCounter(mtr);
@@ -100,14 +102,25 @@ int main() {
 		}
 		*/
 
-		if (circleCollisionDetection(entityManager.getPlayer(), entityManager.getEnemies())) {
+		//check for collision
+		Entity* collider = circleCollisionDetection(entityManager.getPlayer(), entityManager.getEnemies());
+		if (collider != nullptr) {
 			mvprintw(0, 40, "Circle Collision!!");
+
+			//start battle and save result
+			int battleResult = battleManager.startBattle(entityManager.getPlayer(), collider, 1);
+
+			//battle won
+			if (battleResult == 1) {
+				entityManager.removeEntity(collider);
+			}
+			//battle lost
+			else{
+				//someting happens
+			}
+			
 		}
 
-		// battle class test
-		//test turn order with different speeds
-		//BattleManager test;
-		//Entity *enemy = entityManager.getEnemies()[0];
 		//test.startBattle(entityManager.getPlayer(), enemy, 1);
 		
 		// Update Entities with new positions and update animations to be drawn at the next iteration goes here.

@@ -15,11 +15,14 @@ BattleManager::BattleManager(){
 	availableMoves.push_back(new HealMove("Weak Heal", 100, 15));
 	availableMoves.push_back(new HealMove("Strong Heal", 30, 50));
 	availableMoves.push_back(new BuffMove("Focus", 100, 2, TargetStat::ATTACK, true));   // Buff
-	availableMoves.push_back(new BuffMove("Armor Break", 85, 1, TargetStat::DEFENSE, false));  // Debuff
 	availableMoves.push_back(new BuffMove("Sprint", 100, 2, TargetStat::SPEED, true));    // Buff
+	availableMoves.push_back(new BuffMove("Armor Break", 85, 1, TargetStat::DEFENSE, false));  // Debuff
 }
 
 int BattleManager::startBattle(Entity* hero, Entity* enemy, int enemyCount) {
+
+	hero->resetBuffStages();
+	enemy->resetBuffStages();
 
 	entityList.push_back(hero);
 
@@ -42,8 +45,14 @@ int BattleManager::startBattle(Entity* hero, Entity* enemy, int enemyCount) {
 
 		int winner = checkWinner();
 		if (winner != 0) {
-			cleanMem();
+			resetForNextBattle();
 			return winner;
+		}
+
+		//debug return
+		if (input == 'k') {
+			resetForNextBattle();
+			return 1;
 		}
 
 		switch (currentState) {
@@ -152,7 +161,7 @@ void BattleManager::targetSelectAction(int& selectedMove, int& selectedTarget,in
 	else {
 		if (cat == MoveCategory::BUFF || cat == MoveCategory::HEAL) {
 			//terget itself
-			selectedTarget = (char)(currentTurn + '0');
+			selectedTarget = (char)(turnOrder[currentTurn] + '0');
 		}
 		else {
 			//target hero
@@ -256,14 +265,16 @@ bool BattleManager::isHerosTurn() const{
 	return activeEntityIndex == 0;
 }
 
-void BattleManager::cleanMem(){
+void BattleManager::resetForNextBattle(){
 	for (int i = 2;i < totalEntities;i++) {
 		delete(entityList[i]);
 	}
-	totalEntities = 1;
+	
 	entityList = {};
 	turnCounter = 0;
 	currentTurn = 0;
+	totalEntities = 1;
+	roundCounter = 1;
 	currentState = moveSelect;
 }
 

@@ -62,7 +62,7 @@ float getRadius(Entity *entity) {
 	return (calculateWidthHeight(vec2dMax.y, vec2dMin.y) / 2);
 }
 
-bool circleCollisionDetection(Entity* player, std::vector<Entity*> enemies) {
+Entity* circleCollisionDetection(Entity* player, std::vector<Entity*> enemies) {
 	Vec2d playerCurrentPosition = player->getPosition();
 	float playerRadius = getRadius(player);
 
@@ -74,10 +74,10 @@ bool circleCollisionDetection(Entity* player, std::vector<Entity*> enemies) {
 		float combinedRadii = playerRadius + getRadius(enemy);
 
 		if ((absoluteDistanceX < combinedRadii) && (absoluteDistanceY < combinedRadii)) {
-			return true;
+			return enemy;
 		}
 	}
-	return false;
+	return nullptr;
 }
 
 /*
