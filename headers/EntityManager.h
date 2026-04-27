@@ -24,6 +24,16 @@ public:
 	Entity* getPlayer() const;
 	std::vector<Entity*> getEnemies() const;
 
+	bool canWalkTo(int x, int y) const;
+	void initializeWalkable();
+
 private:
 	std::vector<Entity*> entities;
+
+	static const int maxWidth = 154;
+	static const int maxHeight = 39;
+	static const int minWidth = 2;
+	static const int minHeight = 2;
+	bool walkableTerrain[maxWidth][maxHeight];
+
 };
