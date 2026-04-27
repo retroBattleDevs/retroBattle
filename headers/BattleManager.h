@@ -50,7 +50,7 @@ private:
 	void nextTurn();
 	int checkWinner();
 	bool isHerosTurn() const;
-	void cleanMem();
+	void resetForNextBattle();
 
 public:
 	BattleManager();
