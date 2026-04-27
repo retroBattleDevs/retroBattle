@@ -3,6 +3,8 @@
 
 #include <iostream>
 #include "external_libraries/PDCurses/curses.h"
+#include "headers/MersenneTwister.h"
+#include "headers/movements/RandomMovement.h"
 
 namespace EntityTypes {
 	enum Type {
@@ -15,12 +17,8 @@ namespace EntityTypes {
 class Entity {
 
 protected:
-	Vec2d position;
-	Vec2d min;
-	Vec2d max;
 	static int nextId;
 	int id;
-
 
 	int health;
 	int	hitPoints;
@@ -40,10 +38,12 @@ protected:
 	int defenceBuffStage;
 	int speedBuffStage;
 
+	Vec2d direction;
+
 public:
 
 	Entity();
-	Entity(int id, Vec2d min, Vec2d max, Vec2d position);
+	Entity(int id, const int width, const int height, Vec2d position);
 
 	Vec2d getPosition() const;
 	Vec2d getMin() const;
@@ -75,9 +75,10 @@ public:
 	void setDefence(int d);
 	void setSpeed(int s);
 
-	void drawSelf() const;
-	void drawTesting() const;
+	virtual void drawSelf() const = 0;
+	void drawBoundingBox() const;
 	void move(Vec2d delta);
+
 	void takeDamage(int damage);
 	void heal(int amount);
 	bool isAlive() const;
@@ -91,4 +92,15 @@ public:
 	int getFinalAttack() const;
 	int getFinalDefence() const;
 	int getFinalSpeed() const;
+
+	Vec2d position;
+	Vec2d min;
+	Vec2d max;
+	Vec2d size;
+	Vec2d getDirection() const;
+	MersenneTwister* rng;
+
+	Movement* movement;
+
+	void updateBoundingBox(const Vec2d difference);
 };

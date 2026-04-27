@@ -6,10 +6,12 @@
 #include <vector>
 #include "headers/Entity.h"
 
+Vec2d ceilVec2d(Vec2d vec2);
+Vec2d floorVec2d(Vec2d vec2);
 float calculateWidthHeight(float max, float min);
 float calculateAbsoluteDistance(float point1, float point2);
 bool collisionDetectionBoundinBox(Entity* player, std::vector<Entity*> enemies);
-bool circleCollisionDetection(Entity* player, std::vector<Entity*> enemies);
+Entity* circleCollisionDetection(Entity* player, std::vector<Entity*> enemies);
 float getRadius(Entity *entity);
 
 #endif // !GENERAL_FUNCS

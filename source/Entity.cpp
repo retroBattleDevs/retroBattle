@@ -1,4 +1,6 @@
 #include "headers/Entity.h"
+#include "headers/general_funcs.h"
+
 
 int Entity::nextId = 1;
 
@@ -7,6 +9,7 @@ Entity::Entity() {
 	position = Vec2d(0, 0);
 	min = Vec2d(0, 0);
 	max = Vec2d(0, 0);
+	size = Vec2d(0, 0);
 	id = nextId++;
 
 	health = 100;
@@ -18,17 +21,20 @@ Entity::Entity() {
 	attackBuffStage = 0;
 	defenceBuffStage = 0;
 	speedBuffStage = 0;
+
+	direction = Vec2d(0, 1);
+	rng = new MersenneTwister();
+	movement = nullptr;
 }
 
+Entity::Entity(int id, const int width, const int height, Vec2d position) {
+	this->id = nextId++;
+	size = Vec2d(width, height);
+	this->min = position - (floorVec2d(size * 0.5));
+	this->max = position + (floorVec2d(size * 0.5));
 
-// Testing Julian
-Entity::Entity(int id, Vec2d min, Vec2d max, Vec2d position) {
-	this->id = id;
-	this->min = min;
-	this->max = max;
 	this->position = position;
 
-	id = nextId++;
 	health = 100;
 	hitPoints = 100;
 	attack = 10;
@@ -38,14 +44,22 @@ Entity::Entity(int id, Vec2d min, Vec2d max, Vec2d position) {
 	attackBuffStage = 0;
 	defenceBuffStage = 0;
 	speedBuffStage = 0;
+
+	direction = Vec2d(0, 1);
+	rng = new MersenneTwister();
+	movement = nullptr;
 }
 
-Entity::~Entity() = default;
+Entity::~Entity() {
+	if (rng != nullptr)
+	    delete rng;
+};
 
 Entity::Entity(const Entity& other) {
 	position = other.position;
 	min = other.min;
 	max = other.max;
+	size = other.size;
 	id = other.id;
 
 	health = other.health;
@@ -57,12 +71,15 @@ Entity::Entity(const Entity& other) {
 	attackBuffStage = 0;
 	defenceBuffStage = 0;
 	speedBuffStage = 0;
+	rng = other.rng;
+	movement = other.movement;
 }
 Entity& Entity::operator=(const Entity& other) {
 	if (this != &other) {
 		position = other.position;
 		min = other.min;
 		max = other.max;
+		size = other.size;
 		id = other.id;
 
 		health = other.health;
@@ -70,6 +87,8 @@ Entity& Entity::operator=(const Entity& other) {
 		attack = other.attack;
 		defence = other.defence;
 		speed = other.speed;
+		rng = other.rng;
+		movement = other.movement;
 
 		attackBuffStage = 0;
 		defenceBuffStage = 0;
@@ -81,6 +100,7 @@ Entity::Entity(Entity&& other) noexcept {
 	position = other.position;
 	min = other.min;
 	max = other.max;
+	size = other.size;
 	id = other.id;
 
 	health = other.health;
@@ -88,6 +108,8 @@ Entity::Entity(Entity&& other) noexcept {
 	attack = other.attack;
 	defence = other.defence;
 	speed = other.speed;
+	rng = other.rng;
+	movement = other.movement;
 
 	attackBuffStage = 0;
 	defenceBuffStage = 0;
@@ -98,6 +120,7 @@ Entity& Entity::operator=(Entity&& other) noexcept {
 		position = other.position;
 		min = other.min;
 		max = other.max;
+		size = other.size;
 		id = other.id;
 
 		health = other.health;
@@ -105,6 +128,8 @@ Entity& Entity::operator=(Entity&& other) noexcept {
 		attack = other.attack;
 		defence = other.defence;
 		speed = other.speed;
+		rng = other.rng;
+		movement = other.movement;
 
 		attackBuffStage = 0;
 		defenceBuffStage = 0;
@@ -132,7 +157,6 @@ int Entity::getDefence() const {
 int Entity::getSpeed() const{
 	return this->speed;
 }
-
 
 void Entity::setHealth(int h) {
 	if (h < 0) h = 0;
@@ -166,25 +190,26 @@ void Entity::setSpeed(int s){
 	speed = s;
 }
 
-
-void Entity::drawSelf() const {
-	std::cout << "Entity ID: " << id << "\n";
-	std::cout << "Position: (" << position.x << ", " << position.y << ")\n";
-	std::cout << "Bounding Box Min: (" << min.x << ", " << min.y << ")\n";
-	std::cout << "Bounding Box Max: (" << max.x << ", " << max.y << ")\n";
-}
-
-
-void Entity::drawTesting() const {
+void Entity::drawBoundingBox() const {
 	attron(COLOR_PAIR(1));
-	mvprintw(position.y - 2, position.x - 2, "#####");
-	mvprintw(position.y - 1, position.x - 2, "#   #");
-	mvprintw(position.y, position.x - 2, "#   #");
-	mvprintw(position.y + 1, position.x - 2, "#   #");
-	mvprintw(position.y + 2, position.x - 2, "#####");
+	int i = min.x;
+	while (i <= max.x) {
+		mvprintw(min.y, i, "#");
+		mvprintw(max.y, i, "#");
+		i++;
+	}
+
+	i = min.y;
+	while (i <= max.y) {
+		mvprintw(i, min.x, "#");
+		mvprintw(i, max.x, "#");
+		i++;
+	}
+
 	attroff(COLOR_PAIR(1));
 	mvprintw(position.y, position.x, "#");
 }
+
 Vec2d Entity::getPosition() const {
 	return position;
 }
@@ -201,8 +226,21 @@ int Entity::getId() const {
 	return id;
 }
 
+void Entity::updateBoundingBox(const Vec2d difference) {
+	min += difference;
+	max += difference;
+}
+
 void Entity::setPosition(Vec2d newPosition) {
+	Vec2d diff = newPosition - position;
+	if (diff.x != 0.0f || diff.y != 0.0f) {
+		direction = diff;
+		direction.normalize();
+	}
 	position = newPosition;
+
+	updateBoundingBox(diff);
+
 }
 
 void Entity::setMin(Vec2d newMin) {
@@ -214,9 +252,16 @@ void Entity::setMax(Vec2d newMax) {
 }
 
 void Entity::move(Vec2d delta) {
-	position.x += delta.x;
-	position.y += delta.y;
+	if (delta.x != 0.0f || delta.y != 0.0f) {
+		direction = delta;
+		direction.normalize();
+	}
+
+	position += delta;
+
+	updateBoundingBox(delta);
 }
+
 void Entity::takeDamage(int damage) {
 	int currentDef = getFinalDefence();
 	int actualDamage = damage - currentDef;
@@ -291,3 +336,8 @@ int Entity::getFinalSpeed() const {
 EntityTypes::Type Entity::getType() const {
 	return EntityTypes::Type::Entity;
 }
+
+Vec2d Entity::getDirection() const {
+	return direction;
+}
+

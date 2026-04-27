@@ -3,6 +3,14 @@
 #include <cmath>
 #include <vector>
 
+Vec2d ceilVec2d(Vec2d vec2) {
+	return Vec2d(ceilf(vec2.x), ceilf(vec2.y));
+}
+
+Vec2d floorVec2d(Vec2d vec2) {
+	return Vec2d(floorf(vec2.x), floorf(vec2.y));
+}
+
 float calculateWidthHeight(float max, float min) {
 	return max - min;
 }
@@ -54,7 +62,7 @@ float getRadius(Entity *entity) {
 	return (calculateWidthHeight(vec2dMax.y, vec2dMin.y) / 2);
 }
 
-bool circleCollisionDetection(Entity* player, std::vector<Entity*> enemies) {
+Entity* circleCollisionDetection(Entity* player, std::vector<Entity*> enemies) {
 	Vec2d playerCurrentPosition = player->getPosition();
 	float playerRadius = getRadius(player);
 
@@ -66,10 +74,10 @@ bool circleCollisionDetection(Entity* player, std::vector<Entity*> enemies) {
 		float combinedRadii = playerRadius + getRadius(enemy);
 
 		if ((absoluteDistanceX < combinedRadii) && (absoluteDistanceY < combinedRadii)) {
-			return true;
+			return enemy;
 		}
 	}
-	return false;
+	return nullptr;
 }
 
 /*

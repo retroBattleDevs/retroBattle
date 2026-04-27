@@ -1,6 +1,8 @@
 ﻿#include "retroBattle.h"
 
-void keyDispatcher(metrics& mtr, const char c, Entity *player) {
+void keyDispatcher(metrics& mtr, const char c, EntityManager *mgr) {
+
+	Entity *player = mgr->getPlayer();
 	Vec2d position = player->getPosition();
 	switch (c) {
 		case 'a':
@@ -18,14 +20,21 @@ void keyDispatcher(metrics& mtr, const char c, Entity *player) {
 		case 'm':
 			if (!mtr.displayWindow) {
 				mtr.displayWindow = 1;
-			}
-			else {
+			} else {
 				mtr.displayWindow = 0;
 				delwin(mtr.win);
 				mtr.win = nullptr;
 			}
+			break;
+		case 'b':
+			mgr->showBoundingBox = (mgr->showBoundingBox == true) ? false : true;
+			break;
+		case 'x':
+			mgr->RUNNING = 0;
     }
-	player->setPosition(position);
+	if (mgr->canWalkTo(position.x, position.y)) {
+		player->setPosition(position);
+	}
 }
 void initWindowsAPI(void) {
 	HWND hwnd = GetConsoleWindow();
@@ -64,34 +73,28 @@ int main() {
 	int x = 10, y = 10;
 
 	float time_diff = 0;
-	// Entity  
-	Entity* player = new Player(1, Vec2d(3.0, 3.0), Vec2d(5.0, 5.0), Vec2d(30.0, 30.0));
-	
-	Entity* enemy1 = new Enemy(2, Vec2d(10.0, 10.0), Vec2d(20.0, 20.0), Vec2d(20.0, 20.0));
-	Entity* enemy2 = new Enemy(3, Vec2d(10.0, 10.0), Vec2d(20.0, 20.0), Vec2d(20.0, 30.0));
-	Entity* enemy3 = new Enemy(4, Vec2d(10.0, 10.0), Vec2d(20.0, 20.0), Vec2d(45.0, 15.0));
-	//Entity enemy3(4, Vec2d(10.0, 10.0), Vec2d(20.0, 20.0), Vec2d(45.0, 15.0));
-	//Entity enemy4(5, Vec2d(10.0, 10.0), Vec2d(20.0, 20.0), Vec2d(50.0, 20.0));
 
-	std::vector<Entity*> entities = { player, enemy1 };
+	Entity* player = new Player(1, 5, 5, Vec2d(30.0, 30.0));
+	Entity* enemy1 = new Enemy(2, 5, 5, Vec2d(20.0, 20.0));
+	Entity* enemy2 = new Enemy(3, 5, 5, Vec2d(20.0, 30.0));
+	Entity* enemy3 = new Enemy(4, 5, 5, Vec2d(45.0, 15.0));
+
+	std::vector<Entity*> entities = { player, enemy1, enemy2, enemy3 };
 	EntityManager entityManager(entities);
+	/*
 	entityManager.add(enemy2);
 	entityManager.add(enemy3);
+	*/
 
-	while (1) {
+	BattleManager battleManager;
+
+	while (entityManager.RUNNING) {
 
 		updateTimeCounter(mtr);
 		calculateFPS(mtr);
 
 		// Drawing of the Entities goes here.
 		entityManager.renderAll();
-		/*
-		player.drawTesting();
-		enemy.drawTesting();
-		enemy2.drawTesting();
-		enemy3.drawTesting();
-		enemy4.drawTesting();
-		*/
 
 		displayMetrics(mtr);
 
@@ -102,23 +105,39 @@ int main() {
 		}
 		*/
 
-		if (circleCollisionDetection(entityManager.getPlayer(), entityManager.getEnemies())) {
+		//check for collision
+		Entity* collider = circleCollisionDetection(entityManager.getPlayer(), entityManager.getEnemies());
+		if (collider != nullptr) {
 			mvprintw(0, 40, "Circle Collision!!");
+
+			//start battle and save result
+			int battleResult = battleManager.startBattle(entityManager.getPlayer(), collider, 1);
+
+			//battle won
+			if (battleResult == 1) {
+				entityManager.removeEntity(collider);
+			}
+			//battle lost
+			else{
+				//someting happens
+			}
+			
 		}
 
-		// battle class test
-		//BattleManager test;
-		//test turn order with different speeds
-		//enemy.setSpeed(12);
-		//test.startBattle(&player, &enemy, 2);
+		//test.startBattle(entityManager.getPlayer(), enemy, 1);
 		
 		// Update Entities with new positions and update animations to be drawn at the next iteration goes here.
 		mvprintw(0, 0, "y: %f    x: %f", entityManager.getPlayer()->getPosition().x, entityManager.getPlayer()->getPosition().y);
+
+		mvprintw(1, 0, "Direction X: %.2f    Direction Y: %.2f",
+			entityManager.getPlayer()->getDirection().x,
+			entityManager.getPlayer()->getDirection().y);
 		
 		//mvprintw(0, 0, "_rows: %d    _cols: %d", _rows, _cols);
 		refresh();
+
 		int c = getch(stdin);
-		keyDispatcher(mtr, c, entityManager.getPlayer());
+		keyDispatcher(mtr, c, &entityManager);
 
 		// Sleep so much as we need to keep us at 60 fps. 
 		time_diff = mtr.deltaTime > 0.016666 ? 0 : (0.016666 - mtr.deltaTime) * 100000;
@@ -129,6 +148,7 @@ int main() {
 	}
 
 	endwin();
+	clearScreen();
 	
 	return 0;
 }

@@ -2,7 +2,17 @@
 
 Player::Player() : Entity() {}
 
-Player::Player(int id, Vec2d min, Vec2d max, Vec2d position) : Entity(id, min, max, position) {}
+Player::Player(int id, const int width, const int height, Vec2d position) : Entity(id, width, height, position) {}
+
+Player::~Player() {}
+
+void Player::drawSelf() const {
+	attron(COLOR_PAIR(1));
+	mvprintw(position.y - 1, position.x - 2, " \\O7 ");
+	mvprintw(position.y,     position.x - 2, "  H  ");
+	mvprintw(position.y + 1, position.x - 2, " / L ");
+	attroff(COLOR_PAIR(1));
+}
 
 EntityTypes::Type Player::getType() const {
 	return EntityTypes::Type::Player;

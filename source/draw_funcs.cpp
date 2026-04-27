@@ -1,5 +1,9 @@
 #include "headers/draw_funcs.h"
 
+void clearScreen() {
+	std::cout << "\x1b[H\x1b[J";
+}
+
 void drawDoricColumn(void) {
 	char columns[30] = "\x1b[38;5;46m";
 	char walls[30] = "\x1b[38;5;104m";
@@ -51,6 +55,7 @@ void drawDoricColumn(void) {
 }
 
 void drawLogo(const int x, const int y) {
+	clearScreen();
 	drawDoricColumn();
 	std::cout << "\x1b[" << y - 6 << ";" << x << "H" << "      ______________                    __________           ";
 	std::cout << "\x1b[" << y - 5 << ";" << x << "H" << "     |              |                  |          |___       ";
