@@ -17,3 +17,4 @@
 #include "headers/BattleManager.h"
 #include "headers/Vec2D.h"
 #include "headers/EntityManager.h"
+#include "headers/terrain/Room.h"

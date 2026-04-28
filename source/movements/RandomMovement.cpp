@@ -26,13 +26,13 @@ void RandomMovement::movingPatern(Vec2d &pos, Vec2d& min, Vec2d& max, int moveAm
     }
 
     if (moveX < 0) {
-        if (realX == 0) {
+        if (realX == 3) {
             pos.x += moveAmountX;
         } else {
             pos.x -= moveAmountX;
         }
     } else if (moveX > 0) {
-        if (realX == 4) {
+        if (realX == 152) {
             pos.x -= moveAmountX;
         } else {
             pos.x += moveAmountX;
@@ -40,13 +40,13 @@ void RandomMovement::movingPatern(Vec2d &pos, Vec2d& min, Vec2d& max, int moveAm
     }
 
     if (moveY > 0) {
-        if (realY == 4) {
+        if (realY == 38) {
             pos.y -= moveAmountY;
         } else {
             pos.y += moveAmountY;
         }
     } else if (moveY < 0) {
-        if (realY == 0) {
+        if (realY == 2) {
             pos.y += moveAmountY;
         } else {
             pos.y -= moveAmountY;

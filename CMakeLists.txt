@@ -31,6 +31,7 @@ add_executable (
 	"source/MersenneTwister.cpp"
     "source/movements/RandomMovement.cpp" 
 	"source/movements/Movement.cpp"
+    "source/Terrain/Room.cpp"
 )
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)

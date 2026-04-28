@@ -1,17 +1,45 @@
 #include "headers/Player.h"
 
-Player::Player() : Entity() {}
+Player::Player() : Entity() {
+	showStats = 0;
+	statsWindow = nullptr;
+}
 
-Player::Player(int id, const int width, const int height, Vec2d position) : Entity(id, width, height, position) {}
+Player::Player(int id, const int width, const int height, Vec2d position) : Entity(id, width, height, position) {
+	showStats = 0;
+	statsWindow = nullptr;
+}
 
-Player::~Player() {}
+Player::~Player() {
+	delwin(statsWindow);
+	statsWindow = nullptr;
+}
 
 void Player::drawSelf() const {
 	attron(COLOR_PAIR(1));
-	mvprintw(position.y - 1, position.x - 2, " \\O7 ");
-	mvprintw(position.y,     position.x - 2, "  H  ");
-	mvprintw(position.y + 1, position.x - 2, " / L ");
+	mvprintw(position.y - 1, position.x - 1,  "\\O7");
+	mvprintw(position.y,     position.x,        "H");
+	mvprintw(position.y + 1, position.x - 1,  "/");
+	mvprintw(position.y + 1, position.x + 1,    "L");
 	attroff(COLOR_PAIR(1));
+}
+
+void Player::displayStats() {
+	if (showStats) {
+		if (statsWindow == nullptr) {
+			statsWindow = subwin(stdscr, 4, 45, 36, 110);
+		}
+		wclear(statsWindow);
+		box(statsWindow, 0, 0);
+		mvwprintw(statsWindow, 1, 1, "x: %f    y: %f", getPosition().x, getPosition().y);
+		mvwprintw(statsWindow, 2, 1, "Direction X: %.2f    Direction Y: %.2f", getDirection().x, getDirection().y);
+	}
+}
+
+void Player::hideStats() {
+	showStats = 0;
+	delwin(statsWindow);
+	statsWindow = nullptr;
 }
 
 EntityTypes::Type Player::getType() const {

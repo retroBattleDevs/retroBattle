@@ -2,7 +2,7 @@
 
 void keyDispatcher(metrics& mtr, const char c, EntityManager *mgr) {
 
-	Entity *player = mgr->getPlayer();
+	Player *player = static_cast<Player*>(mgr->getPlayer());
 	Vec2d position = player->getPosition();
 	switch (c) {
 		case 'a':
@@ -20,10 +20,9 @@ void keyDispatcher(metrics& mtr, const char c, EntityManager *mgr) {
 		case 'm':
 			if (!mtr.displayWindow) {
 				mtr.displayWindow = 1;
+				displayMetrics(mtr);
 			} else {
-				mtr.displayWindow = 0;
-				delwin(mtr.win);
-				mtr.win = nullptr;
+				hideMetrics(mtr);
 			}
 			break;
 		case 'b':
@@ -31,6 +30,15 @@ void keyDispatcher(metrics& mtr, const char c, EntityManager *mgr) {
 			break;
 		case 'x':
 			mgr->RUNNING = 0;
+			break;
+		case 'i':
+			if (!player->showStats) {
+				player->showStats = 1;
+				player->displayStats();
+			} else {
+				player->hideStats();
+			}
+			break;
     }
 	if (mgr->canWalkTo(position.x, position.y)) {
 		player->setPosition(position);
@@ -55,7 +63,7 @@ int main() {
 	using namespace std;
 	
 	initWindowsAPI();
-	drawLogo(50, 20);
+	//drawLogo(50, 20);
 	initPDCurses();
 
 	metrics mtr = { 0 };
@@ -75,7 +83,7 @@ int main() {
 	float time_diff = 0;
 
 	Entity* player = new Player(1, 5, 5, Vec2d(30.0, 30.0));
-	Entity* enemy1 = new Enemy(2, 5, 5, Vec2d(20.0, 20.0));
+	Entity* enemy1 = new Enemy(2, 5, 5, Vec2d(60.0, 20.0));
 	Entity* enemy2 = new Enemy(3, 5, 5, Vec2d(20.0, 30.0));
 	Entity* enemy3 = new Enemy(4, 5, 5, Vec2d(45.0, 15.0));
 
@@ -88,15 +96,19 @@ int main() {
 
 	BattleManager battleManager;
 
+	Room startRoom = Room(_cols, _rows);
+
 	while (entityManager.RUNNING) {
 
 		updateTimeCounter(mtr);
 		calculateFPS(mtr);
 
 		// Drawing of the Entities goes here.
+		startRoom.drawSelf();
 		entityManager.renderAll();
 
 		displayMetrics(mtr);
+		static_cast<Player*>(player)->displayStats();
 
 		// Collision detection and response goes here
 		/*
@@ -120,18 +132,8 @@ int main() {
 			//battle lost
 			else{
 				//someting happens
-			}
-			
-		}
-
-		//test.startBattle(entityManager.getPlayer(), enemy, 1);
-		
-		// Update Entities with new positions and update animations to be drawn at the next iteration goes here.
-		mvprintw(0, 0, "y: %f    x: %f", entityManager.getPlayer()->getPosition().x, entityManager.getPlayer()->getPosition().y);
-
-		mvprintw(1, 0, "Direction X: %.2f    Direction Y: %.2f",
-			entityManager.getPlayer()->getDirection().x,
-			entityManager.getPlayer()->getDirection().y);
+			}			
+		}	
 		
 		//mvprintw(0, 0, "_rows: %d    _cols: %d", _rows, _cols);
 		refresh();

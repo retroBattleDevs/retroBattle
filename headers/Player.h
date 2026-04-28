@@ -9,6 +9,8 @@ public:
 	Player(int id, const int width, const int height, Vec2d position);
 	~Player();
 
+	void displayStats();
+	void hideStats();
 	virtual void drawSelf() const override;
 
 	EntityTypes::Type getType() const override;
@@ -21,6 +23,8 @@ public:
 	int getWidth() const;
 	*/
 
+	WINDOW *statsWindow;
+	int showStats;
 private:
 	//int heigth, width = 3;
 };
