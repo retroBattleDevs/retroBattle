@@ -27,7 +27,7 @@ void Player::drawSelf() const {
 void Player::displayStats() {
 	if (showStats) {
 		if (statsWindow == nullptr) {
-			statsWindow = subwin(stdscr, 4, 45, 36, 110);
+			statsWindow = subwin(stdscr, 4, 45, 1, 110);
 		}
 		wclear(statsWindow);
 		box(statsWindow, 0, 0);

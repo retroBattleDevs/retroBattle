@@ -14,6 +14,11 @@ public:
 protected:
 
 private:
+    void initializeWalkable();
+	int maxWidth;
+	int maxHeight;
+	int minWidth;
+	int minHeight;
 };
 
 #endif // RandomMovement_H

@@ -40,7 +40,7 @@ void keyDispatcher(metrics& mtr, const char c, EntityManager *mgr) {
 			}
 			break;
     }
-	if (mgr->canWalkTo(position.x, position.y)) {
+	if (mgr->canWalkTo(player, position)) {
 		player->setPosition(position);
 	}
 }
@@ -63,7 +63,7 @@ int main() {
 	using namespace std;
 	
 	initWindowsAPI();
-	//drawLogo(50, 20);
+	drawLogo(50, 20);
 	initPDCurses();
 
 	metrics mtr = { 0 };
