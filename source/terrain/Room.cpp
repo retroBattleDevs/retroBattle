@@ -12,6 +12,38 @@ Room::Room(const int newWidth, const int newHeight) {
 
 Room::~Room() {}
 
+Room::Room(const Room &otherRoom) {
+    width = otherRoom.width;
+    height = otherRoom.height;
+}
+
+Room &Room::operator = (const Room &otherRoom) {
+    if (this != &otherRoom) {
+        width = otherRoom.width;
+        height = otherRoom.height;
+    }
+    return *this;
+}
+
+Room::Room(Room &&otherRoom) {
+    width = otherRoom.width;
+    height = otherRoom.height;
+
+    otherRoom.width = 0;
+    otherRoom.height = 0;
+}
+
+Room &Room::operator = (Room &&otherRoom) {
+    if (this != &otherRoom) {
+        width = otherRoom.width;
+        height = otherRoom.height;
+
+        otherRoom.width = 0;
+        otherRoom.height = 0;
+    }
+    return *this;
+}
+
 void Room::drawSelf() const {
     
     int pos_x = 40, pos_y = 20;
@@ -52,7 +84,7 @@ void Room::drawSelf() const {
         if (i == 17) {
             mvprintw(i, 0, "--");
             mvprintw(i, width - 1, "--");
-            i += 5;
+            i += 6;
             mvprintw(i, 0, "--");
             mvprintw(i, width - 1, "--");
             continue;

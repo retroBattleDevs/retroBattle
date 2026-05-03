@@ -9,6 +9,11 @@ class Room {
 		Room(const int newWidth, const int newHeight);
 		virtual ~Room();
 
+		Room(const Room &otherRoom);
+		Room &operator = (const Room& otherRoom);
+		Room(Room &&otherRoom);
+		Room &operator = (Room &&otherRoom);
+
 		virtual void drawSelf() const;
 	protected:
 
