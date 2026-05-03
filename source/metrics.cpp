@@ -3,7 +3,7 @@
 void displayMetrics(metrics &mtr) {
 	if (mtr.displayWindow) {
 		if (mtr.win == nullptr) {
-			mtr.win = subwin(stdscr, 5, 30, 0, 0);
+			mtr.win = subwin(stdscr, 5, 30, 1, 1);
 		}
 		wclear(mtr.win);
 		box(mtr.win, 0, 0);
@@ -11,6 +11,11 @@ void displayMetrics(metrics &mtr) {
 		mvwprintw(mtr.win, 2, 1, "deltaTime: %f", mtr.deltaTime);
 		mvwprintw(mtr.win, 3, 1, "Frame    : %d", mtr.Frame);
 	}
+}
+void hideMetrics(metrics& mtr) {
+	mtr.displayWindow = 0;
+	delwin(mtr.win);
+	mtr.win = nullptr;
 }
 const static uint64_t epoch = ((uint64_t)116444736000000000ULL);
 void usleep(const int usec) {

@@ -66,24 +66,7 @@ void EntityManager::renderAll() const {
 			e->drawSelf();
 
 		if (e->movement) {
-			if (canWalkTo(e->getPosition().x, e->getPosition().y)) {
-				e->movement->movingPatern(e->position, e->min, e->max, 1, 1);
-			}
-			else {
-				Vec2d invalidPosition = e->getPosition();
-				if (invalidPosition.x <= minWidth) {
-					e->movement->movingPatern(e->position, e->min, e->max, 1, 0);
-				}
-				else if (invalidPosition.x >= maxWidth) {
-					e->movement->movingPatern(e->position, e->min, e->max, -1, 0);
-				}
-				else if (invalidPosition.y <= minHeight) {
-					e->movement->movingPatern(e->position, e->min, e->max, 0, 1);
-				}
-				else if (invalidPosition.y >= maxHeight) {
-					e->movement->movingPatern(e->position, e->min, e->max, 0, -1);
-				}
-			}
+			e->movement->movingPatern(e->position, e->min, e->max, 1, 1);
 		}
 	}
 }
@@ -111,14 +94,21 @@ size_t EntityManager::getEntityCount() const {
 }
 
 void EntityManager::initializeWalkable() {
-	for (int x = 0; x < this->maxWidth; x++) {
-		for (int y = 0; y < this->maxHeight; y++) {
-			walkableTerrain[x][y] = true;
-		}
-	}
+	int _rows = 0,
+		_cols = 0;
+	getmaxyx(stdscr, _rows, _cols);
+
+	maxWidth = _cols;
+	maxHeight = _rows;
+	minWidth = 0;
+	minHeight = 0;
 }
 
-bool EntityManager::canWalkTo(int x, int y) const {
-	if (x < this->minWidth || x >= this->maxWidth || y < this->minHeight || y >= maxHeight) return false;
-	return walkableTerrain[x][y];
+bool EntityManager::canWalkTo(Entity *e, Vec2d newPosition) const {
+	Vec2d newMin = e->min - (e->getPosition() - newPosition);
+	Vec2d newMax = e->max - (e->getPosition() - newPosition);
+	if (newMin.x < this->minWidth || newMax.x >= this->maxWidth || newMin.y < this->minHeight || newMax.y >= maxHeight) {
+		return false;
+	}
+	return true;
 }

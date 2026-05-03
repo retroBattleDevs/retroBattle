@@ -1,4 +1,4 @@
-#include "headers/Enemy.h"
+#include "headers/enemies/Enemy.h"
 
 Enemy::Enemy() : Entity() {}
 
@@ -17,7 +17,8 @@ EntityTypes::Type Enemy::getType() const {
 void Enemy::drawSelf() const {
 	attron(COLOR_PAIR(2));
 	mvprintw(position.y - 1, position.x - 2, "\\_O_/");
-	mvprintw(position.y,     position.x - 2, "  H   ");
-	mvprintw(position.y + 1, position.x - 2, " / \\ ");
+	mvprintw(position.y,     position.x,        "H");
+	mvprintw(position.y + 1, position.x - 1,    "/");
+	mvprintw(position.y + 1, position.x + 1,    "\\");
 	attroff(COLOR_PAIR(2));
 }
