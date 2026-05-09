@@ -77,6 +77,7 @@ int main() {
 	init_pair(1, COLOR_GREEN, COLOR_BLACK);
 	init_pair(2, COLOR_RED, COLOR_BLACK);
 	init_pair(3, COLOR_CYAN, COLOR_BLACK);
+	init_pair(4, COLOR_YELLOW, COLOR_BLACK);
 
 	int x = 10, y = 10;
 
@@ -90,7 +91,14 @@ int main() {
 	Entity* enemy5 = new Enemy(3, 5, 5, Vec2d(120.0, 30.0));
 	Entity* enemy6 = new Enemy(4, 5, 5, Vec2d(145.0, 15.0));
 
-	std::vector<Entity*> entities = { player, enemy1, enemy2, enemy3, enemy4, enemy5, enemy6 };
+	//GateKeeper
+	MersenneTwister tempRng;
+	int randX = tempRng.getRandomNumber(5, _cols - 5);
+	int randY = tempRng.getRandomNumber(5, _rows - 5);
+	Entity* gateKeeper = new GateKeeper(7, 5, 5, Vec2d(randX, randY));
+
+
+	std::vector<Entity*> entities = { player, enemy1, enemy2, enemy3, enemy4, enemy5, enemy6, gateKeeper };
 	EntityManager entityManager(entities);
 	/*
 	entityManager.add(enemy2);
@@ -119,6 +127,24 @@ int main() {
 			mvprintw(0, 40, "Collision!!");
 		}
 		*/
+
+		//GateKeeper collision
+		if (circleCollisionDetection(entityManager.getPlayer(), { gateKeeper }) != nullptr) {
+			int midY = _rows / 2;
+			int midX = _cols / 2;
+
+			mvprintw(midY, midX - 4, "YOU WON!");
+			mvprintw(midY + 1, midX - 15, "Press any key to restart...");
+			refresh();
+			
+			nodelay(stdscr, false);
+			getch();
+			nodelay(stdscr, true);
+
+			entityManager.getPlayer()->setPosition(Vec2d(30.0, 30.0));
+			gateKeeper->setPosition(Vec2d(tempRng.getRandomNumber(5, _cols - 5), tempRng.getRandomNumber(5, _rows - 5)));
+			continue;
+		}
 
 		//check for collision
 		Entity* collider = circleCollisionDetection(entityManager.getPlayer(), entityManager.getEnemies());
