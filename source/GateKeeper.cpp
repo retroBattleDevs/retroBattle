@@ -33,9 +33,9 @@ GateKeeper& GateKeeper::operator=(GateKeeper&& other) noexcept {
 
 void GateKeeper::drawSelf() const {
     attron(COLOR_PAIR(4));
-    mvprintw(position.y - 1, position.x - 2, " [___] ");
-    mvprintw(position.y, position.x - 2,     " (o_o) ");
-    mvprintw(position.y + 1, position.x - 2, " / | \\ ");
+    mvprintw(position.y - 1, position.x - 2, "[___]");
+    mvprintw(position.y, position.x - 2,     "(o_o)");
+    mvprintw(position.y + 1, position.x - 2, "/ | \\");
     attroff(COLOR_PAIR(4));
 }
 
