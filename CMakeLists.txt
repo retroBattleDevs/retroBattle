@@ -31,7 +31,7 @@ add_executable (
 	"source/MersenneTwister.cpp"
     "source/movements/RandomMovement.cpp" 
 	"source/movements/Movement.cpp"
-)
+ "source/Item.cpp" "headers/Item.h" "source/Equipment.cpp")
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET retroBattle PROPERTY CXX_STANDARD 20)
