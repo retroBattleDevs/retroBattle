@@ -1,5 +1,5 @@
 #pragma once 
-#include "headers/Item.h"
+#include "headers/items/Item.h"
 
 enum class EquipmentSlot {
     Weapon,
