@@ -36,13 +36,14 @@ private:
 	void printHeroStats();
 	void printHeroMoves(int selectedMove);
 	void printEnemyStats(int selectedTarget);
+	void drawBackGround(int y, int x);
+	void drawEnemy(int y,int x);
+	void drawHero(int y, int x);
 	std::string getShortType(MoveCategory cat);
 
 	//checkers and actions
 	void changeState(BattleState state);
 	void calculateTurnOrder();
-	bool isValidMove(int selectedMove);
-	bool isValidTarget(int selectedTarget);
 	void moveSelectAction(int& selectedMove,int input);
 	void targetSelectAction(int& selectedMove, int& selectedTarget, int input);
 	void performMoveAction(int selectedMove, int selectedTarget);
