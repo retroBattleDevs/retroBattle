@@ -1,4 +1,4 @@
-#include "headers/Equipment.h"
+#include "headers/items/Equipment.h"
 #include <iostream>
 
 Equipment::Equipment(int id,const std::string& name,const std::string& description,const char* asciiSymbol,
