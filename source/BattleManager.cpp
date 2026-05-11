@@ -51,8 +51,18 @@ int BattleManager::startBattle(Entity* hero, Entity* enemy, int enemyCount) {
 
 		//debug return
 		if (input == 'k') {
+			printLog("Herro won the battle");
+			refresh();
+			Sleep(5000);
 			resetForNextBattle();
 			return 1;
+		}
+		if (input == 'l') {
+			printLog("Herro lost the battle");
+			refresh();
+			Sleep(5000);
+			resetForNextBattle();
+			return -1;
 		}
 
 		switch (currentState) {
@@ -95,77 +105,108 @@ void BattleManager::calculateTurnOrder(){
 	});
 }
 
-bool BattleManager::isValidMove(int selectedMove)
-{
-	int moveIdx = selectedMove - '1';
-
-	return (moveIdx >= 0 && moveIdx < availableMoves.size());
-}
-
-bool BattleManager::isValidTarget(int selectedTarget)
-{
-	return (selectedTarget - '0' >= 1 && selectedTarget - '0' < totalEntities);
-}
-
 void BattleManager::moveSelectAction(int& selectedMove,int input){
 	//heros turn
 	if (isHerosTurn()) {
-		printLog("Heros turn: Please select a move from moves list");
-		if (input != -1) selectedMove = input;
-		if (selectedMove == -1) return;
-		if (!isValidMove(input)) {
-			printELog("Invalid selection. Please choose a different move.");
-		}
-		else {
-			changeState(targetSelect);
+		attron(COLOR_PAIR(1));
+		mvprintw(23, 2, "Heros turn:");
+		attroff(COLOR_PAIR(1));
+		printELog("Use wasd to move trough the move list. Press space to lock in move.");
+		if (input != -1) {
+			switch (input) {
+			case 's':
+			case 'd':
+				selectedMove++;
+				if (selectedMove > availableMoves.size() - 1) {
+					selectedMove = 0;
+				}
+				break;
+			case 'w':
+			case 'a':
+				selectedMove--;
+				if (selectedMove < 0) {
+					selectedMove = availableMoves.size() - 1;
+				}
+				break;
+			case ' ':
+				if(selectedMove != -1)
+				changeState(targetSelect);
+			default:
+				break;
+			}
 		}
 	}
 	//enemy turn
 	else {
-		printLog("Enemys turn: Chossing move");
+		attron(COLOR_PAIR(2));
+		mvprintw(23, 2, "Enemys turn:");
+		attroff(COLOR_PAIR(2));
+		printELog("Chossing move");
 		refresh();
 		Sleep(2000);
 		int randomIdx = rand() % availableMoves.size();
-		selectedMove = (randomIdx + 1) + '0';
+		selectedMove = (randomIdx + 1);
 		changeState(targetSelect);
 	}
 }
 
 void BattleManager::targetSelectAction(int& selectedMove, int& selectedTarget,int input){
 	if (selectedMove == -1) return;
-	int moveIdx = selectedMove - '1';
+	int moveIdx = selectedMove;
 	BattleMove* move = availableMoves[moveIdx];
 	MoveCategory cat = move->getCategory();
 	//heros turn
 	if (isHerosTurn()) {
 		if (cat == MoveCategory::BUFF || cat == MoveCategory::HEAL) {
-			printLog("Hero selected " + move->getName() + " move");
-			selectedTarget = '0';
+			selectedTarget = 0;
 			changeState(performSelectedMove);
 			return;
 		}
 
-		printLog("Please select a target from targets list");
-
-		if (input != -1) selectedTarget = input;
-		if (selectedTarget == -1) return;
-
-		if (!isValidTarget(input)) {
-			printELog("Invalid selection. Please choose a different target.");
-		}
-		else {
+		if (totalEntities == 2) {
+			selectedTarget = 1;
 			changeState(performSelectedMove);
+			return;
+		}
+
+		if (selectedTarget == 0) {
+			selectedTarget = 1;
+		}
+
+		printELog("Use wasd to move trough the enemy list. Press space to lock in target.");
+		if (input != -1) {
+			switch (input) {
+			case 's':
+			case 'd':
+				selectedTarget++;
+				if (selectedTarget > totalEntities - 1) {
+					selectedTarget = 1;
+				}
+				break;
+			case 'w':
+			case 'a':
+				selectedTarget--;
+				if (selectedTarget < 1) {
+					selectedTarget = totalEntities - 1;
+				}
+				break;
+			case ' ':
+				if (selectedMove != -1);
+				changeState(performSelectedMove);
+			default:
+				break;
+			}
 		}
 	}
 	//enemy turn
 	else {
 		if (cat == MoveCategory::BUFF || cat == MoveCategory::HEAL) {
 			//terget itself
-			selectedTarget = (char)(turnOrder[currentTurn] + '0');
+			selectedTarget = turnOrder[currentTurn];
 		}
 		else {
 			//target hero
-			selectedTarget = '0';
+			selectedTarget = 0;
 		}
 		changeState(performSelectedMove);
 	}
@@ -177,8 +218,8 @@ void BattleManager::performMoveAction(int selectedMove, int selectedTarget){
 }
 
 void BattleManager::performMove(int selectedMove, int selectedTarget){
-	int moveIndex = selectedMove - '1';
-	int targetIndex = selectedTarget - '0';
+	int moveIndex = selectedMove;
+	int targetIndex = selectedTarget;
 
 	int entityIndex = turnOrder[currentTurn];
 
@@ -188,31 +229,52 @@ void BattleManager::performMove(int selectedMove, int selectedTarget){
 
 	bool success = move->execute(*executor, *target);
 	
-	std::string executorName = (isHerosTurn()) ? "Hero " : "Enemy " + std::to_string(entityIndex);
+	std::string executorName = (isHerosTurn()) ? "Hero " : "Enemy" + std::to_string(entityIndex);
 	std::string logMsg;
 
+	if (isHerosTurn()) {
+		attron(COLOR_PAIR(1));
+	}
+	else
+	{
+		attron(COLOR_PAIR(2));
+	}
+
+	mvprintw(23, 2, executorName.c_str());
+
+	logMsg = " used " + move->getName();
+	attron(COLOR_PAIR(4));
+	mvprintw(23, 8, logMsg.c_str());
+	attroff(COLOR_PAIR(4));
+
 	if (!success) {
-		logMsg = (executorName + " used " + move->getName() + "... but it MISSED!");
+		attron(COLOR_PAIR(2));
+		printELog("... but it MISSED!");
+		attroff(COLOR_PAIR(2));
+		refresh();
+		return;
 	}
 	else {
-		logMsg = (executorName + " used " + move->getName());
+		attron(COLOR_PAIR(3));
+		logMsg = "";
 		switch (move->getCategory()) {
 		case MoveCategory::ATTACK:
-			logMsg += (isHerosTurn()) ? " on Enemy " + std::to_string(targetIndex) : " on the Hero";
+			logMsg += (isHerosTurn()) ? "on Enemy " + std::to_string(targetIndex) : " on Hero";
 			break;
 		case MoveCategory::HEAL:
-			logMsg += " to recover HP!";
+			logMsg += "to recover HP!";
 			break;
 		case MoveCategory::BUFF:
-			logMsg += " to boost stats!";
+			logMsg += "to boost stats!";
 			break;
 		case MoveCategory::DEBUFF:
-			logMsg += " to weaken the foe!";
+			logMsg += "to weaken the foe!";
 			break;
 		}
 	}
 
-	printLog(logMsg);
+	printELog(logMsg);
+	attroff(COLOR_PAIR(3));
 	refresh();
 }
 
@@ -234,12 +296,11 @@ void BattleManager::nextTurn(){
 			foundValidTurn = true;
 		}
 	}
-	
 }
 
 int BattleManager::checkWinner(){
 	if (entityList[0]->getHealth() <= 0) {
-		printLog("Herro lost the battle (returning -1)");
+		printLog("Herro lost the battle");
 		refresh();
 		Sleep(5000);
 		return -1;
@@ -252,7 +313,7 @@ int BattleManager::checkWinner(){
 		}
 	}
 	if (endBattle) {
-		printLog("Herro won the battle (returning 1)");
+		printLog("Herro won the battle");
 		refresh();
 		Sleep(5000);
 		return 1;
@@ -327,6 +388,9 @@ void BattleManager::DrawUI(int selectedMove,int selectedTarget) {
 	printHeroStats();
 	printHeroMoves(selectedMove);
 	printEnemyStats(selectedTarget);
+	drawBackGround(15,40);
+	drawEnemy(12,120);
+	drawHero(3,14);
 }
 
 void BattleManager::printLog(std::string strg) {
@@ -334,7 +398,7 @@ void BattleManager::printLog(std::string strg) {
 }
 
 void BattleManager::printELog(std::string strg){
-	mvprintw(24, 1, strg.c_str());
+	mvprintw(24, 2, strg.c_str());
 }
 
 void BattleManager::printHeroStats(){
@@ -362,10 +426,12 @@ void BattleManager::printHeroMoves(int selectedMove){
 		BattleMove* move = availableMoves[i];
 
 		// Selection indicator
-		if (selectedMove - '1' == i) {
+		if (selectedMove == i) {
+			attron(COLOR_PAIR(5));
 			mvprintw(y, 23, " > ");
 		}
 		else {
+			attron(COLOR_PAIR(3));
 			mvprintw(y, 23, "   ");
 		}
 
@@ -380,6 +446,7 @@ void BattleManager::printHeroMoves(int selectedMove){
 			move->getAccuracy(),
 			typeStr.c_str());
 	}
+	
 	attroff(COLOR_PAIR(3));
 }
 
@@ -389,8 +456,12 @@ void BattleManager::printEnemyStats(int selectedTarget){
 	mvprintw(27, 73, "Enemy stats:");
 	mvprintw(28, 73, std::string(43, '-').c_str());
 	for (int i = 1;i < totalEntities;i++) {
-		if(selectedTarget - '0' == i) mvprintw(29, 72 + ((i - 1) * 20), ">");
+		if (selectedTarget == i) {
+			attron(COLOR_PAIR(6));
+			mvprintw(29, 72 + ((i - 1) * 20), ">");
+		} 
 		mvprintw(29, 73 + ((i - 1) * 20), "Enemy %d", i);
+		attron(COLOR_PAIR(2));
 		mvprintw(30, 73 + ((i - 1) * 20), "Hp:");
 		mvprintw(30, 82 + ((i - 1) * 20), "|%d/%d", entityList[i]->getHealth(), entityList[i]->getHitPoints());
 		mvprintw(31, 73 + ((i - 1) * 20), "Attack:");
@@ -402,6 +473,65 @@ void BattleManager::printEnemyStats(int selectedTarget){
 	}
 	attroff(COLOR_PAIR(2));
 	mvprintw(38, 73, "Stat format: |BuffedStat (BaseStat)");
+}
+
+void BattleManager::drawBackGround(int y, int x){
+	int pos_y = y;
+	int pos_x = x;
+
+	attron(COLOR_PAIR(3));
+	mvprintw(pos_y - 13, pos_x, "               )\\         O_._._._A_._._._O         /(");
+	mvprintw(pos_y - 12, pos_x, "                \\`--.___,'=================`.___,--'/");
+	mvprintw(pos_y - 11, pos_x, "                 \\`--._.__                 __._,--'/");
+	mvprintw(pos_y - 10, pos_x, "                   \\  ,. l`~~~~~~~~~~~~~~~'l ,.  /");
+	mvprintw(pos_y - 9, pos_x, "       __            \\||(_)!_!_!_.-._!_!_!(_)||/            __");
+	mvprintw(pos_y - 8, pos_x, "       \\\\`-.__        ||_|____!!_|;|_!!____|_||        __,-'//");
+	mvprintw(pos_y - 7, pos_x, "        \\\\    `==---='-----------'='-----------`=---=='    //");
+	mvprintw(pos_y - 6, pos_x, "        | `--.                                         ,--' |");
+	mvprintw(pos_y - 5, pos_x, "         \\  ,.`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~',.  /");
+	mvprintw(pos_y - 4, pos_x, "           \\||  ____,-------._,-------._,-------.____  ||/");
+	mvprintw(pos_y - 3, pos_x, "            ||\\|___!`=======\"!`=======\"!`=======\"!___|/||");
+	mvprintw(pos_y - 2, pos_x, "            || |---||--------||-| | |-!!--------||---| ||");
+	mvprintw(pos_y - 1, pos_x, "  __O_____O_ll_lO_____O_____O|| |'|'| ||O_____O_____Ol_ll_O_____O__");
+	mvprintw(pos_y    , 1, std::string(154, '-').c_str());
+	attroff(COLOR_PAIR(3));
+}
+
+void BattleManager::drawEnemy(int y, int x){
+	attron(COLOR_PAIR(2));
+	mvprintw(y + 0, x, "    _____");
+	mvprintw(y + 1, x, " \\_\\(),()/_/");
+	mvprintw(y + 2, x, "   (,___,)");
+	mvprintw(y + 3, x, "  ,-/`~`\\-,___");
+	mvprintw(y + 4, x, " / /).:.('--._)");
+	mvprintw(y + 5, x, "{_[ (_,_)");
+	mvprintw(y + 6, x, "    | Y |");
+	mvprintw(y + 7, x, "   /  |  \\");
+	mvprintw(y + 8, x, "   """ """");
+	attroff(COLOR_PAIR(2));
+}
+
+void BattleManager::drawHero(int y, int x){
+	attron(COLOR_PAIR(1));
+	mvprintw(y + 0, x, "      _ _");
+	mvprintw(y + 1, x, "     /.-.`.");
+	mvprintw(y + 2, x, "    //o;o\\ \\");
+	mvprintw(y + 3, x, "    \\\\_-_/)/");
+	mvprintw(y + 4, x, "    _`) ( _\\\\");
+	mvprintw(y + 5, x, " .`) '-.-' ( `.");
+	mvprintw(y + 6, x, "/ `/   .   \\`. \\");
+	mvprintw(y + 7, x, "\\ \\\\___A___/_` /");
+	mvprintw(y + 8, x, " '-)|)=@=(|(-'`\\");
+	mvprintw(y + 9, x, "   |/\\   /\\|  )/");
+	mvprintw(y + 10, x, "   /__\\_/__\\");
+	mvprintw(y + 11, x, "  '---' '---'");
+	mvprintw(y + 12, x, "   \\ /   \\ /");
+	mvprintw(y + 13, x, "   ( )   ( )");
+	mvprintw(y + 14, x, "   /_\\   /_\\");
+	mvprintw(y + 15, x, "  '---' '---'");
+	mvprintw(y + 16, x, "   \\ /   \\ /");
+	mvprintw(y + 17, x, "   /_\\   /_\\");
+	attroff(COLOR_PAIR(1));
 }
 
 std::string BattleManager::getShortType(MoveCategory cat) {

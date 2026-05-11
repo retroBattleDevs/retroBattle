@@ -78,6 +78,8 @@ int main() {
 	init_pair(2, COLOR_RED, COLOR_BLACK);
 	init_pair(3, COLOR_CYAN, COLOR_BLACK);
 	init_pair(4, COLOR_YELLOW, COLOR_BLACK);
+	init_pair(5, COLOR_BLACK, COLOR_CYAN);
+	init_pair(6, COLOR_BLACK, COLOR_RED);
 
 	int x = 10, y = 10;
 
@@ -160,7 +162,8 @@ int main() {
 			}
 			//battle lost
 			else{
-				//someting happens
+				//end the program
+				return 0;
 			}			
 		}	
 		
