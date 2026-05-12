@@ -34,7 +34,9 @@ add_executable (
     "source/Terrain/Room.cpp"
     "source/GateKeeper.cpp"
     "source/items/Item.cpp"
-	"source/items/Equipment.cpp")
+	"source/items/Relic.cpp")
+	
+
 
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
