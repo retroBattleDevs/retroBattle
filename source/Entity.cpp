@@ -49,6 +49,30 @@ Entity::Entity(int id, const int width, const int height, Vec2d position) {
 	rng = new MersenneTwister();
 	movement = nullptr;
 }
+/*
+Entity::Entity(int id, const int width, const int height, Vec2d position, Movement* movement) {
+	this->id = nextId++;
+	size = Vec2d(width, height);
+	this->min = position - (floorVec2d(size * 0.5));
+	this->max = position + (floorVec2d(size * 0.5));
+
+	this->position = position;
+
+	health = 100;
+	hitPoints = 100;
+	attack = 10;
+	defence = 5;
+	speed = 10;
+
+	attackBuffStage = 0;
+	defenceBuffStage = 0;
+	speedBuffStage = 0;
+
+	direction = Vec2d(0, 1);
+	rng = new MersenneTwister();
+	movement = movement;
+}
+*/
 
 Entity::~Entity() {
 	if (rng != nullptr)
@@ -341,3 +365,6 @@ Vec2d Entity::getDirection() const {
 	return direction;
 }
 
+void Entity::setMovement(Movement* movement) {
+	this->movement = movement;
+}

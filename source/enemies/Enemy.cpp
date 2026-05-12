@@ -1,9 +1,10 @@
 #include "headers/enemies/Enemy.h"
+#include "headers/movements/ChaseMovement.h"
 
 Enemy::Enemy() : Entity() {}
 
-Enemy::Enemy(int id, const int width, const int height, Vec2d position) : Entity(id, width, height, position) {
-	movement = new RandomMovement();
+Enemy::Enemy(int id, const int width, const int height, Vec2d position, Movement* enemyMovement) : Entity(id, width, height, position) {
+	movement = enemyMovement;
 }
 
 Enemy::~Enemy() {

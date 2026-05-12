@@ -85,14 +85,16 @@ int main() {
 
 	float time_diff = 0;
 
-	Entity* player = new Player(1, 5, 5, Vec2d(30.0, 30.0));
-	Entity* enemy1 = new Enemy(2, 5, 5, Vec2d(60.0, 20.0));
-	Entity* enemy2 = new Enemy(3, 5, 5, Vec2d(20.0, 30.0));
-	Entity* enemy3 = new Enemy(4, 5, 5, Vec2d(45.0, 15.0));
-	Entity* enemy4 = new Enemy(2, 5, 5, Vec2d(100.0, 20.0));
-	Entity* enemy5 = new Enemy(3, 5, 5, Vec2d(120.0, 30.0));
-	Entity* enemy6 = new Enemy(4, 5, 5, Vec2d(145.0, 15.0));
-
+	Entity* player = new Player(1, 5, 5, Vec2d(70.0, 20.0));
+	Entity* enemy1 = new Enemy(2, 5, 5, Vec2d(20.0, 20.0), new RandomMovement);
+	Entity* enemy2 = new Enemy(3, 5, 5, Vec2d(20.0, 30.0), new RandomMovement);
+	Entity* enemy3 = new Enemy(4, 5, 5, Vec2d(25.0, 10.0), new RandomMovement);
+	/*
+	Entity* enemy4 = new Enemy(2, 5, 5, Vec2d(100.0, 20.0), new RandomMovement);
+	Entity* enemy5 = new Enemy(3, 5, 5, Vec2d(120.0, 30.0), new RandomMovement);
+	Entity* enemy6 = new Enemy(4, 5, 5, Vec2d(145.0, 15.0), new RandomMovement);
+	*/
+	
 	//GateKeeper
 	MersenneTwister tempRng;
 	int randX = tempRng.getRandomNumber(5, _cols - 5);
@@ -100,7 +102,7 @@ int main() {
 	Entity* gateKeeper = new GateKeeper(7, 5, 5, Vec2d(randX, randY));
 
 
-	std::vector<Entity*> entities = { player, enemy1, enemy2, enemy3, enemy4, enemy5, enemy6, gateKeeper };
+	std::vector<Entity*> entities = { player, enemy1, enemy2, enemy3, /*enemy4, enemy5, enemy6,*/ gateKeeper};
 	EntityManager entityManager(entities);
 	/*
 	entityManager.add(enemy2);
@@ -129,6 +131,11 @@ int main() {
 			mvprintw(0, 40, "Collision!!");
 		}
 		*/
+
+		Entity* angryEnemy = circleCollisionDetectionAggressionRadius(entityManager.getPlayer(), entityManager.getEnemies());
+		if (angryEnemy != nullptr) {
+			entityManager.changeMovement(angryEnemy, new ChaseMovement(entityManager.getPlayer()));
+		}
 
 		//GateKeeper collision
 		if (circleCollisionDetection(entityManager.getPlayer(), { gateKeeper }) != nullptr) {
@@ -165,7 +172,9 @@ int main() {
 				//end the program
 				return 0;
 			}			
-		}	
+		}
+		/*
+		*/
 		
 		//mvprintw(0, 0, "_rows: %d    _cols: %d", _rows, _cols);
 		refresh();

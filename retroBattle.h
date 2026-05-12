@@ -19,3 +19,4 @@
 #include "headers/EntityManager.h"
 #include "headers/terrain/Room.h"
 #include "headers/GateKeeper.h"
+#include "headers/movements/ChaseMovement.h"

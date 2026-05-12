@@ -92,6 +92,7 @@ public:
 	int getFinalAttack() const;
 	int getFinalDefence() const;
 	int getFinalSpeed() const;
+	void setMovement(Movement* movement);
 
 	Vec2d position;
 	Vec2d min;

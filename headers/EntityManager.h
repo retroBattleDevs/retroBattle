@@ -27,6 +27,8 @@ public:
 	bool canWalkTo(Entity* e, Vec2d newPosition) const;
 	void initializeWalkable();
 
+	void changeMovement(Entity* e, Movement* movement);
+
 private:
 	std::vector<Entity*> entities;
 

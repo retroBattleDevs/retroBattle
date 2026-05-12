@@ -33,8 +33,8 @@ add_executable (
 	"source/movements/Movement.cpp"
     "source/Terrain/Room.cpp"
     "source/GateKeeper.cpp"
-    "source/Item.cpp"
-	"source/Equipment.cpp")
+    "source/items/Item.cpp"
+	"source/items/Equipment.cpp" "headers/movements/ChaseMovement.h" "source/movements/ChaseMovement.cpp")
 
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)

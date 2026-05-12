@@ -112,3 +112,7 @@ bool EntityManager::canWalkTo(Entity *e, Vec2d newPosition) const {
 	}
 	return true;
 }
+
+void EntityManager::changeMovement(Entity* e, Movement* movement) {
+	e->setMovement(movement);
+}
