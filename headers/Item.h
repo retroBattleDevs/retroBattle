@@ -2,6 +2,7 @@
 #include <iostream>
 #include "Vec2d.h"
 #include "Player.h"
+#include "external_libraries/PDCurses/curses.h"
 
 class Item {
 protected:
@@ -24,8 +25,10 @@ public:
     Vec2d getPosition() const;
     char getSymbol() const;
 
-    //Verhalten 
-    virtual void onPickup(Player& player) = 0;
+    
+    virtual void onPickup(Player& player) = 0; //Verhalten 
+    virtual void drawSelf() const = 0;
+
 };
 
 
