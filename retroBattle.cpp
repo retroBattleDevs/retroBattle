@@ -138,7 +138,7 @@ int main() {
 		}
 
 		//GateKeeper collision
-		if (circleCollisionDetection(entityManager.getPlayer(), { gateKeeper }) != nullptr) {
+		if (circleCollisionDetection(entityManager.getPlayer(), { gateKeeper }).size() > 0) {
 			int midY = _rows / 2;
 			int midX = _cols / 2;
 
@@ -156,16 +156,17 @@ int main() {
 		}
 
 		//check for collision
-		Entity* collider = circleCollisionDetection(entityManager.getPlayer(), entityManager.getEnemies());
-		if (collider != nullptr) {
+		auto collider = circleCollisionDetection(entityManager.getPlayer(), entityManager.getEnemies());
+		if (collider.size() > 0) {
 			mvprintw(0, 40, "Circle Collision!!");
+			auto enemiesInRadius = getEnemiesInRadius(entityManager.getPlayer(), entityManager.getEnemies(), 30);
 
 			//start battle and save result
-			int battleResult = battleManager.startBattle(entityManager.getPlayer(), collider, 1);
+			int battleResult = battleManager.startBattle(entityManager.getPlayer(), collider.front(), 1);
 
 			//battle won
 			if (battleResult == 1) {
-				entityManager.removeEntity(collider);
+				entityManager.removeEntity(collider.front());
 			}
 			//battle lost
 			else{

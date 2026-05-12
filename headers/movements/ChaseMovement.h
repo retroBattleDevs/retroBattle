@@ -16,6 +16,8 @@ private:
 	void initializeWalkable();
 	Entity* target;
 
+	int counter;
+
 	int maxWidth;
 	int maxHeight;
 	int minWidth;
