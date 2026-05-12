@@ -24,8 +24,7 @@ void ChaseMovement::initializeWalkable() {
 void ChaseMovement::movingPatern(Vec2d& pos, Vec2d& min, Vec2d& max, int moveAmountX, int moveAmountY) {
     int realX = pos.x;
     int realY = pos.y;
-    
-
+   
     Vec2d pos_cache = pos;
     Vec2d desired_Point = target->getPosition();
 

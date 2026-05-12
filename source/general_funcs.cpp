@@ -80,9 +80,10 @@ Entity* circleCollisionDetection(Entity* player, std::vector<Entity*> enemies) {
 	return nullptr;
 }
 
-Entity* circleCollisionDetectionAggressionRadius(Entity* player, std::vector<Entity*> enemies) {
+std::vector< Entity*> circleCollisionDetectionAggressionRadius(Entity* player, std::vector<Entity*> enemies) {
 	Vec2d playerCurrentPosition = player->getPosition();
 	float playerRadius = getRadius(player);
+	std::vector<Entity*> angryEnemies;
 
 	for (auto& enemy : enemies) {
 		Vec2d enemyCurrentPosition = enemy->getPosition();
@@ -92,10 +93,10 @@ Entity* circleCollisionDetectionAggressionRadius(Entity* player, std::vector<Ent
 		float combinedRadii = playerRadius + getRadius(enemy)+10;
 
 		if ((absoluteDistanceX < combinedRadii) && (absoluteDistanceY < combinedRadii)) {
-			return enemy;
+			angryEnemies.push_back(enemy);
 		}
 	}
-	return nullptr;
+	return angryEnemies;
 }
 
 /*
