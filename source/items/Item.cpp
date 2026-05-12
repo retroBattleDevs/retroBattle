@@ -1,9 +1,7 @@
-<<<<<<< HEAD:source/items/Item.cpp
-#include "headers/items/Item.h"
-#include <cstring>
-=======
-#include "headers/Item.h"
->>>>>>> Item:source/Item.cpp
+
+#include "headers/Items/Item.h"
+#include "headers/Vec2D.h"
+
 
 
 Item::Item(): position(0, 0), symbol('?') {

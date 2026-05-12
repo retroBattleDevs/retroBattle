@@ -1,5 +1,7 @@
-#include "headers/Relic.h"
-
+#include "headers/Items/Relic.h"
+#include "headers/Items/Item.h"
+#include "headers/Vec2D.h"
+#include "headers/Player.h"
 
 Relic::Relic(const Vec2d& pos, int bonus)
     : Item(pos, 'R'), bonusAmount(bonus) {

@@ -1,7 +1,7 @@
 #pragma once
 #include <iostream>
-#include "Vec2d.h"
-#include "Player.h"
+#include "headers/Vec2D.h"
+#include "headers/Player.h"
 #include "external_libraries/PDCurses/curses.h"
 
 class Item {

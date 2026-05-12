@@ -1,5 +1,5 @@
 #pragma once 
-#include "headers/Item.h"
+#include "headers/Items/Item.h"
 #include "external_libraries/PDCurses/curses.h"
 
 
