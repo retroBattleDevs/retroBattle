@@ -86,12 +86,12 @@ int main() {
 	float time_diff = 0;
 
 	Entity* player = new Player(1, 5, 5, Vec2d(30.0, 30.0));
-	Entity* enemy1 = new Enemy(2, 5, 5, Vec2d(60.0, 20.0));
-	Entity* enemy2 = new Enemy(3, 5, 5, Vec2d(20.0, 30.0));
-	Entity* enemy3 = new Enemy(4, 5, 5, Vec2d(45.0, 15.0));
-	Entity* enemy4 = new Enemy(2, 5, 5, Vec2d(100.0, 20.0));
-	Entity* enemy5 = new Enemy(3, 5, 5, Vec2d(120.0, 30.0));
-	Entity* enemy6 = new Enemy(4, 5, 5, Vec2d(145.0, 15.0));
+	Entity* enemy1 = new Enemy(2, 5, 5, Vec2d(60.0, 20.0), new RandomMovement);
+	Entity* enemy2 = new Enemy(3, 5, 5, Vec2d(20.0, 30.0), new RandomMovement);
+	Entity* enemy3 = new Enemy(4, 5, 5, Vec2d(45.0, 15.0), new RandomMovement);
+	Entity* enemy4 = new Enemy(2, 5, 5, Vec2d(100.0, 20.0), new RandomMovement);
+	Entity* enemy5 = new Enemy(3, 5, 5, Vec2d(120.0, 30.0), new RandomMovement);
+	Entity* enemy6 = new Enemy(4, 5, 5, Vec2d(145.0, 15.0), new ChaseMovement(player));
 
 	//GateKeeper
 	MersenneTwister tempRng;
@@ -131,7 +131,7 @@ int main() {
 		*/
 
 		//GateKeeper collision
-		if (circleCollisionDetection(entityManager.getPlayer(), { gateKeeper }) != nullptr) {
+		if (circleCollisionDetection(entityManager.getPlayer(), { gateKeeper }).size() > 0) {
 			int midY = _rows / 2;
 			int midX = _cols / 2;
 
@@ -148,17 +148,21 @@ int main() {
 			continue;
 		}
 
+		/*
+			Battle Manager currently takes one Entity. Adjusted the collision Detection to return a vector of all colliding Enemies.
+			For the program to compile at the current state I start the fight with the first Entity of the vector.
+		*/
 		//check for collision
-		Entity* collider = circleCollisionDetection(entityManager.getPlayer(), entityManager.getEnemies());
-		if (collider != nullptr) {
+		auto collider = circleCollisionDetection(entityManager.getPlayer(), entityManager.getEnemies());
+		if (collider.size() > 0) {
 			mvprintw(0, 40, "Circle Collision!!");
 
 			//start battle and save result
-			int battleResult = battleManager.startBattle(entityManager.getPlayer(), collider, 1);
+			int battleResult = battleManager.startBattle(entityManager.getPlayer(), collider.front(), 1);
 
 			//battle won
 			if (battleResult == 1) {
-				entityManager.removeEntity(collider);
+				entityManager.removeEntity(collider.front());
 			}
 			//battle lost
 			else{

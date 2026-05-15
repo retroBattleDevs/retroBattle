@@ -34,7 +34,7 @@ add_executable (
     "source/Terrain/Room.cpp"
     "source/GateKeeper.cpp"
     "source/items/Item.cpp"
-	"source/items/Relic.cpp")
+	"source/items/Relic.cpp" "source/movements/ChaseMovement.cpp")
 	
 
 
