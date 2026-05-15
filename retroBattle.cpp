@@ -131,7 +131,7 @@ int main() {
 		*/
 
 		//GateKeeper collision
-		if (circleCollisionDetection(entityManager.getPlayer(), { gateKeeper }) != nullptr) {
+		if (circleCollisionDetection(entityManager.getPlayer(), { gateKeeper }).size() > 0) {
 			int midY = _rows / 2;
 			int midX = _cols / 2;
 
@@ -148,17 +148,21 @@ int main() {
 			continue;
 		}
 
+		/*
+			Battle Manager currently takes one Entity. Adjusted the collision Detection to return a vector of all colliding Enemies.
+			For the program to compile at the current state I start the fight with the first Entity of the vector.
+		*/
 		//check for collision
-		Entity* collider = circleCollisionDetection(entityManager.getPlayer(), entityManager.getEnemies());
-		if (collider != nullptr) {
+		auto collider = circleCollisionDetection(entityManager.getPlayer(), entityManager.getEnemies());
+		if (collider.size() > 0) {
 			mvprintw(0, 40, "Circle Collision!!");
 
 			//start battle and save result
-			int battleResult = battleManager.startBattle(entityManager.getPlayer(), collider, 1);
+			int battleResult = battleManager.startBattle(entityManager.getPlayer(), collider.front(), 1);
 
 			//battle won
 			if (battleResult == 1) {
-				entityManager.removeEntity(collider);
+				entityManager.removeEntity(collider.front());
 			}
 			//battle lost
 			else{
