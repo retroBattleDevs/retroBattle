@@ -29,7 +29,9 @@ void keyDispatcher(metrics& mtr, const char c, EntityManager *mgr) {
 			mgr->showBoundingBox = (mgr->showBoundingBox == true) ? false : true;
 			break;
 		case 'x':
-			mgr->RUNNING = 0;
+			if (displayDialog()) {
+				mgr->RUNNING = 0;
+			}
 			break;
 		case 'i':
 			if (!player->showStats) {
@@ -80,6 +82,11 @@ int main() {
 	init_pair(4, COLOR_YELLOW, COLOR_BLACK);
 	init_pair(5, COLOR_BLACK, COLOR_CYAN);
 	init_pair(6, COLOR_BLACK, COLOR_RED);
+
+	init_color(BROWN_COLOR, 867, 718, 527);
+	init_color(LIGHT_GREEN_COLOR, 714, 917, 203);
+	init_pair(7, BROWN_COLOR, COLOR_BLACK);
+	init_pair(8, LIGHT_GREEN_COLOR, COLOR_BLACK);
 
 	int x = 10, y = 10;
 
@@ -169,8 +176,8 @@ int main() {
 				//end the program
 				return 0;
 			}			
-		}	
-		
+		}
+
 		//mvprintw(0, 0, "_rows: %d    _cols: %d", _rows, _cols);
 		refresh();
 

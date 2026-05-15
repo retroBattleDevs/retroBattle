@@ -1,6 +1,7 @@
 #ifndef ROOM_H
 #define ROOM_H
 
+#include "headers/MersenneTwister.h"
 #include "external_libraries/PDCurses/curses.h"
 
 class Room {

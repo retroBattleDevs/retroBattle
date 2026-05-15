@@ -11,6 +11,8 @@ public:
     virtual ~RandomMovement();
 
     virtual void movingPatern(Vec2d& pos, Vec2d& min, Vec2d& max, int moveAmountX, int moveAmountY) override;
+
+	int tempo;
 protected:
 
 private:

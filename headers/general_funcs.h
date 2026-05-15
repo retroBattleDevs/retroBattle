@@ -6,6 +6,7 @@
 #include <vector>
 #include "headers/Entity.h"
 
+int displayDialog();
 Vec2d ceilVec2d(Vec2d vec2);
 Vec2d floorVec2d(Vec2d vec2);
 float calculateWidthHeight(float max, float min);
