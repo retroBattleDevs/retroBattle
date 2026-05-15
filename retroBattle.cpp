@@ -86,12 +86,12 @@ int main() {
 	float time_diff = 0;
 
 	Entity* player = new Player(1, 5, 5, Vec2d(30.0, 30.0));
-	Entity* enemy1 = new Enemy(2, 5, 5, Vec2d(60.0, 20.0));
-	Entity* enemy2 = new Enemy(3, 5, 5, Vec2d(20.0, 30.0));
-	Entity* enemy3 = new Enemy(4, 5, 5, Vec2d(45.0, 15.0));
-	Entity* enemy4 = new Enemy(2, 5, 5, Vec2d(100.0, 20.0));
-	Entity* enemy5 = new Enemy(3, 5, 5, Vec2d(120.0, 30.0));
-	Entity* enemy6 = new Enemy(4, 5, 5, Vec2d(145.0, 15.0));
+	Entity* enemy1 = new Enemy(2, 5, 5, Vec2d(60.0, 20.0), new RandomMovement);
+	Entity* enemy2 = new Enemy(3, 5, 5, Vec2d(20.0, 30.0), new RandomMovement);
+	Entity* enemy3 = new Enemy(4, 5, 5, Vec2d(45.0, 15.0), new RandomMovement);
+	Entity* enemy4 = new Enemy(2, 5, 5, Vec2d(100.0, 20.0), new RandomMovement);
+	Entity* enemy5 = new Enemy(3, 5, 5, Vec2d(120.0, 30.0), new RandomMovement);
+	Entity* enemy6 = new Enemy(4, 5, 5, Vec2d(145.0, 15.0), new ChaseMovement(player));
 
 	//GateKeeper
 	MersenneTwister tempRng;
