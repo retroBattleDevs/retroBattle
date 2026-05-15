@@ -15,6 +15,7 @@ typedef struct metrics {
 } metrics;
 
 void displayMetrics(metrics &mtr);
+void hideMetrics(metrics& mtr);
 void usleep(const int usec);
 void gettimeofday(struct timeval &tp, struct timezone *tzp);
 void initTimeCounter(metrics &mtr);

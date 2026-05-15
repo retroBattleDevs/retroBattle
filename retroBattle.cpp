@@ -2,7 +2,7 @@
 
 void keyDispatcher(metrics& mtr, const char c, EntityManager *mgr) {
 
-	Entity *player = mgr->getPlayer();
+	Player *player = static_cast<Player*>(mgr->getPlayer());
 	Vec2d position = player->getPosition();
 	switch (c) {
 		case 'a':
@@ -20,10 +20,9 @@ void keyDispatcher(metrics& mtr, const char c, EntityManager *mgr) {
 		case 'm':
 			if (!mtr.displayWindow) {
 				mtr.displayWindow = 1;
+				displayMetrics(mtr);
 			} else {
-				mtr.displayWindow = 0;
-				delwin(mtr.win);
-				mtr.win = nullptr;
+				hideMetrics(mtr);
 			}
 			break;
 		case 'b':
@@ -31,8 +30,17 @@ void keyDispatcher(metrics& mtr, const char c, EntityManager *mgr) {
 			break;
 		case 'x':
 			mgr->RUNNING = 0;
+			break;
+		case 'i':
+			if (!player->showStats) {
+				player->showStats = 1;
+				player->displayStats();
+			} else {
+				player->hideStats();
+			}
+			break;
     }
-	if (mgr->canWalkTo(position.x, position.y)) {
+	if (mgr->canWalkTo(player, position)) {
 		player->setPosition(position);
 	}
 }
@@ -69,17 +77,30 @@ int main() {
 	init_pair(1, COLOR_GREEN, COLOR_BLACK);
 	init_pair(2, COLOR_RED, COLOR_BLACK);
 	init_pair(3, COLOR_CYAN, COLOR_BLACK);
+	init_pair(4, COLOR_YELLOW, COLOR_BLACK);
+	init_pair(5, COLOR_BLACK, COLOR_CYAN);
+	init_pair(6, COLOR_BLACK, COLOR_RED);
 
 	int x = 10, y = 10;
 
 	float time_diff = 0;
 
 	Entity* player = new Player(1, 5, 5, Vec2d(30.0, 30.0));
-	Entity* enemy1 = new Enemy(2, 5, 5, Vec2d(20.0, 20.0));
-	Entity* enemy2 = new Enemy(3, 5, 5, Vec2d(20.0, 30.0));
-	Entity* enemy3 = new Enemy(4, 5, 5, Vec2d(45.0, 15.0));
+	Entity* enemy1 = new Enemy(2, 5, 5, Vec2d(60.0, 20.0), new RandomMovement);
+	Entity* enemy2 = new Enemy(3, 5, 5, Vec2d(20.0, 30.0), new RandomMovement);
+	Entity* enemy3 = new Enemy(4, 5, 5, Vec2d(45.0, 15.0), new RandomMovement);
+	Entity* enemy4 = new Enemy(2, 5, 5, Vec2d(100.0, 20.0), new RandomMovement);
+	Entity* enemy5 = new Enemy(3, 5, 5, Vec2d(120.0, 30.0), new RandomMovement);
+	Entity* enemy6 = new Enemy(4, 5, 5, Vec2d(145.0, 15.0), new ChaseMovement(player));
 
-	std::vector<Entity*> entities = { player, enemy1, enemy2, enemy3 };
+	//GateKeeper
+	MersenneTwister tempRng;
+	int randX = tempRng.getRandomNumber(5, _cols - 5);
+	int randY = tempRng.getRandomNumber(5, _rows - 5);
+	Entity* gateKeeper = new GateKeeper(7, 5, 5, Vec2d(randX, randY));
+
+
+	std::vector<Entity*> entities = { player, enemy1, enemy2, enemy3, enemy4, enemy5, enemy6, gateKeeper };
 	EntityManager entityManager(entities);
 	/*
 	entityManager.add(enemy2);
@@ -88,15 +109,19 @@ int main() {
 
 	BattleManager battleManager;
 
+	Room startRoom = Room(_cols, _rows);
+
 	while (entityManager.RUNNING) {
 
 		updateTimeCounter(mtr);
 		calculateFPS(mtr);
 
 		// Drawing of the Entities goes here.
+		startRoom.drawSelf();
 		entityManager.renderAll();
 
 		displayMetrics(mtr);
+		static_cast<Player*>(player)->displayStats();
 
 		// Collision detection and response goes here
 		/*
@@ -105,33 +130,46 @@ int main() {
 		}
 		*/
 
+		//GateKeeper collision
+		if (circleCollisionDetection(entityManager.getPlayer(), { gateKeeper }).size() > 0) {
+			int midY = _rows / 2;
+			int midX = _cols / 2;
+
+			mvprintw(midY, midX - 4, "YOU WON!");
+			mvprintw(midY + 1, midX - 15, "Press any key to restart...");
+			refresh();
+			
+			nodelay(stdscr, false);
+			getch();
+			nodelay(stdscr, true);
+
+			entityManager.getPlayer()->setPosition(Vec2d(30.0, 30.0));
+			gateKeeper->setPosition(Vec2d(tempRng.getRandomNumber(5, _cols - 5), tempRng.getRandomNumber(5, _rows - 5)));
+			continue;
+		}
+
+		/*
+			Battle Manager currently takes one Entity. Adjusted the collision Detection to return a vector of all colliding Enemies.
+			For the program to compile at the current state I start the fight with the first Entity of the vector.
+		*/
 		//check for collision
-		Entity* collider = circleCollisionDetection(entityManager.getPlayer(), entityManager.getEnemies());
-		if (collider != nullptr) {
+		auto collider = circleCollisionDetection(entityManager.getPlayer(), entityManager.getEnemies());
+		if (collider.size() > 0) {
 			mvprintw(0, 40, "Circle Collision!!");
 
 			//start battle and save result
-			int battleResult = battleManager.startBattle(entityManager.getPlayer(), collider, 1);
+			int battleResult = battleManager.startBattle(entityManager.getPlayer(), collider.front(), 1);
 
 			//battle won
 			if (battleResult == 1) {
-				entityManager.removeEntity(collider);
+				entityManager.removeEntity(collider.front());
 			}
 			//battle lost
 			else{
-				//someting happens
-			}
-			
-		}
-
-		//test.startBattle(entityManager.getPlayer(), enemy, 1);
-		
-		// Update Entities with new positions and update animations to be drawn at the next iteration goes here.
-		mvprintw(0, 0, "y: %f    x: %f", entityManager.getPlayer()->getPosition().x, entityManager.getPlayer()->getPosition().y);
-
-		mvprintw(1, 0, "Direction X: %.2f    Direction Y: %.2f",
-			entityManager.getPlayer()->getDirection().x,
-			entityManager.getPlayer()->getDirection().y);
+				//end the program
+				return 0;
+			}			
+		}	
 		
 		//mvprintw(0, 0, "_rows: %d    _cols: %d", _rows, _cols);
 		refresh();
