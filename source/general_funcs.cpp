@@ -3,6 +3,16 @@
 #include <cmath>
 #include <vector>
 
+int displayDialog() {
+	mvprintw(20, 60, "Are you sure you want to quit? [y/N]");
+	refresh();
+	char input = getchar();
+	if (input == 'y' || input == 'Y') {
+		return 1;
+	}
+	return 0;
+}
+
 Vec2d ceilVec2d(Vec2d vec2) {
 	return Vec2d(ceilf(vec2.x), ceilf(vec2.y));
 }
