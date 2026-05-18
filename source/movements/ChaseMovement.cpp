@@ -5,6 +5,7 @@ ChaseMovement::ChaseMovement(Entity* targetPlayer, Entity* self) : target(target
     type = chase_movement;
     movementName = "chaseMovement";
     counter = 0;
+    simpleMovementCounter = 0;
     initializeWalkable();
 }
 
@@ -23,6 +24,7 @@ void ChaseMovement::initializeWalkable() {
     minHeight = 0;
 }
 
+// Min Max Terrain Grenzen ueberpruefen
 void ChaseMovement::movingPatern(Vec2d& pos, Vec2d& min, Vec2d& max, int moveAmountX, int moveAmountY) {
     if (counter == 3) {
 
@@ -33,6 +35,7 @@ void ChaseMovement::movingPatern(Vec2d& pos, Vec2d& min, Vec2d& max, int moveAmo
         Vec2d desired_Point = target->getPosition();
 
         if (inAggressionRadius(target, self, 30)) {
+            // if in aggression radius follow player
 
             int xDistance = std::abs(desired_Point.x - realX);
             int yDistance = std::abs(desired_Point.y - realY);
@@ -63,7 +66,25 @@ void ChaseMovement::movingPatern(Vec2d& pos, Vec2d& min, Vec2d& max, int moveAmo
             }
         }
         else {
-
+            // else simple movement
+            switch (simpleMovementCounter) {
+            case 0: 
+                pos.y -= moveAmountY;
+                simpleMovementCounter++;
+                break;
+            case 1:
+                pos.x += moveAmountX;
+                simpleMovementCounter++;
+                break;
+            case 2:
+                pos.y += moveAmountY;
+                simpleMovementCounter++;
+                break;
+            case 3:
+                pos.x -= moveAmountX;
+                simpleMovementCounter = 0;
+                break;
+            }
         }
 
 

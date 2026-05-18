@@ -18,6 +18,7 @@ private:
 	Entity* self;
 
 	int counter;
+	int simpleMovementCounter;
 
 	int maxWidth;
 	int maxHeight;
