@@ -1,9 +1,11 @@
 #include "headers/movements/ChaseMovement.h"
+#include "headers/general_funcs.h"
 
-ChaseMovement::ChaseMovement(Entity* targetPlayer) : target(targetPlayer) {
+ChaseMovement::ChaseMovement(Entity* targetPlayer, Entity* self) : target(targetPlayer), self(self) {
     type = chase_movement;
     movementName = "chaseMovement";
     counter = 0;
+    simpleMovementCounter = 0;
     initializeWalkable();
 }
 
@@ -22,6 +24,7 @@ void ChaseMovement::initializeWalkable() {
     minHeight = 0;
 }
 
+// Min Max Terrain Grenzen ueberpruefen
 void ChaseMovement::movingPatern(Vec2d& pos, Vec2d& min, Vec2d& max, int moveAmountX, int moveAmountY) {
     if (counter == 3) {
 
@@ -31,34 +34,66 @@ void ChaseMovement::movingPatern(Vec2d& pos, Vec2d& min, Vec2d& max, int moveAmo
         Vec2d pos_cache = pos;
         Vec2d desired_Point = target->getPosition();
 
-        int xDistance = std::abs(desired_Point.x - realX);
-        int yDistance = std::abs(desired_Point.y - realY);
+        if (inAggressionRadius(target, self, 15)) {
+            // if in aggression radius follow player
 
-        if (xDistance == 0) {
-            if (pos.y > desired_Point.y) { pos.y -= moveAmountY; }
-            if (pos.y < desired_Point.y) { pos.y += moveAmountY; }
-        }
-        else if (yDistance == 0) {
-            if (pos.x > desired_Point.x) { pos.x -= moveAmountX; }
-            if (pos.x < desired_Point.x) { pos.x += moveAmountX; }
-        }
-        else if (xDistance < yDistance) {
-            if (desired_Point.x > realX) {
-                pos.x += moveAmountX;
-            }
-            else if (desired_Point.x < realX) {
-                pos.x -= moveAmountX;
-            }
-        }
-        else if (xDistance > yDistance) {
-            if (desired_Point.y > realY) {
-                pos.y += moveAmountY;
-            }
-            else if (desired_Point.y < realX) {
-                pos.y -= moveAmountY;
-            }
-        }
+            int xDistance = std::abs(desired_Point.x - realX);
+            int yDistance = std::abs(desired_Point.y - realY);
 
+            if (xDistance == 0) {
+                if (pos.y > desired_Point.y) { pos.y -= moveAmountY; }
+                if (pos.y < desired_Point.y) { pos.y += moveAmountY; }
+            }
+            else if (yDistance == 0) {
+                if (pos.x > desired_Point.x) { pos.x -= moveAmountX; }
+                if (pos.x < desired_Point.x) { pos.x += moveAmountX; }
+            }
+            else if (xDistance < yDistance) {
+                if (desired_Point.x > realX) {
+                    pos.x += moveAmountX;
+                }
+                else if (desired_Point.x < realX) {
+                    pos.x -= moveAmountX;
+                }
+            }
+            else if (xDistance > yDistance) {
+                if (desired_Point.y > realY) {
+                    pos.y += moveAmountY;
+                }
+                else if (desired_Point.y < realX) {
+                    pos.y -= moveAmountY;
+                }
+            }
+        }
+        else {
+            // else simple movement
+            switch (simpleMovementCounter) {
+            case 0:
+                if (pos.y - moveAmountY >= minHeight) {
+                    pos.y -= moveAmountY;
+                }
+                simpleMovementCounter++;
+                break;
+            case 1:
+                if (pos.x + moveAmountX <= maxWidth) {
+                    pos.x += moveAmountX;
+                }
+                simpleMovementCounter++;
+                break;
+            case 2:
+                if (pos.y + moveAmountY <= maxHeight) {
+                    pos.y += moveAmountY;
+                }
+                simpleMovementCounter++;
+                break;
+            case 3:
+                if (pos.x - moveAmountX >= minWidth) {
+                    pos.x -= moveAmountX;
+                }
+                simpleMovementCounter = 0;
+                break;
+            }
+        }
 
 
         Vec2d diff = pos - pos_cache;

@@ -92,7 +92,7 @@ std::vector<Entity*> circleCollisionDetection(Entity* player, std::vector<Entity
 	return collidingEnemies;
 }
 
-std::vector<Entity*> circleCollisionDetectionAggressionRadius(Entity* player, std::vector<Entity*> enemies) {
+std::vector<Entity*> circleCollisionDetectionAggressionRadius(Entity* player, std::vector<Entity*> enemies, int radius) {
 	Vec2d playerCurrentPosition = player->getPosition();
 	float playerRadius = getRadius(player);
 	std::vector<Entity*> angryEnemies;
@@ -102,13 +102,28 @@ std::vector<Entity*> circleCollisionDetectionAggressionRadius(Entity* player, st
 
 		float absoluteDistanceX = calculateAbsoluteDistance(playerCurrentPosition.x, enemyCurrentPosition.x);
 		float absoluteDistanceY = calculateAbsoluteDistance(playerCurrentPosition.y, enemyCurrentPosition.y);
-		float combinedRadii = playerRadius + getRadius(enemy) + 10;
 
-		if ((absoluteDistanceX < combinedRadii) && (absoluteDistanceY < combinedRadii)) {
+		if ((absoluteDistanceX < radius) && (absoluteDistanceY < radius)) {
 			angryEnemies.push_back(enemy);
 		}
 	}
 	return angryEnemies;
+}
+
+bool inAggressionRadius(Entity* player, Entity* enemy, int radius) {
+	Vec2d playerCurrentPosition = player->getPosition();
+	float playerRadius = getRadius(player);
+
+	Vec2d enemyCurrentPosition = enemy->getPosition();
+
+	float absoluteDistanceX = calculateAbsoluteDistance(playerCurrentPosition.x, enemyCurrentPosition.x);
+	float absoluteDistanceY = calculateAbsoluteDistance(playerCurrentPosition.y, enemyCurrentPosition.y);
+
+	if ((absoluteDistanceX < radius) && (absoluteDistanceY < radius)) {
+		return true;
+	}
+
+	return false;
 }
 
 std::vector<Entity*> getEnemiesInRadius(Entity* player, std::vector<Entity*> enemies, int radius) {
