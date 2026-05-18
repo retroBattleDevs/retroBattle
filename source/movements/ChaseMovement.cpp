@@ -34,7 +34,7 @@ void ChaseMovement::movingPatern(Vec2d& pos, Vec2d& min, Vec2d& max, int moveAmo
         Vec2d pos_cache = pos;
         Vec2d desired_Point = target->getPosition();
 
-        if (inAggressionRadius(target, self, 30)) {
+        if (inAggressionRadius(target, self, 15)) {
             // if in aggression radius follow player
 
             int xDistance = std::abs(desired_Point.x - realX);
@@ -68,20 +68,28 @@ void ChaseMovement::movingPatern(Vec2d& pos, Vec2d& min, Vec2d& max, int moveAmo
         else {
             // else simple movement
             switch (simpleMovementCounter) {
-            case 0: 
-                pos.y -= moveAmountY;
+            case 0:
+                if (pos.y - moveAmountY >= minHeight) {
+                    pos.y -= moveAmountY;
+                }
                 simpleMovementCounter++;
                 break;
             case 1:
-                pos.x += moveAmountX;
+                if (pos.x + moveAmountX <= maxWidth) {
+                    pos.x += moveAmountX;
+                }
                 simpleMovementCounter++;
                 break;
             case 2:
-                pos.y += moveAmountY;
+                if (pos.y + moveAmountY <= maxHeight) {
+                    pos.y += moveAmountY;
+                }
                 simpleMovementCounter++;
                 break;
             case 3:
-                pos.x -= moveAmountX;
+                if (pos.x - moveAmountX >= minWidth) {
+                    pos.x -= moveAmountX;
+                }
                 simpleMovementCounter = 0;
                 break;
             }
