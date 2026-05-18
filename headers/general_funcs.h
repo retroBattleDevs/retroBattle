@@ -14,7 +14,9 @@ float calculateAbsoluteDistance(float point1, float point2);
 std::vector<Entity*> collisionDetectionBoundinBox(Entity* player, std::vector<Entity*> enemies);
 std::vector<Entity*> circleCollisionDetection(Entity* player, std::vector<Entity*> enemies);
 float getRadius(Entity *entity);
-std::vector<Entity*> circleCollisionDetectionAggressionRadius(Entity* player, std::vector<Entity*> enemies);
+std::vector<Entity*> circleCollisionDetectionAggressionRadius(Entity* player, std::vector<Entity*> enemies, int radius);
 std::vector<Entity*> getEnemiesInRadius(Entity* player, std::vector<Entity*> enemies, int radius);
+
+bool inAggressionRadius(Entity* player, Entity* enemy, int radius);
 
 #endif // !GENERAL_FUNCS

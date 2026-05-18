@@ -7,7 +7,7 @@
 
 class ChaseMovement : public Movement {
 public:
-	ChaseMovement(Entity* playerTarget);
+	ChaseMovement(Entity* playerTarget, Entity* self);
 	virtual ~ChaseMovement();
 
 	virtual void movingPatern(Vec2d& pos, Vec2d& min, Vec2d& max, int moveAmountX, int moveAmountY) override;
@@ -15,6 +15,7 @@ public:
 private:
 	void initializeWalkable();
 	Entity* target;
+	Entity* self;
 
 	int counter;
 

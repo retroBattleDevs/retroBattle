@@ -93,12 +93,16 @@ int main() {
 	float time_diff = 0;
 
 	Entity* player = new Player(1, 5, 5, Vec2d(30.0, 30.0));
+	/*
 	Entity* enemy1 = new Enemy(2, 5, 5, Vec2d(60.0, 20.0), new RandomMovement);
 	Entity* enemy2 = new Enemy(3, 5, 5, Vec2d(20.0, 30.0), new RandomMovement);
 	Entity* enemy3 = new Enemy(4, 5, 5, Vec2d(45.0, 15.0), new RandomMovement);
 	Entity* enemy4 = new Enemy(2, 5, 5, Vec2d(100.0, 20.0), new RandomMovement);
-	Entity* enemy5 = new Enemy(3, 5, 5, Vec2d(120.0, 30.0), new RandomMovement);
-	Entity* enemy6 = new Enemy(4, 5, 5, Vec2d(145.0, 15.0), new ChaseMovement(player));
+	*/
+	Entity* enemy5 = new Enemy(3, 5, 5, Vec2d(120.0, 30.0));
+	enemy5->movement = new ChaseMovement(player, enemy5);
+	Entity* enemy6 = new Enemy(4, 5, 5, Vec2d(145.0, 15.0));
+	enemy6->movement = new ChaseMovement(player, enemy6);
 
 	//GateKeeper
 	MersenneTwister tempRng;
@@ -107,7 +111,7 @@ int main() {
 	Entity* gateKeeper = new GateKeeper(7, 5, 5, Vec2d(randX, randY));
 
 
-	std::vector<Entity*> entities = { player, enemy1, enemy2, enemy3, enemy4, enemy5, enemy6, gateKeeper };
+	std::vector<Entity*> entities = { player, /*enemy1, enemy2, enemy3, enemy4,*/ enemy5, enemy6, gateKeeper};
 	EntityManager entityManager(entities);
 	/*
 	entityManager.add(enemy2);
@@ -160,6 +164,7 @@ int main() {
 			For the program to compile at the current state I start the fight with the first Entity of the vector.
 		*/
 		//check for collision
+		/*
 		auto collider = circleCollisionDetection(entityManager.getPlayer(), entityManager.getEnemies());
 		if (collider.size() > 0) {
 			mvprintw(0, 40, "Circle Collision!!");
@@ -177,6 +182,7 @@ int main() {
 				return 0;
 			}			
 		}
+		*/
 
 		//mvprintw(0, 0, "_rows: %d    _cols: %d", _rows, _cols);
 		refresh();
