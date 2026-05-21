@@ -4,7 +4,7 @@ Room::Room() {
 	width = 0;
 	height = 0;
     entity_manager = nullptr;
-    room_init = 0;
+    room_init = 1;
 }
 
 Room::Room(const int newWidth, const int newHeight) {

@@ -16,14 +16,6 @@ public:
 	void roomCheck(Terrain *terrain, Vec2d &pos);
 
 	EntityTypes::Type getType() const override;
-	/*
-	two options determining heigth and width of character:
-	- 1: Vec2d Min, Max values, width = Max.x - Min.x, heigth = Max.y - Min.y
-	- 2: heigth, width member variables (Chose this options: to keep possibility to increase/decrease Min/Max-Values without changing player appearance)
-	void drawSelf(std::vector<std::vector<char*>> texture);
-	int getHeigth() const;
-	int getWidth() const;
-	*/
 
 	WINDOW *statsWindow;
 	int showStats;

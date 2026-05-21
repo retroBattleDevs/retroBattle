@@ -2,6 +2,7 @@
 #define TERRAIN_H
 
 #include "Room.h"
+#include "headers/GateKeeper.h"
 
 class Terrain {
 	public:
@@ -9,6 +10,7 @@ class Terrain {
 		virtual ~Terrain();
 
 		Room room[3][3];
+		GateKeeper *gatekeeper;
 	protected:
 
 	private:
