@@ -123,7 +123,7 @@ int main() {
 		}
 		*/
 
-		//GateKeeper collision
+		//GateKeeper Collision Detection 
 		if (circleCollisionDetection(terrain.room[player->terrain_room_x][player->terrain_room_y].entity_manager->getPlayer(), { terrain.gatekeeper }).size() > 0) {
 			int midY = _rows / 2;
 			int midX = _cols / 2;
@@ -141,12 +141,7 @@ int main() {
 			continue;
 		}
 
-		/*
-			Battle Manager currently takes one Entity. Adjusted the collision Detection to return a vector of all colliding Enemies.
-			For the program to compile at the current state I start the fight with the first Entity of the vector.
-		*/
-		//check for collision
-		
+		// BattleManager Collision Detection 
 		auto collider = circleCollisionDetection(terrain.room[player->terrain_room_x][player->terrain_room_y].entity_manager->getPlayer(), terrain.room[player->terrain_room_x][player->terrain_room_y].entity_manager->getEnemies());
 		if (collider.size() > 0) {
 			mvprintw(0, 40, "Circle Collision!!");
@@ -159,8 +154,9 @@ int main() {
 				terrain.room[player->terrain_room_x][player->terrain_room_y].entity_manager->removeEntity(collider.front());
 			}
 			//battle lost
-			else{
+			else {
 				//end the program
+				clearScreen();
 				return 0;
 			}			
 		}
