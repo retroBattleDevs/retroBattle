@@ -20,6 +20,7 @@
 #include "headers/terrain/Room.h"
 #include "headers/GateKeeper.h"
 #include "headers/movements/ChaseMovement.h"
+#include "headers/terrain/Terrain.h"
 
 #define BROWN_COLOR 20
 #define LIGHT_GREEN_COLOR 21

@@ -16,6 +16,7 @@ public:
 
 	void add(Entity* entity);
 	void removeEntity(Entity* entity);
+	void removePlayer();
 	void renderAll() const;
 
 	size_t getEntityCount() const;

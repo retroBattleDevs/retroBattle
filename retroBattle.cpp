@@ -1,9 +1,12 @@
 ﻿#include "retroBattle.h"
 
-void keyDispatcher(metrics& mtr, const char c, EntityManager *mgr) {
+int RUNNING = 1;
+
+void keyDispatcher(metrics& mtr, const char c, Terrain *terrain, EntityManager *mgr) {
 
 	Player *player = static_cast<Player*>(mgr->getPlayer());
 	Vec2d position = player->getPosition();
+
 	switch (c) {
 		case 'a':
 			position.x--;
@@ -30,9 +33,10 @@ void keyDispatcher(metrics& mtr, const char c, EntityManager *mgr) {
 			break;
 		case 'x':
 			if (displayDialog()) {
-				mgr->RUNNING = 0;
+				clearScreen();
+				RUNNING = 0;
 			}
-			break;
+			return;
 		case 'i':
 			if (!player->showStats) {
 				player->showStats = 1;
@@ -42,6 +46,9 @@ void keyDispatcher(metrics& mtr, const char c, EntityManager *mgr) {
 			}
 			break;
     }
+
+	player->roomCheck(terrain, position);
+
 	if (mgr->canWalkTo(player, position)) {
 		player->setPosition(position);
 	}
@@ -92,48 +99,19 @@ int main() {
 
 	float time_diff = 0;
 
-	Entity* player = new Player(1, 5, 5, Vec2d(30.0, 30.0));
-	/*
-	*/
-	Entity* enemy1 = new Enemy(2, 5, 5, Vec2d(60.0, 20.0));
-	Entity* enemy2 = new Enemy(3, 5, 5, Vec2d(20.0, 30.0));
-	Entity* enemy3 = new Enemy(4, 5, 5, Vec2d(45.0, 15.0));
-	Entity* enemy4 = new Enemy(2, 5, 5, Vec2d(100.0, 20.0));
-	Entity* enemy5 = new Enemy(3, 5, 5, Vec2d(120.0, 30.0));
-	Entity* enemy6 = new Enemy(4, 5, 5, Vec2d(145.0, 15.0));
-	enemy1->movement = new ChaseMovement(player, enemy1);
-	enemy2->movement = new ChaseMovement(player, enemy2);
-	enemy3->movement = new ChaseMovement(player, enemy3);
-	enemy4->movement = new ChaseMovement(player, enemy4);
-	enemy5->movement = new ChaseMovement(player, enemy5);
-	enemy6->movement = new ChaseMovement(player, enemy6);
-
-	//GateKeeper
-	MersenneTwister tempRng;
-	int randX = tempRng.getRandomNumber(5, _cols - 5);
-	int randY = tempRng.getRandomNumber(5, _rows - 5);
-	Entity* gateKeeper = new GateKeeper(7, 5, 5, Vec2d(randX, randY));
-
-
-	std::vector<Entity*> entities = { player, enemy1, enemy2, enemy3, enemy4, enemy5, enemy6, gateKeeper};
-	EntityManager entityManager(entities);
-	/*
-	entityManager.add(enemy2);
-	entityManager.add(enemy3);
-	*/
+	Terrain terrain;
+	Player *player = static_cast<Player*>(terrain.room[1][1].entity_manager->getPlayer());
 
 	BattleManager battleManager;
 
-	Room startRoom = Room(_cols, _rows);
-
-	while (entityManager.RUNNING) {
+	while (RUNNING) {
 
 		updateTimeCounter(mtr);
 		calculateFPS(mtr);
 
 		// Drawing of the Entities goes here.
-		startRoom.drawSelf();
-		entityManager.renderAll();
+		terrain.room[player->terrain_room_x][player->terrain_room_y].drawSelf();
+		terrain.room[player->terrain_room_x][player->terrain_room_y].entity_manager->renderAll();
 
 		displayMetrics(mtr);
 		static_cast<Player*>(player)->displayStats();
@@ -145,8 +123,8 @@ int main() {
 		}
 		*/
 
-		//GateKeeper collision
-		if (circleCollisionDetection(entityManager.getPlayer(), { gateKeeper }).size() > 0) {
+		//GateKeeper Collision Detection 
+		if (circleCollisionDetection(terrain.room[player->terrain_room_x][player->terrain_room_y].entity_manager->getPlayer(), { terrain.gatekeeper }).size() > 0) {
 			int midY = _rows / 2;
 			int midX = _cols / 2;
 
@@ -158,41 +136,36 @@ int main() {
 			getch();
 			nodelay(stdscr, true);
 
-			entityManager.getPlayer()->setPosition(Vec2d(30.0, 30.0));
-			gateKeeper->setPosition(Vec2d(tempRng.getRandomNumber(5, _cols - 5), tempRng.getRandomNumber(5, _rows - 5)));
+			terrain.room[player->terrain_room_x][player->terrain_room_y].entity_manager->getPlayer()->setPosition(Vec2d(30.0, 30.0));
+			terrain.gatekeeper->setPosition(Vec2d(terrain.gatekeeper->rng->getRandomNumber(5, _cols - 5), terrain.gatekeeper->rng->getRandomNumber(5, _rows - 5)));
 			continue;
 		}
 
-		/*
-			Battle Manager currently takes one Entity. Adjusted the collision Detection to return a vector of all colliding Enemies.
-			For the program to compile at the current state I start the fight with the first Entity of the vector.
-		*/
-		//check for collision
-		/*
-		auto collider = circleCollisionDetection(entityManager.getPlayer(), entityManager.getEnemies());
+		// BattleManager Collision Detection 
+		auto collider = circleCollisionDetection(terrain.room[player->terrain_room_x][player->terrain_room_y].entity_manager->getPlayer(), terrain.room[player->terrain_room_x][player->terrain_room_y].entity_manager->getEnemies());
 		if (collider.size() > 0) {
 			mvprintw(0, 40, "Circle Collision!!");
 
 			//start battle and save result
-			int battleResult = battleManager.startBattle(entityManager.getPlayer(), collider.front(), 1);
+			int battleResult = battleManager.startBattle(terrain.room[player->terrain_room_x][player->terrain_room_y].entity_manager->getPlayer(), collider.front(), 1);
 
 			//battle won
 			if (battleResult == 1) {
-				entityManager.removeEntity(collider.front());
+				terrain.room[player->terrain_room_x][player->terrain_room_y].entity_manager->removeEntity(collider.front());
 			}
 			//battle lost
-			else{
+			else {
 				//end the program
+				clearScreen();
 				return 0;
 			}			
 		}
-		*/
+		
 
-		//mvprintw(0, 0, "_rows: %d    _cols: %d", _rows, _cols);
 		refresh();
 
 		int c = getch(stdin);
-		keyDispatcher(mtr, c, &entityManager);
+		keyDispatcher(mtr, c, &terrain, terrain.room[player->terrain_room_x][player->terrain_room_y].entity_manager);
 
 		// Sleep so much as we need to keep us at 60 fps. 
 		time_diff = mtr.deltaTime > 0.016666 ? 0 : (0.016666 - mtr.deltaTime) * 100000;
@@ -203,7 +176,6 @@ int main() {
 	}
 
 	endwin();
-	clearScreen();
 	
 	return 0;
 }
