@@ -34,7 +34,7 @@ void keyDispatcher(metrics& mtr, const char c, Terrain *terrain, EntityManager *
 		case 'x':
 			if (displayDialog()) {
 				clearScreen();
-				exit(0);
+				RUNNING = 0;
 			}
 			return;
 		case 'i':
@@ -104,7 +104,7 @@ int main() {
 
 	BattleManager battleManager;
 
-	while (true) {
+	while (RUNNING) {
 
 		updateTimeCounter(mtr);
 		calculateFPS(mtr);
