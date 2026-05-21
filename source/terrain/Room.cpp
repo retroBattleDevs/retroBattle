@@ -3,24 +3,35 @@
 Room::Room() {
 	width = 0;
 	height = 0;
+    entity_manager = nullptr;
+    room_init = 0;
 }
 
 Room::Room(const int newWidth, const int newHeight) {
 	width = newWidth - 1;
 	height = newHeight - 1;
+    entity_manager = nullptr;
+    room_init = 1;
 }
 
-Room::~Room() {}
+Room::~Room() {
+    if (entity_manager != nullptr)
+        delete entity_manager;
+}
 
 Room::Room(const Room &otherRoom) {
     width = otherRoom.width;
     height = otherRoom.height;
+    entity_manager = otherRoom.entity_manager;
+    room_init = otherRoom.room_init;
 }
 
 Room &Room::operator = (const Room &otherRoom) {
     if (this != &otherRoom) {
         width = otherRoom.width;
         height = otherRoom.height;
+        entity_manager = otherRoom.entity_manager;
+        room_init = otherRoom.room_init;
     }
     return *this;
 }
@@ -28,18 +39,26 @@ Room &Room::operator = (const Room &otherRoom) {
 Room::Room(Room &&otherRoom) {
     width = otherRoom.width;
     height = otherRoom.height;
+    entity_manager = otherRoom.entity_manager;
+    room_init = otherRoom.room_init;
 
     otherRoom.width = 0;
     otherRoom.height = 0;
+    otherRoom.entity_manager = nullptr;
+    otherRoom.room_init = 0;
 }
 
 Room &Room::operator = (Room &&otherRoom) {
     if (this != &otherRoom) {
         width = otherRoom.width;
         height = otherRoom.height;
+        entity_manager = otherRoom.entity_manager;
+        room_init = otherRoom.room_init;
 
         otherRoom.width = 0;
         otherRoom.height = 0;
+        otherRoom.entity_manager = nullptr;
+        otherRoom.room_init = 0;
     }
     return *this;
 }
@@ -48,10 +67,10 @@ void Room::drawSelf() const {
     
     int pos_x = 0, pos_y = 0;
 	attron(COLOR_PAIR(3));
-	mvprintw(0, 0, " ----------------------------------------------------------------------|       |---------------------------------------------------------------------------");
-    mvprintw(1, 0, "                                                                      /_________\\");
-    mvprintw(2, 0, "                                                                      |_________|");
-    mvprintw(3, 0, "                                                                     /___________\\");
+	mvprintw(0, 0, " ------------------------------------------------------------------------|       |-------------------------------------------------------------------------");
+    mvprintw(1, 0, "                                                                        /_________\\");
+    mvprintw(2, 0, "                                                                        |_________|");
+    mvprintw(3, 0, "                                                                       /___________\\");
     attroff(COLOR_PAIR(3));
 
     std::srand(100);
@@ -99,9 +118,9 @@ void Room::drawSelf() const {
 		mvprintw(i, width, "|");
 	}
 
-    mvprintw(height - 3, 68, "\\_____________/");
-    mvprintw(height - 2, 69, "\\___________/");
-    mvprintw(height - 1, 70, "\\ _______ /");
-	mvprintw(height, 0, " ----------------------------------------------------------------------|       |---------------------------------------------------------------------------");
+    mvprintw(height - 3, 70, "\\_____________/");
+    mvprintw(height - 2, 71, "\\___________/");
+    mvprintw(height - 1, 72, "\\ _______ /");
+	mvprintw(height, 0, " ------------------------------------------------------------------------|       |-------------------------------------------------------------------------");
 	attroff(COLOR_PAIR(3));
 }

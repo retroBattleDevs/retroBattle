@@ -3,6 +3,7 @@
 
 #include "headers/MersenneTwister.h"
 #include "external_libraries/PDCurses/curses.h"
+#include "headers/EntityManager.h"
 
 class Room {
 	public:
@@ -16,6 +17,9 @@ class Room {
 		Room &operator = (Room &&otherRoom);
 
 		virtual void drawSelf() const;
+		EntityManager *entity_manager;
+
+		int room_init;
 	protected:
 
 		int width, height;

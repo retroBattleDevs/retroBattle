@@ -3,11 +3,15 @@
 Player::Player() : Entity() {
 	showStats = 0;
 	statsWindow = nullptr;
+	terrain_room_x = 1;
+	terrain_room_y = 1;
 }
 
 Player::Player(int id, const int width, const int height, Vec2d position) : Entity(id, width, height, position) {
 	showStats = 0;
 	statsWindow = nullptr;
+	terrain_room_x = 1;
+	terrain_room_y = 1;
 }
 
 Player::~Player() {
@@ -40,6 +44,31 @@ void Player::hideStats() {
 	showStats = 0;
 	delwin(statsWindow);
 	statsWindow = nullptr;
+}
+
+void Player::roomCheck(Terrain *terrain, Vec2d &pos) {
+	if ((pos.x >= 73 && pos.x <= 81) && pos.y == 1) {
+		if (terrain_room_y > 0) {
+
+			terrain->room[terrain_room_x][terrain_room_y].entity_manager->removeEntity(this);
+
+			terrain_room_y -= 1;
+			pos.y = 44;
+			//setPosition(Vec2d(pos.x, 44));
+			terrain->room[terrain_room_x][terrain_room_y].entity_manager->add(this);
+		}
+	}
+	if ((pos.x >= 73 && pos.x <= 81) && pos.y == 45) {
+		if (terrain_room_y < 2) {
+
+			terrain->room[terrain_room_x][terrain_room_y].entity_manager->removeEntity(this);
+
+			terrain_room_y += 1;
+			pos.y = 2;
+			//setPosition(Vec2d(pos.x, 2));
+			terrain->room[terrain_room_x][terrain_room_y].entity_manager->add(this);
+		}
+	}
 }
 
 EntityTypes::Type Player::getType() const {
