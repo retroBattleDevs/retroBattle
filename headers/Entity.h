@@ -10,7 +10,8 @@ namespace EntityTypes {
 	enum Type {
 		Player,
 		Enemy,
-		Entity
+		Entity,
+		Gatekeeper
 	};
 }
 

@@ -10,7 +10,6 @@ class Terrain {
 		virtual ~Terrain();
 
 		Room room[3][3];
-		GateKeeper *gatekeeper;
 	protected:
 
 	private:

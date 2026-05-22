@@ -124,21 +124,24 @@ int main() {
 		*/
 
 		//GateKeeper Collision Detection 
-		if (circleCollisionDetection(terrain.room[player->terrain_room_x][player->terrain_room_y].entity_manager->getPlayer(), { terrain.gatekeeper }).size() > 0) {
-			int midY = _rows / 2;
-			int midX = _cols / 2;
+		GateKeeper *gatekeeper = terrain.room[player->terrain_room_x][player->terrain_room_y].getGatekeeper();
+		if (gatekeeper != nullptr) {
+			if (circleCollisionDetection(terrain.room[player->terrain_room_x][player->terrain_room_y].entity_manager->getPlayer(), { gatekeeper }).size() > 0) {
+				int midY = _rows / 2;
+				int midX = _cols / 2;
 
-			mvprintw(midY, midX - 4, "YOU WON!");
-			mvprintw(midY + 1, midX - 15, "Press any key to restart...");
-			refresh();
-			
-			nodelay(stdscr, false);
-			getch();
-			nodelay(stdscr, true);
+				mvprintw(midY, midX - 4, "YOU WON!");
+				mvprintw(midY + 1, midX - 15, "Press any key to restart...");
+				refresh();
 
-			terrain.room[player->terrain_room_x][player->terrain_room_y].entity_manager->getPlayer()->setPosition(Vec2d(30.0, 30.0));
-			terrain.gatekeeper->setPosition(Vec2d(terrain.gatekeeper->rng->getRandomNumber(5, _cols - 5), terrain.gatekeeper->rng->getRandomNumber(5, _rows - 5)));
-			continue;
+				nodelay(stdscr, false);
+				getch();
+				nodelay(stdscr, true);
+
+				terrain.room[player->terrain_room_x][player->terrain_room_y].entity_manager->getPlayer()->setPosition(Vec2d(30.0, 30.0));
+				gatekeeper->setPosition(Vec2d(gatekeeper->rng->getRandomNumber(5, _cols - 5), gatekeeper->rng->getRandomNumber(5, _rows - 5)));
+				continue;
+			}
 		}
 
 		// BattleManager Collision Detection 

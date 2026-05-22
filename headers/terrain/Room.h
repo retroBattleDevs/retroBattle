@@ -4,6 +4,7 @@
 #include "headers/MersenneTwister.h"
 #include "external_libraries/PDCurses/curses.h"
 #include "headers/EntityManager.h"
+#include "headers/GateKeeper.h"
 
 class Room {
 	public:
@@ -15,6 +16,7 @@ class Room {
 		Room &operator = (const Room& otherRoom);
 		Room(Room &&otherRoom);
 		Room &operator = (Room &&otherRoom);
+		GateKeeper *getGatekeeper();
 
 		virtual void drawSelf() const;
 		EntityManager *entity_manager;
