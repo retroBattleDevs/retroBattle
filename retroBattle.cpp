@@ -147,7 +147,6 @@ int main() {
 		// BattleManager Collision Detection 
 		auto collider = circleCollisionDetection(terrain.room[player->terrain_room_x][player->terrain_room_y].entity_manager->getPlayer(), terrain.room[player->terrain_room_x][player->terrain_room_y].entity_manager->getEnemies());
 		if (collider.size() > 0) {
-			mvprintw(0, 40, "Circle Collision!!");
 
 			//start battle and save result
 			int battleResult = battleManager.startBattle(terrain.room[player->terrain_room_x][player->terrain_room_y].entity_manager->getPlayer(), collider.front(), 1);
@@ -164,7 +163,7 @@ int main() {
 			}			
 		}
 		
-
+		mvprintw(0, 40, "width: %d    Height: %d", _cols, _rows);
 		refresh();
 
 		int c = getch(stdin);

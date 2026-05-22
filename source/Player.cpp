@@ -53,11 +53,11 @@ void Player::roomCheck(Terrain *terrain, Vec2d &pos) {
 			terrain->room[terrain_room_x][terrain_room_y].entity_manager->removePlayer();
 
 			terrain_room_y -= 1;
-			pos.y = 44;
+			pos.y = terrain->room[terrain_room_x][terrain_room_y].height - 2;
 			terrain->room[terrain_room_x][terrain_room_y].entity_manager->add(this);
 		}
 	}
-	if ((pos.x >= 73 && pos.x <= 81) && pos.y == 45) {
+	if ((pos.x >= 73 && pos.x <= 81) && (pos.y == terrain->room[terrain_room_x][terrain_room_y].height - 1)) {
 		if (terrain_room_y < 2) {
 
 			terrain->room[terrain_room_x][terrain_room_y].entity_manager->removePlayer();
