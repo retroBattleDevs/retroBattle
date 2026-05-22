@@ -14,7 +14,7 @@ Terrain::Terrain() {
 	MersenneTwister tempRng;
 	int randX = tempRng.getRandomNumber(5, _cols - 5);
 	int randY = tempRng.getRandomNumber(5, _rows - 5);
-	gatekeeper = new GateKeeper(7, 5, 5, Vec2d(randX, randY));
+	GateKeeper *gatekeeper = new GateKeeper(7, 5, 5, Vec2d(randX, randY));
 
 	Player* player = new Player(1, 5, 5, Vec2d(30.0, 30.0));
 	Enemy* enemy1 = new Enemy(2, 5, 5, Vec2d(60.0, 20.0));
@@ -125,6 +125,4 @@ Terrain::Terrain() {
 	room[2][2].entity_manager = new EntityManager(roomEntities_2_2);
 }
 
-Terrain::~Terrain() {
-	delete gatekeeper;
-}
+Terrain::~Terrain() {}

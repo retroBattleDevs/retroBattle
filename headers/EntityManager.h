@@ -28,8 +28,8 @@ public:
 	bool canWalkTo(Entity* e, Vec2d newPosition) const;
 	void initializeWalkable();
 
-private:
 	std::vector<Entity*> entities;
+private:
 
 	int maxWidth;
 	int maxHeight;

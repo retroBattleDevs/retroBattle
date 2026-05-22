@@ -63,6 +63,14 @@ Room &Room::operator = (Room &&otherRoom) {
     return *this;
 }
 
+GateKeeper *Room::getGatekeeper() {
+    for (auto entity : entity_manager->entities) {
+        if (entity->getType() == EntityTypes::Type::Gatekeeper) {
+            return static_cast<GateKeeper*>(entity);
+        }
+    }
+}
+
 void Room::drawSelf() const {
     
     int pos_x = 0, pos_y = 0;
