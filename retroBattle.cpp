@@ -162,8 +162,7 @@ int main() {
 				return 0;
 			}			
 		}
-		
-		mvprintw(0, 40, "width: %d    Height: %d", _cols, _rows);
+
 		refresh();
 
 		int c = getch(stdin);
