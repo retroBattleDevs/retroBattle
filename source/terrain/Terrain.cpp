@@ -3,6 +3,7 @@
 #include "headers/enemies/Enemy.h"
 #include "headers/Gatekeeper.h"
 #include "headers/movements/ChaseMovement.h"
+#include "headers/movements/GuardingMovement.h"
 #include "headers/movements/RandomMovement.h"
 
 Terrain::Terrain() {
@@ -16,20 +17,21 @@ Terrain::Terrain() {
 	int randY = tempRng.getRandomNumber(5, _rows - 5);
 	GateKeeper *gatekeeper = new GateKeeper(7, 5, 5, Vec2d(randX, randY));
 
-	Player* player = new Player(1, 5, 5, Vec2d(30.0, 30.0));
+	Player* player = new Player(1, 5, 5, Vec2d(145.0, 30.0));
 	Enemy* enemy1 = new Enemy(2, 5, 5, Vec2d(60.0, 20.0));
-	Enemy* enemy2 = new Enemy(3, 5, 5, Vec2d(20.0, 30.0));
+	Enemy* enemy2 = new Enemy(3, 5, 5, Vec2d(40.0, 30.0));
 	Enemy* enemy3 = new Enemy(4, 5, 5, Vec2d(45.0, 15.0));
 	Enemy* enemy4 = new Enemy(2, 5, 5, Vec2d(100.0, 20.0));
 	Enemy* enemy5 = new Enemy(3, 5, 5, Vec2d(120.0, 30.0));
 	Enemy* enemy6 = new Enemy(4, 5, 5, Vec2d(145.0, 15.0));
-	enemy1->movement = new ChaseMovement(player, enemy1);
+	//enemy1->movement = new ChaseMovement(player, enemy1);
+	enemy1->movement = new GuardingMovement(Vec2d(10, 5), Vec2d(123, 11));
 	enemy2->movement = new ChaseMovement(player, enemy2);
-	enemy3->movement = new ChaseMovement(player, enemy3);
-	enemy4->movement = new ChaseMovement(player, enemy4);
+	enemy3->movement = new GuardingMovement(Vec2d(15, 30), Vec2d(50, 30.0));
+	enemy4->movement = new GuardingMovement(Vec2d(5, 5), Vec2d(5, 30));
 	enemy5->movement = new ChaseMovement(player, enemy5);
 	enemy6->movement = new ChaseMovement(player, enemy6);
-	std::vector<Entity*> entities = { enemy1, enemy2, enemy3, enemy4, enemy5, enemy6, gatekeeper, player };
+	std::vector<Entity*> entities = { enemy1, enemy2, enemy3, enemy4,/* enemy5, enemy6, */ gatekeeper, player};
 	room[1][1] = Room(_cols, _rows);
 	room[1][1].entity_manager = new EntityManager(entities);
 
