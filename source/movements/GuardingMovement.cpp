@@ -28,7 +28,7 @@ void GuardingMovement::movingPatern(Vec2d& pos, Vec2d& min, Vec2d& max, int move
         initMovement = false;
     }
     
-    if (counter == 2) {
+    if (counter == 1) {
         int realX = pos.x;
         int realY = pos.y;
         Vec2d pos_cache = pos;
