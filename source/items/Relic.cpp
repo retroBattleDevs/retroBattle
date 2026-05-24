@@ -7,11 +7,9 @@ Relic::Relic(const Vec2d& pos, int bonus, RelicType type)
     : Item(pos), bonusAmount(bonus) , type(type) {
 }
 
-
 Relic::Relic(const Relic& other)
     : Item(other), bonusAmount(other.bonusAmount) {
 }
-
 
 Relic& Relic::operator=(const Relic& other) {
     if (this != &other) {
@@ -21,11 +19,9 @@ Relic& Relic::operator=(const Relic& other) {
     return *this;
 }
 
-
 Relic::Relic(Relic&& other) noexcept
     : Item(std::move(other)), bonusAmount(other.bonusAmount) {
 }
-
 
 Relic& Relic::operator=(Relic&& other) noexcept {
     if (this != &other) {
@@ -35,24 +31,18 @@ Relic& Relic::operator=(Relic&& other) noexcept {
     return *this;
 }
 
-
 Relic::~Relic() = default;
-
-
 
 // Darstellung
 void Relic::drawSelf() const {
-    attron(COLOR_PAIR(7));
+    attron(COLOR_PAIR(9));
     mvprintw(position.y - 2, position.x - 2, " .-. ");
     mvprintw(position.y - 1, position.x - 2, "( * )");
     mvprintw(position.y, position.x - 2, " \\_/ ");
     mvprintw(position.y + 1, position.x - 2, " / \\ ");
     mvprintw(position.y + 2, position.x - 2, " ' ' ");
     mvprintw(position.y, position.x, "+");
-
-
-    attroff(COLOR_PAIR(7));
-    
+    attroff(COLOR_PAIR(9));
 }
 
 void Relic::onPickUp(Player& player) {
