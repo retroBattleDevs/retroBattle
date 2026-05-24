@@ -19,3 +19,5 @@
 #include "headers/EntityManager.h"
 #include "headers/terrain/Room.h"
 #include "headers/GateKeeper.h"
+#include "headers/items/Item.h"
+#include "headers/items/Relic.h"

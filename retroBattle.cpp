@@ -59,6 +59,8 @@ void initPDCurses(void) {
 		start_color();
 	}
 }
+
+
 int main() {
 	using namespace std;
 	
@@ -80,6 +82,7 @@ int main() {
 	init_pair(4, COLOR_YELLOW, COLOR_BLACK);
 	init_pair(5, COLOR_BLACK, COLOR_CYAN);
 	init_pair(6, COLOR_BLACK, COLOR_RED);
+	init_pair(7, COLOR_MAGENTA, COLOR_BLACK);
 
 	int x = 10, y = 10;
 
@@ -98,6 +101,7 @@ int main() {
 	int randX = tempRng.getRandomNumber(5, _cols - 5);
 	int randY = tempRng.getRandomNumber(5, _rows - 5);
 	Entity* gateKeeper = new GateKeeper(7, 5, 5, Vec2d(randX, randY));
+	
 
 
 	std::vector<Entity*> entities = { player, enemy1, enemy2, enemy3, enemy4, enemy5, enemy6, gateKeeper };
@@ -111,14 +115,30 @@ int main() {
 
 	Room startRoom = Room(_cols, _rows);
 
-	while (entityManager.RUNNING) {
+//	Item* relic = new Relic(Vec2d(0, 0), 5, RelicType::AttackBoost);
 
+	Item* relic1 = new Relic(Vec2d(10, 10), 5, RelicType::AttackBoost);
+	Item* relic2 = new Relic(Vec2d(20, 20), 5, RelicType::SpeedBoost);
+	Item* relic3 = new Relic(Vec2d(30, 30), 5, RelicType::HealthBoost);
+
+	std::vector<Item*> relics = { relic1, relic2, relic3 };
+
+
+	while (entityManager.RUNNING) {
+		// clear screen
+		wclear(stdscr);
 		updateTimeCounter(mtr);
 		calculateFPS(mtr);
 
 		// Drawing of the Entities goes here.
 		startRoom.drawSelf();
+		//if (relic) relic->drawSelf();
+		for (Item* r : relics) {
+			if (r) r->drawSelf();
+		}
+
 		entityManager.renderAll();
+
 
 		displayMetrics(mtr);
 		static_cast<Player*>(player)->displayStats();
@@ -137,7 +157,7 @@ int main() {
 
 			mvprintw(midY, midX - 4, "YOU WON!");
 			mvprintw(midY + 1, midX - 15, "Press any key to restart...");
-			refresh();
+			
 			
 			nodelay(stdscr, false);
 			getch();
@@ -147,6 +167,61 @@ int main() {
 			gateKeeper->setPosition(Vec2d(tempRng.getRandomNumber(5, _cols - 5), tempRng.getRandomNumber(5, _rows - 5)));
 			continue;
 		}
+
+		//Relic collision
+		for (Item*& r : relics) {
+			if (r && circleCollisionItem(entityManager.getPlayer(), r, 5.0f)) {
+
+				Relic* relic = static_cast<Relic*>(r);
+				relic->onPickUp(*static_cast<Player*>(player));
+
+				// Meldung anzeigen
+				int midY = _rows / 2;
+				int midX = _cols / 2;
+				mvprintw(midY, midX - 7, "RELIC COLLECTED!");
+				mvprintw(midY + 1, midX - 18, "Your stats have been increased.");
+
+				nodelay(stdscr, false);
+				getch();
+				nodelay(stdscr, true);
+
+				delete r;
+				r = nullptr;
+
+				break; 
+			}
+		}
+
+
+
+
+
+			//if (relic && circleCollisionItem(entityManager.getPlayer(), relic, 5.0f)) {
+			//	// Bildschirmmitte berechnen
+			//	int midY = _rows / 2;
+			//	int midX = _cols / 2;
+
+			//	// Meldung anzeigen
+			//	mvprintw(midY, midX - 7, "RELIC COLLECTED!");
+			//	mvprintw(midY + 1, midX - 18, "Your attack buffs have been increased by 20%.");
+			//	
+
+			//	// Spiel kurz pausieren, bis Spieler bestätigt
+			//	nodelay(stdscr, false);
+			//	getch();
+			//	nodelay(stdscr, true);
+
+			//	// Effekt anwenden (Relic bufft Player)
+			//	static_cast<Relic*>(relic)->onPickUp(*static_cast<Player*>(player));
+
+
+			//	// Item entfernen (despawnen) - erst freigeben, dann Pointer nullen
+			//	delete relic;
+			//	relic = nullptr;
+
+			//	continue;
+			//}
+			
 
 		//check for collision
 		Entity* collider = circleCollisionDetection(entityManager.getPlayer(), entityManager.getEnemies());
@@ -177,8 +252,7 @@ int main() {
 		time_diff = mtr.deltaTime > 0.016666 ? 0 : (0.016666 - mtr.deltaTime) * 100000;
 		usleep(time_diff);
 
-		// clear screen
-		wclear(stdscr);
+		
 	}
 
 	endwin();

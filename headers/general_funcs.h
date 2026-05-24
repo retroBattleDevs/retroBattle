@@ -5,6 +5,7 @@
 #include <iostream>
 #include <vector>
 #include "headers/Entity.h"
+#include "headers/items/Item.h"
 
 Vec2d ceilVec2d(Vec2d vec2);
 Vec2d floorVec2d(Vec2d vec2);
@@ -13,5 +14,7 @@ float calculateAbsoluteDistance(float point1, float point2);
 bool collisionDetectionBoundinBox(Entity* player, std::vector<Entity*> enemies);
 Entity* circleCollisionDetection(Entity* player, std::vector<Entity*> enemies);
 float getRadius(Entity *entity);
+bool circleCollisionItem(Entity* player, Item* item, float radius);
+
 
 #endif // !GENERAL_FUNCS

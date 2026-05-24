@@ -80,6 +80,18 @@ Entity* circleCollisionDetection(Entity* player, std::vector<Entity*> enemies) {
 	return nullptr;
 }
 
+bool circleCollisionItem(Entity* player, Item* item, float radius) {
+	if (item == nullptr || player == nullptr) return false;
+
+	float dx = player->getPosition().x - item->getPosition().x;
+	float dy = player->getPosition().y - item->getPosition().y;
+
+	float distance = sqrt(dx * dx + dy * dy);
+
+	return distance < radius;
+}
+
+
 /*
 bool collisionDetectionCircles(Entity *e1, Entity *e2) {
 	float combinedRadii = getRadius(e1) + getRadius(e2);
