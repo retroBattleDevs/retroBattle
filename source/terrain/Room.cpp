@@ -85,11 +85,11 @@ void Room::drawSelf() const {
     for (int i = 0; i < 10; i++) {
         pos_x = std::rand() % 150 + 1;
         pos_y = std::rand() % 39 + 5;
-        attron(COLOR_PAIR(8));
+        attron(COLOR_PAIR(10));
         mvprintw(pos_y - 4, pos_x, "  .-\"\"\"-.");
         mvprintw(pos_y - 3, pos_x, " /* * * *\\");
         mvprintw(pos_y - 2, pos_x, ":_.-:`:-._;");
-        attroff(COLOR_PAIR(8));
+        attroff(COLOR_PAIR(10));
         attron(COLOR_PAIR(7));
         mvprintw(pos_y - 1, pos_x, "    (_)");
         mvprintw(pos_y, pos_x, " \\|/(_)\\|/");

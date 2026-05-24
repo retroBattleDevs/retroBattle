@@ -68,6 +68,8 @@ void initPDCurses(void) {
 		start_color();
 	}
 }
+
+
 int main() {
 	using namespace std;
 	
@@ -89,11 +91,13 @@ int main() {
 	init_pair(4, COLOR_YELLOW, COLOR_BLACK);
 	init_pair(5, COLOR_BLACK, COLOR_CYAN);
 	init_pair(6, COLOR_BLACK, COLOR_RED);
+	init_pair(7, COLOR_MAGENTA, COLOR_BLACK);
 
-	init_color(BROWN_COLOR, 867, 718, 527);
 	init_color(LIGHT_GREEN_COLOR, 714, 917, 203);
-	init_pair(7, BROWN_COLOR, COLOR_BLACK);
 	init_pair(8, LIGHT_GREEN_COLOR, COLOR_BLACK);
+	init_pair(9, COLOR_BLUE, COLOR_BLACK);
+	init_color(BROWN_COLOR, 867, 718, 527);
+	init_pair(10, BROWN_COLOR, COLOR_BLACK);
 
 	int x = 10, y = 10;
 
@@ -104,6 +108,11 @@ int main() {
 
 	BattleManager battleManager;
 
+	Item* relic1 = new Relic(Vec2d(10, 10), 5, RelicType::AttackBoost);
+	Item* relic2 = new Relic(Vec2d(20, 20), 5, RelicType::SpeedBoost);
+	Item* relic3 = new Relic(Vec2d(30, 30), 5, RelicType::HealthBoost);
+	std::vector<Item*> relics = { relic1, relic2, relic3 };
+
 	while (RUNNING) {
 
 		updateTimeCounter(mtr);
@@ -111,8 +120,13 @@ int main() {
 
 		// Drawing of the Entities goes here.
 		terrain.room[player->terrain_room_x][player->terrain_room_y].drawSelf();
+		for (Item* r : relics) {
+			if (r) {
+				r->drawSelf();
+			}
+		}
 		terrain.room[player->terrain_room_x][player->terrain_room_y].entity_manager->renderAll();
-
+		
 		displayMetrics(mtr);
 		static_cast<Player*>(player)->displayStats();
 
@@ -140,7 +154,33 @@ int main() {
 
 				terrain.room[player->terrain_room_x][player->terrain_room_y].entity_manager->getPlayer()->setPosition(Vec2d(30.0, 30.0));
 				gatekeeper->setPosition(Vec2d(gatekeeper->rng->getRandomNumber(5, _cols - 5), gatekeeper->rng->getRandomNumber(5, _rows - 5)));
-				continue;
+			    continue;
+			}
+		}
+		
+		// Relics Collision Detection
+		for (Item*& r : relics) {
+			if (r && circleCollisionItem(terrain.room[player->terrain_room_x][player->terrain_room_y].entity_manager->getPlayer(), r, 5.0f)) {
+
+				Relic* relic = static_cast<Relic*>(r);
+				relic->onPickUp(*static_cast<Player*>(player));
+
+				// Meldung anzeigen
+				int midY = _rows / 2;
+				int midX = _cols / 2;
+				mvprintw(midY, midX - 7, "RELIC COLLECTED!");
+				mvprintw(midY + 1, midX - 18, "Your stats have been increased.");
+
+				nodelay(stdscr, false);
+				getch();
+				nodelay(stdscr, true);
+
+				player->setAttack(player->getAttack() + 20);
+
+				delete r;
+				r = nullptr;
+
+				break;
 			}
 		}
 
@@ -160,7 +200,7 @@ int main() {
 				//end the program
 				clearScreen();
 				return 0;
-			}			
+			}
 		}
 
 		refresh();
@@ -177,6 +217,6 @@ int main() {
 	}
 
 	endwin();
-	
+
 	return 0;
 }
