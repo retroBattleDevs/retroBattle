@@ -24,3 +24,6 @@
 
 #define BROWN_COLOR 20
 #define LIGHT_GREEN_COLOR 21
+#include "headers/items/Item.h"
+#include "headers/items/Relic.h"
+

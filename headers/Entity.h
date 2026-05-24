@@ -41,6 +41,8 @@ protected:
 
 	Vec2d direction;
 
+
+
 public:
 
 	Entity();

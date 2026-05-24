@@ -2,17 +2,18 @@
 #include <iostream>
 #include "headers/Vec2D.h"
 #include "headers/Player.h"
+#include "headers/MersenneTwister.h"
 #include "external_libraries/PDCurses/curses.h"
 
 class Item {
 protected:
     Vec2d position;
-    char symbol;
+   
 
 public:
  
     Item();
-    Item(const Vec2d& pos, char sym);
+    Item(const Vec2d& pos);
 
     //Rule of Five
     Item(const Item& other);                 
@@ -22,12 +23,11 @@ public:
     virtual ~Item();                         
 
   
-    Vec2d getPosition() const;
-    char getSymbol() const;
-
+    Vec2d getPosition() const;   
     
-    virtual void onPickup(Player& player) = 0; //Verhalten 
     virtual void drawSelf() const = 0;
+    virtual void onPickUp(Player& player) = 0;
+    MersenneTwister rng;
 
 };
 
