@@ -5,6 +5,8 @@
 #include "headers/movements/ChaseMovement.h"
 #include "headers/movements/GuardingMovement.h"
 #include "headers/movements/RandomMovement.h"
+#include "headers/enemies/Spider.h"
+#include "headers/enemies/Snake.h"
 
 Terrain::Terrain() {
 	int _rows = 0,
@@ -24,6 +26,8 @@ Terrain::Terrain() {
 	Enemy* enemy4 = new Enemy(2, 5, 5, Vec2d(100.0, 20.0));
 	Enemy* enemy5 = new Enemy(3, 5, 5, Vec2d(120.0, 30.0));
 	Enemy* enemy6 = new Enemy(4, 5, 5, Vec2d(145.0, 15.0));
+	Snake* slySnake = new Snake(101, 8, 1, Vec2d(30.0, 25.0));
+
 	//enemy1->movement = new ChaseMovement(player, enemy1);
 	enemy1->movement = new GuardingMovement(Vec2d(10, 5), Vec2d(123, 11));
 	enemy2->movement = new ChaseMovement(player, enemy2);
@@ -31,15 +35,21 @@ Terrain::Terrain() {
 	enemy4->movement = new GuardingMovement(Vec2d(5, 5), Vec2d(5, 30));
 	enemy5->movement = new ChaseMovement(player, enemy5);
 	enemy6->movement = new ChaseMovement(player, enemy6);
-	std::vector<Entity*> entities = { enemy1, enemy2, enemy3, enemy4,/* enemy5, enemy6, */ gatekeeper, player};
+	slySnake->movement = new GuardingMovement(Vec2d(30.0, 25.0), Vec2d(60.0, 25.0));
+
+	std::vector<Entity*> entities = { enemy1, enemy2, enemy3, enemy4,/* enemy5, enemy6, */ gatekeeper, player, slySnake };
 	room[1][1] = Room(_cols, _rows);
 	room[1][1].entity_manager = new EntityManager(entities);
 
 	// ########################  Room [1][0] ###############################
+	Spider* venomSpider = new Spider(99, 7, 5, Vec2d(20.0, 15.0));
+	venomSpider->movement = new GuardingMovement(Vec2d(20.0, 15.0), Vec2d(25.0, 15.0));
+
 	std::vector<Entity*> upRoomEntities = {
 		new Enemy(2, 5, 5, Vec2d(60.0, 20.0)),
 		new Enemy(2, 5, 5, Vec2d(100.0, 30.0)),
-		new Enemy(2, 5, 5, Vec2d(10.0, 15.0))
+		new Enemy(2, 5, 5, Vec2d(10.0, 15.0)),
+		venomSpider
 	};
 	upRoomEntities[0]->movement = new RandomMovement();
 	upRoomEntities[1]->movement = new RandomMovement();

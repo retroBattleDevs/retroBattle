@@ -28,13 +28,15 @@ add_executable (
 	"source/EntityManager.cpp" 
 	"source/Player.cpp" 
 	"source/Enemies/Enemy.cpp" 
+	"source/Enemies/Spider.cpp"
+	"source/Enemies/Snake.cpp"
 	"source/MersenneTwister.cpp"
     "source/movements/RandomMovement.cpp" 
 	"source/movements/Movement.cpp"
     "source/Terrain/Room.cpp"
     "source/GateKeeper.cpp"
     "source/items/Item.cpp"
-	"source/items/Relic.cpp" "source/movements/ChaseMovement.cpp" "headers/terrain/Terrain.h" "source/terrain/Terrain.cpp" "headers/movements/GuardingMovement.h" "source/movements/GuardingMovement.cpp")
+	"source/items/Relic.cpp" "source/movements/ChaseMovement.cpp" "headers/terrain/Terrain.h" "source/terrain/Terrain.cpp" "headers/movements/GuardingMovement.h" "source/movements/GuardingMovement.cpp" "headers/enemies/Spider.h" "headers/enemies/Snake.h" "source/enemies/Spider.cpp" "source/enemies/Snake.cpp")
 	
 
 
