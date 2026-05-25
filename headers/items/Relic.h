@@ -1,15 +1,23 @@
 #pragma once 
-#include "headers/Items/Item.h"
+#include "headers/items/Item.h"
 #include "external_libraries/PDCurses/curses.h"
+
+enum class RelicType {
+    AttackBoost,
+    SpeedBoost,
+    HealthBoost
+
+};
 
 
 class Relic : public Item {
 private:
-    int bonusAmount;   // z.B. +5 Attack
+    int bonusAmount;  
+    RelicType type;
 
 public:
   
-    Relic(const Vec2d& pos, int bonus = 5);
+    Relic(const Vec2d& pos, int bonus, RelicType type);
 
     // Rule of Five
     Relic(const Relic& other);
@@ -19,9 +27,11 @@ public:
     ~Relic() override;
 
    
-    void onPickup(Player& player) override;
+    
    
     void drawSelf() const override;
+    void onPickUp(Player& player) override;
+
 };
 
 

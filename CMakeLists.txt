@@ -27,20 +27,22 @@ add_executable (
 	"source/SubMoves.cpp" 
 	"source/EntityManager.cpp" 
 	"source/Player.cpp" 
-	"source/Enemies/Enemy.cpp" 
+	"source/enemies/Enemy.cpp"
 	"source/MersenneTwister.cpp"
     "source/movements/RandomMovement.cpp" 
 	"source/movements/Movement.cpp"
-    "source/Terrain/Room.cpp"
+    "source/terrain/Room.cpp"
     "source/GateKeeper.cpp"
     "source/items/Item.cpp"
-	"source/items/Relic.cpp"
 	"source/textures/AsciiTexture.cpp"
 	"source/textures/TextureManager.cpp"
+	"source/items/Relic.cpp" 
+	"source/movements/ChaseMovement.cpp"
+	"source/terrain/Terrain.cpp"
+	"source/movements/GuardingMovement.cpp"
+	"source/enemies/Spider.cpp" 
+	"source/enemies/Snake.cpp"
 )
-	
-
-
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET retroBattle PROPERTY CXX_STANDARD 20)

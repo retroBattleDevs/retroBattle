@@ -5,13 +5,21 @@
 #include <iostream>
 #include <vector>
 #include "headers/Entity.h"
+#include "headers/items/Item.h"
 
+int displayDialog();
 Vec2d ceilVec2d(Vec2d vec2);
 Vec2d floorVec2d(Vec2d vec2);
 float calculateWidthHeight(float max, float min);
 float calculateAbsoluteDistance(float point1, float point2);
-bool collisionDetectionBoundinBox(Entity* player, std::vector<Entity*> enemies);
-Entity* circleCollisionDetection(Entity* player, std::vector<Entity*> enemies);
+std::vector<Entity*> collisionDetectionBoundinBox(Entity* player, std::vector<Entity*> enemies);
+std::vector<Entity*> circleCollisionDetection(Entity* player, std::vector<Entity*> enemies);
 float getRadius(Entity *entity);
+bool circleCollisionItem(Entity* player, Item* item, float radius);
+
+std::vector<Entity*> circleCollisionDetectionAggressionRadius(Entity* player, std::vector<Entity*> enemies, int radius);
+std::vector<Entity*> getEnemiesInRadius(Entity* player, std::vector<Entity*> enemies, int radius);
+
+bool inAggressionRadius(Entity* player, Entity* enemy, int radius);
 
 #endif // !GENERAL_FUNCS

@@ -3,15 +3,13 @@
 #include "headers/Vec2D.h"
 #include "headers/Player.h"
 
-Relic::Relic(const Vec2d& pos, int bonus)
-    : Item(pos, 'R'), bonusAmount(bonus) {
+Relic::Relic(const Vec2d& pos, int bonus, RelicType type)
+    : Item(pos), bonusAmount(bonus) , type(type) {
 }
-
 
 Relic::Relic(const Relic& other)
     : Item(other), bonusAmount(other.bonusAmount) {
 }
-
 
 Relic& Relic::operator=(const Relic& other) {
     if (this != &other) {
@@ -21,11 +19,9 @@ Relic& Relic::operator=(const Relic& other) {
     return *this;
 }
 
-
 Relic::Relic(Relic&& other) noexcept
     : Item(std::move(other)), bonusAmount(other.bonusAmount) {
 }
-
 
 Relic& Relic::operator=(Relic&& other) noexcept {
     if (this != &other) {
@@ -35,16 +31,34 @@ Relic& Relic::operator=(Relic&& other) noexcept {
     return *this;
 }
 
-
 Relic::~Relic() = default;
-
-// Verhalten beim Aufheben
-void Relic::onPickup(Player& player) {
-    player.modifyAttackBuffStage(+1);   // +20% Attack
-}
-
 
 // Darstellung
 void Relic::drawSelf() const {
-    mvaddch((int)position.y, (int)position.x, symbol);
+    attron(COLOR_PAIR(9));
+    mvprintw(position.y - 2, position.x - 2, " .-. ");
+    mvprintw(position.y - 1, position.x - 2, "( * )");
+    mvprintw(position.y, position.x - 2, " \\_/ ");
+    mvprintw(position.y + 1, position.x - 2, " / \\ ");
+    mvprintw(position.y + 2, position.x - 2, " ' ' ");
+    mvprintw(position.y, position.x, "+");
+    attroff(COLOR_PAIR(9));
 }
+
+void Relic::onPickUp(Player& player) {
+    switch (type) {
+    case RelicType::AttackBoost:
+        player.modifyAttackBuffStage(+1);
+        break;
+
+    case RelicType::SpeedBoost:
+        player.modifySpeedBuffStage(+1);
+        break;
+
+    case RelicType::HealthBoost:
+        player.heal(20);   
+        break;
+    }
+}
+
+

@@ -40,5 +40,5 @@ void GateKeeper::drawSelf() const {
 }
 
 EntityTypes::Type GateKeeper::getType() const {
-    return EntityTypes::Type::Entity;
+    return EntityTypes::Type::Gatekeeper;
 }

@@ -10,7 +10,8 @@ namespace EntityTypes {
 	enum Type {
 		Player,
 		Enemy,
-		Entity
+		Entity,
+		Gatekeeper
 	};
 }
 
@@ -40,6 +41,8 @@ protected:
 
 	Vec2d direction;
 
+
+
 public:
 
 	Entity();
@@ -53,7 +56,7 @@ public:
 	void setPosition(Vec2d newPosition);
 	void setMin(Vec2d newMin);
 	void setMax(Vec2d newMax);
-	void setId(int newId); 
+	void setId(int newId);
 
 	virtual EntityTypes::Type getType() const;
 

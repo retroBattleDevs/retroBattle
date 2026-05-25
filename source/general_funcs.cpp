@@ -3,6 +3,16 @@
 #include <cmath>
 #include <vector>
 
+int displayDialog() {
+	mvprintw(20, 60, "Are you sure you want to quit? [y/N]");
+	refresh();
+	char input = getchar();
+	if (input == 'y' || input == 'Y') {
+		return 1;
+	}
+	return 0;
+}
+
 Vec2d ceilVec2d(Vec2d vec2) {
 	return Vec2d(ceilf(vec2.x), ceilf(vec2.y));
 }
@@ -24,10 +34,11 @@ float calculateAbsoluteDistance(float point1, float point2) {
 /*
 This function should be used
 */
-bool collisionDetectionBoundinBox(Entity* player, std::vector<Entity*> enemies) {
+std::vector<Entity*> collisionDetectionBoundinBox(Entity* player, std::vector<Entity*> enemies) {
 	Vec2d playerMin = player->getMin();
 	Vec2d playerMax = player->getMax();
 	Vec2d playerCurrentPosition = player->getPosition();
+	std::vector<Entity*> collidingEnemies;
 
 	for (auto& enemy : enemies) {
 		Vec2d enemyMin = enemy->getMin();
@@ -44,10 +55,10 @@ bool collisionDetectionBoundinBox(Entity* player, std::vector<Entity*> enemies) 
 		float combinedHalfHeigth = (calculateWidthHeight(playerMax.y, playerMin.y) + calculateWidthHeight(enemyMax.y, enemyMin.y)) / 2;
 
 		if ((distanceX < combinedHalfWidth) && (distanceY < combinedHalfHeigth)) {
-			return true;
+			collidingEnemies.push_back(enemy);
 		}
 	}
-	return false;
+	return collidingEnemies;
 }
 
 
@@ -62,9 +73,10 @@ float getRadius(Entity *entity) {
 	return (calculateWidthHeight(vec2dMax.y, vec2dMin.y) / 2);
 }
 
-Entity* circleCollisionDetection(Entity* player, std::vector<Entity*> enemies) {
+std::vector<Entity*> circleCollisionDetection(Entity* player, std::vector<Entity*> enemies) {
 	Vec2d playerCurrentPosition = player->getPosition();
 	float playerRadius = getRadius(player);
+	std::vector<Entity*> collidingEnemies;
 
 	for (auto& enemy : enemies) {
 		Vec2d enemyCurrentPosition = enemy->getPosition();
@@ -74,11 +86,75 @@ Entity* circleCollisionDetection(Entity* player, std::vector<Entity*> enemies) {
 		float combinedRadii = playerRadius + getRadius(enemy);
 
 		if ((absoluteDistanceX < combinedRadii) && (absoluteDistanceY < combinedRadii)) {
-			return enemy;
+			collidingEnemies.push_back(enemy);
 		}
 	}
-	return nullptr;
+	return collidingEnemies;
 }
+
+std::vector<Entity*> circleCollisionDetectionAggressionRadius(Entity* player, std::vector<Entity*> enemies, int radius) {
+	Vec2d playerCurrentPosition = player->getPosition();
+	float playerRadius = getRadius(player);
+	std::vector<Entity*> angryEnemies;
+
+	for (auto& enemy : enemies) {
+		Vec2d enemyCurrentPosition = enemy->getPosition();
+
+		float absoluteDistanceX = calculateAbsoluteDistance(playerCurrentPosition.x, enemyCurrentPosition.x);
+		float absoluteDistanceY = calculateAbsoluteDistance(playerCurrentPosition.y, enemyCurrentPosition.y);
+
+		if ((absoluteDistanceX < radius) && (absoluteDistanceY < radius)) {
+			angryEnemies.push_back(enemy);
+		}
+	}
+	return angryEnemies;
+}
+
+bool inAggressionRadius(Entity* player, Entity* enemy, int radius) {
+	Vec2d playerCurrentPosition = player->getPosition();
+	float playerRadius = getRadius(player);
+
+	Vec2d enemyCurrentPosition = enemy->getPosition();
+
+	float absoluteDistanceX = calculateAbsoluteDistance(playerCurrentPosition.x, enemyCurrentPosition.x);
+	float absoluteDistanceY = calculateAbsoluteDistance(playerCurrentPosition.y, enemyCurrentPosition.y);
+
+	if ((absoluteDistanceX < radius) && (absoluteDistanceY < radius)) {
+		return true;
+	}
+
+	return false;
+}
+
+std::vector<Entity*> getEnemiesInRadius(Entity* player, std::vector<Entity*> enemies, int radius) {
+	Vec2d playerCurrentPosition = player->getPosition();
+	float playerRadius = getRadius(player);
+	std::vector<Entity*> collidingEnemies;
+
+	for (auto& enemy : enemies) {
+		Vec2d enemyCurrentPosition = enemy->getPosition();
+
+		float absoluteDistanceX = calculateAbsoluteDistance(playerCurrentPosition.x, enemyCurrentPosition.x);
+		float absoluteDistanceY = calculateAbsoluteDistance(playerCurrentPosition.y, enemyCurrentPosition.y);
+
+		if ((absoluteDistanceX < radius) && (absoluteDistanceY < radius)) {
+			collidingEnemies.push_back(enemy);
+		}
+	}
+	return collidingEnemies;
+}
+
+bool circleCollisionItem(Entity* player, Item* item, float radius) {
+	if (item == nullptr || player == nullptr) return false;
+
+	float dx = player->getPosition().x - item->getPosition().x;
+	float dy = player->getPosition().y - item->getPosition().y;
+
+	float distance = sqrt(dx * dx + dy * dy);
+
+	return distance < radius;
+}
+
 
 /*
 bool collisionDetectionCircles(Entity *e1, Entity *e2) {

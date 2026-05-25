@@ -51,14 +51,14 @@ int BattleManager::startBattle(Entity* hero, Entity* enemy, int enemyCount) {
 
 		//debug return
 		if (input == 'k') {
-			printLog("Herro won the battle");
+			printLog("Hero won the battle");
 			refresh();
 			Sleep(5000);
 			resetForNextBattle();
 			return 1;
 		}
 		if (input == 'l') {
-			printLog("Herro lost the battle");
+			printLog("Hero lost the battle");
 			refresh();
 			Sleep(5000);
 			resetForNextBattle();
