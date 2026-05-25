@@ -19,3 +19,5 @@
 #include "headers/EntityManager.h"
 #include "headers/terrain/Room.h"
 #include "headers/GateKeeper.h"
+#include "headers/textures/AsciiTexture.h"
+#include "headers/textures/TextureManager.h"

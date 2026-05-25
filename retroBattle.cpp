@@ -73,6 +73,9 @@ int main() {
 		_cols = 0;
 	getmaxyx(stdscr, _rows, _cols);
 
+	//textureManager
+	TextureManager textureManager;
+
 	//color pairs
 	init_pair(1, COLOR_GREEN, COLOR_BLACK);
 	init_pair(2, COLOR_RED, COLOR_BLACK);
