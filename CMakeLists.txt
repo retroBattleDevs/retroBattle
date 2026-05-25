@@ -31,7 +31,7 @@ add_executable (
 	"source/MersenneTwister.cpp"
     "source/movements/RandomMovement.cpp" 
 	"source/movements/Movement.cpp"
-    "source/Terrain/Room.cpp"
+    "source/terrain/Room.cpp"
     "source/GateKeeper.cpp"
     "source/items/Item.cpp"
 	"source/items/Relic.cpp" 
