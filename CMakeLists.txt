@@ -34,12 +34,15 @@ add_executable (
     "source/terrain/Room.cpp"
     "source/GateKeeper.cpp"
     "source/items/Item.cpp"
+	"source/textures/AsciiTexture.cpp"
+	"source/textures/TextureManager.cpp"
 	"source/items/Relic.cpp" 
 	"source/movements/ChaseMovement.cpp"
 	"source/terrain/Terrain.cpp"
 	"source/movements/GuardingMovement.cpp"
 	"source/enemies/Spider.cpp" 
-	"source/enemies/Snake.cpp")
+	"source/enemies/Snake.cpp"
+)
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET retroBattle PROPERTY CXX_STANDARD 20)

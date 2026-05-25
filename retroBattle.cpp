@@ -68,8 +68,6 @@ void initPDCurses(void) {
 		start_color();
 	}
 }
-
-
 int main() {
 	using namespace std;
 	
@@ -83,6 +81,9 @@ int main() {
 	int _rows = 0,
 		_cols = 0;
 	getmaxyx(stdscr, _rows, _cols);
+
+	//textureManager
+	TextureManager textureManager;
 
 	//color pairs
 	init_pair(1, COLOR_GREEN, COLOR_BLACK);
