@@ -19,6 +19,10 @@ void AsciiTexture::printTexture(int y, int x) const{
     int startX = x - (width / 2);
 
     for (int i = 0; i < height; ++i) {
-        mvprintw(startY + i, startX, "%s", grid[i].c_str());
-    }
+        const std::string& row = grid[i];
+        for (int j = 0; j < width; ++j) {
+            if (row[j] != ' ') {
+                mvaddch(startY + i, startX + j, row[j]);
+            }
+        }
 }

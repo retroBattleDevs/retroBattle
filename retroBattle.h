@@ -19,10 +19,7 @@
 #include "headers/EntityManager.h"
 #include "headers/terrain/Room.h"
 #include "headers/GateKeeper.h"
-<<<<<<< HEAD
-#include "headers/textures/AsciiTexture.h"
-#include "headers/textures/TextureManager.h"
-=======
+
 #include "headers/movements/ChaseMovement.h"
 #include "headers/terrain/Terrain.h"
 
@@ -31,4 +28,5 @@
 #include "headers/items/Item.h"
 #include "headers/items/Relic.h"
 
->>>>>>> 01cb85856d1e8a494b2095b492d64ccf7de1ad6e
+#include "headers/textures/AsciiTexture.h"
+#include "headers/textures/TextureManager.h"
