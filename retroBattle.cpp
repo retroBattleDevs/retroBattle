@@ -68,8 +68,6 @@ void initPDCurses(void) {
 		start_color();
 	}
 }
-
-
 int main() {
 	using namespace std;
 	

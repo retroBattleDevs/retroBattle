@@ -21,8 +21,6 @@ void TextureManager::loadDefaultTextures(){
 	addTexture("player", temp);
 
 	//more textures
-
-
 }
 
 void TextureManager::addTexture(const std::string& key, std::shared_ptr<AsciiTexture> tex){

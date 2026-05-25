@@ -25,4 +25,5 @@ void AsciiTexture::printTexture(int y, int x) const{
                 mvaddch(startY + i, startX + j, row[j]);
             }
         }
+    }
 }
