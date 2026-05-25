@@ -27,8 +27,6 @@ add_executable (
 	"source/SubMoves.cpp" 
 	"source/EntityManager.cpp" 
 	"source/Player.cpp" 
-	"source/Enemies/Enemy.cpp" 
-	"source/Enemies/Spider.cpp"
 	"source/Enemies/Snake.cpp"
 	"source/MersenneTwister.cpp"
     "source/movements/RandomMovement.cpp" 
