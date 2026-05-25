@@ -2,7 +2,6 @@
 
 Spider::Spider(int id, const int width, const int height, Vec2d position)
     : Enemy(id, width, height, position) {
-
 }
 
 void Spider::drawSelf() const {
