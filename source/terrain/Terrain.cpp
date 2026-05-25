@@ -37,13 +37,13 @@ Terrain::Terrain() {
 	enemy6->movement = new ChaseMovement(player, enemy6);
 	slySnake->movement = new GuardingMovement(Vec2d(30.0, 25.0), Vec2d(60.0, 25.0));
 
-	std::vector<Entity*> entities = { enemy1, enemy2, enemy3, enemy4,/* enemy5, enemy6, */ gatekeeper, player, slySnake };
+	std::vector<Entity*> entities = { enemy1, enemy2, enemy3, enemy4, enemy5, enemy6, gatekeeper, player, slySnake };
 	room[1][1] = Room(_cols, _rows);
 	room[1][1].entity_manager = new EntityManager(entities);
 
 	// ########################  Room [1][0] ###############################
 	Spider* venomSpider = new Spider(99, 7, 5, Vec2d(20.0, 15.0));
-	venomSpider->movement = new GuardingMovement(Vec2d(20.0, 15.0), Vec2d(25.0, 15.0));
+	venomSpider->movement = new GuardingMovement(Vec2d(20.0, 15.0), Vec2d(45.0, 15.0));
 
 	std::vector<Entity*> upRoomEntities = {
 		new Enemy(2, 5, 5, Vec2d(60.0, 20.0)),

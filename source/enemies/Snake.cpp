@@ -9,7 +9,7 @@ void Snake::drawSelf() const {
     attron(COLOR_PAIR(13));
 
 
-    mvprintw(position.y, position.x - 4, " ~^~^~@ ");
+    mvprintw(position.y, position.x - 4, "~^~^~@");
 
     attroff(COLOR_PAIR(13));
 }
