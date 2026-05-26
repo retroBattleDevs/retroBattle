@@ -24,8 +24,12 @@ void GuardingMovement::initializeWalkable() {
 
 void GuardingMovement::movingPatern(Vec2d& pos, Vec2d& min, Vec2d& max, int moveAmountX, int moveAmountY) {
     if (initMovement) {
+        Vec2d pos_cache = pos;
         pos = positionA;
         initMovement = false;
+        Vec2d diff = pos - pos_cache;
+        min += diff;
+        max += diff;
     }
     
     if (counter == 1) {
