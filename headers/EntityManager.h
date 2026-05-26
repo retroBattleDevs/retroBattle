@@ -16,6 +16,7 @@ public:
 
 	void add(Entity* entity);
 	void removeEntity(Entity* entity);
+	void removePlayer();
 	void renderAll() const;
 
 	size_t getEntityCount() const;
@@ -27,8 +28,8 @@ public:
 	bool canWalkTo(Entity* e, Vec2d newPosition) const;
 	void initializeWalkable();
 
-private:
 	std::vector<Entity*> entities;
+private:
 
 	int maxWidth;
 	int maxHeight;

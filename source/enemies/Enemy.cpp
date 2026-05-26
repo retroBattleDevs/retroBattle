@@ -2,6 +2,9 @@
 
 Enemy::Enemy() : Entity() {}
 
+Enemy::Enemy(int id, const int width, const int height, Vec2d position) : Entity(id, width, height, position) {
+}
+
 Enemy::Enemy(int id, const int width, const int height, Vec2d position, Movement* enemyMovement) : Entity(id, width, height, position) {
 	movement = enemyMovement;
 }

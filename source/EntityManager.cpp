@@ -58,6 +58,14 @@ void EntityManager::removeEntity(Entity* entity) {
 	}
 }
 
+void EntityManager::removePlayer() {
+	for (int i = 0; i < entities.size(); i++) {
+		if (entities[i]->getType() == EntityTypes::Type::Player) {
+			entities.erase(entities.begin() + i);
+		}
+	}
+}
+
 void EntityManager::renderAll() const {
 	for (Entity* e : entities) {
 		if (showBoundingBox)

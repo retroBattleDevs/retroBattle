@@ -2,6 +2,7 @@
 
 RandomMovement::RandomMovement() {
     type = random_movement;
+    tempo = 0;
     movementName = "randomMovement";
     rng = new MersenneTwister();
     initializeWalkable();
@@ -23,6 +24,12 @@ void RandomMovement::initializeWalkable() {
 }
 
 void RandomMovement::movingPatern(Vec2d &pos, Vec2d& min, Vec2d& max, int moveAmountX, int moveAmountY) {
+    tempo++;
+    if (tempo < 15) {
+        return;
+    }
+    tempo = 0;
+
     int realX = pos.x;
     int realY = pos.y;
     int moveUnits = 1;

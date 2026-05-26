@@ -19,4 +19,14 @@
 #include "headers/EntityManager.h"
 #include "headers/terrain/Room.h"
 #include "headers/GateKeeper.h"
+
 #include "headers/movements/ChaseMovement.h"
+#include "headers/terrain/Terrain.h"
+
+#define BROWN_COLOR 20
+#define LIGHT_GREEN_COLOR 21
+#include "headers/items/Item.h"
+#include "headers/items/Relic.h"
+
+#include "headers/textures/AsciiTexture.h"
+#include "headers/textures/TextureManager.h"
