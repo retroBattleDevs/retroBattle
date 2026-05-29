@@ -127,6 +127,7 @@ int main() {
 			}
 		}
 		terrain.room[player->terrain_room_x][player->terrain_room_y].entity_manager->renderAll();
+		mvprintw(_rows - 1, 0, "Player Stats [ Health: %d    Attack: %d    Defence: %d    Speed: %d ]", player->getHealth(), player->getAttack(), player->getDefence(), player->getSpeed());
 		
 		displayMetrics(mtr);
 		static_cast<Player*>(player)->displayStats();

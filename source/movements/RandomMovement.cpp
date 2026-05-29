@@ -59,7 +59,7 @@ void RandomMovement::movingPatern(Vec2d &pos, Vec2d& min, Vec2d& max, int moveAm
     }
 
     if (moveY > minHeight) {
-        if (max.y >= maxHeight - 1) {
+        if (max.y >= maxHeight - 2) {
             pos.y -= moveAmountY;
         } else {
             pos.y += moveAmountY;
