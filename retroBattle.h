@@ -30,3 +30,5 @@
 
 #include "headers/textures/AsciiTexture.h"
 #include "headers/textures/TextureManager.h"
+#include "headers/textures/Animator.h"
+#include "headers/textures/AnimatorManager.h"

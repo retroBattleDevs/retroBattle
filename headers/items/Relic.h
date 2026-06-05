@@ -1,6 +1,7 @@
 #pragma once 
 #include "headers/items/Item.h"
 #include "external_libraries/PDCurses/curses.h"
+#include "headers/textures/Animator.h"
 
 enum class RelicType {
     AttackBoost,
@@ -14,10 +15,11 @@ class Relic : public Item {
 private:
     int bonusAmount;  
     RelicType type;
+    std::shared_ptr<Animator> animation;
 
 public:
   
-    Relic(const Vec2d& pos, int bonus, RelicType type);
+    Relic(const Vec2d& pos, int bonus, RelicType type, Animator* animation);
 
     // Rule of Five
     Relic(const Relic& other);

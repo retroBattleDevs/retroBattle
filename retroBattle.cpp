@@ -84,6 +84,7 @@ int main() {
 
 	//textureManager
 	TextureManager textureManager;
+	AnimatorManager animationManager(textureManager);
 
 	//color pairs
 	init_pair(1, COLOR_GREEN, COLOR_BLACK);
@@ -104,14 +105,14 @@ int main() {
 
 	float time_diff = 0;
 
-	Terrain terrain;
+	Terrain terrain(animationManager);
 	Player *player = static_cast<Player*>(terrain.room[1][1].entity_manager->getPlayer());
 
 	BattleManager battleManager;
 
-	Item* relic1 = new Relic(Vec2d(10, 10), 5, RelicType::AttackBoost);
-	Item* relic2 = new Relic(Vec2d(20, 20), 5, RelicType::SpeedBoost);
-	Item* relic3 = new Relic(Vec2d(30, 30), 5, RelicType::HealthBoost);
+	Item* relic1 = new Relic(Vec2d(10, 10), 5, RelicType::AttackBoost, animationManager.getAnimator("relic"));
+	Item* relic2 = new Relic(Vec2d(20, 20), 5, RelicType::SpeedBoost, animationManager.getAnimator("relic"));
+	Item* relic3 = new Relic(Vec2d(30, 30), 5, RelicType::HealthBoost, animationManager.getAnimator("relic"));
 	std::vector<Item*> relics = { relic1, relic2, relic3 };
 
 	while (RUNNING) {
@@ -191,11 +192,16 @@ int main() {
 		if (collider.size() > 0) {
 
 			//start battle and save result
-			int battleResult = battleManager.startBattle(terrain.room[player->terrain_room_x][player->terrain_room_y].entity_manager->getPlayer(), collider.front(), 1);
+			auto enemies = getEnemiesInRadius(terrain.room[player->terrain_room_x][player->terrain_room_y].entity_manager->getPlayer(), terrain.room[player->terrain_room_x][player->terrain_room_y].entity_manager->getEnemies(), 20);
+			int battleResult = battleManager.startBattle(terrain.room[player->terrain_room_x][player->terrain_room_y].entity_manager->getPlayer(), enemies);
 
 			//battle won
 			if (battleResult == 1) {
-				terrain.room[player->terrain_room_x][player->terrain_room_y].entity_manager->removeEntity(collider.front());
+				for (Entity* enemy : enemies) {
+					if (enemy) {
+						terrain.room[player->terrain_room_x][player->terrain_room_y].entity_manager->removeEntity(enemy);
+					}
+				}
 			}
 			//battle lost
 			else {
