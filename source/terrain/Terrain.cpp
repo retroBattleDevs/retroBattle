@@ -14,12 +14,12 @@ Terrain::Terrain() {
 	getmaxyx(stdscr, _rows, _cols);
 
 	// ########################  Main Room [1][1] ###############################
-	MersenneTwister tempRng;
-	int randX = tempRng.getRandomNumber(5, _cols - 5);
-	int randY = tempRng.getRandomNumber(5, _rows - 5);
-	GateKeeper *gatekeeper = new GateKeeper(7, 5, 5, Vec2d(randX, randY));
+	//MersenneTwister tempRng;
+	//int randX = tempRng.getRandomNumber(5, _cols - 5);
+	//int randY = tempRng.getRandomNumber(5, _rows - 5);
+	
 
-	Player* player = new Player(1, 5, 5, Vec2d(145.0, 30.0));
+	Player* player = new Player(1, 5, 5, Vec2d(75.0, 30.0));
 	Enemy* enemy1 = new Enemy(2, 5, 5, Vec2d(60.0, 20.0));
 	Enemy* enemy2 = new Enemy(3, 5, 5, Vec2d(40.0, 30.0));
 	Enemy* enemy3 = new Enemy(4, 5, 5, Vec2d(45.0, 15.0));
@@ -37,7 +37,7 @@ Terrain::Terrain() {
 	enemy6->movement = new ChaseMovement(player, enemy6);
 	slySnake->movement = new GuardingMovement(Vec2d(30.0, 25.0), Vec2d(60.0, 25.0));
 
-	std::vector<Entity*> entities = { enemy1, enemy2, enemy3, enemy4, enemy5, enemy6, gatekeeper, player, slySnake };
+	std::vector<Entity*> entities = { enemy1, enemy2, enemy3, enemy4, enemy5, enemy6, player, slySnake };
 	room[1][1] = Room(_cols, _rows);
 	room[1][1].entity_manager = new EntityManager(entities);
 
@@ -135,6 +135,42 @@ Terrain::Terrain() {
 	roomEntities_2_2[1]->movement = new ChaseMovement(player, roomEntities_2_2[1]);
 	room[2][2] = Room(_cols, _rows);
 	room[2][2].entity_manager = new EntityManager(roomEntities_2_2);
+
+	gateKeeper = nullptr;
+	positionGatekeeper();
 }
+
+	void Terrain::positionGatekeeper() {
+	MersenneTwister rng;
+	int x = rng.getRandomNumber(0, 2);
+	int y = rng.getRandomNumber(0, 2);
+
+	int _rows = 0, _cols = 0;
+	getmaxyx(stdscr, _rows, _cols);
+	int rastgeleX = rng.getRandomNumber(5, _cols - 5);
+	int rastgeleY = rng.getRandomNumber(5, _rows - 5);
+
+	gateKeeper = new GateKeeper(7, 5, 5, Vec2d(rastgeleX, rastgeleY));
+	gatekeeperRoomX = x;
+	gatekeeperRoomY = y;
+
+	room[x][y].entity_manager->entities.push_back(gateKeeper);
+}
+
+	void Terrain::removeGatekeeper() {
+		if (gateKeeper == nullptr) return;  
+
+		auto& entityList = room[gatekeeperRoomX][gatekeeperRoomY].entity_manager->entities;
+
+		for (int i = 0; i < entityList.size(); i++) {
+			if (entityList[i] == gateKeeper) {
+				entityList.erase(entityList.begin() + i);
+				break;
+			}
+		}
+
+		delete gateKeeper;
+		gateKeeper = nullptr;
+	}
 
 Terrain::~Terrain() {}
