@@ -5,6 +5,7 @@ Player::Player() : Entity() {
 	statsWindow = nullptr;
 	terrain_room_x = 1;
 	terrain_room_y = 1;
+	relicCount = 0;
 }
 
 Player::Player(int id, const int width, const int height, Vec2d position, Animator* animation) 
@@ -13,6 +14,7 @@ Player::Player(int id, const int width, const int height, Vec2d position, Animat
 	statsWindow = nullptr;
 	terrain_room_x = 1;
 	terrain_room_y = 1;
+	relicCount = 0;
 }
 
 Player::~Player() {
@@ -37,12 +39,14 @@ void Player::drawSelf() const {
 void Player::displayStats() {
 	if (showStats) {
 		if (statsWindow == nullptr) {
-			statsWindow = subwin(stdscr, 4, 45, 1, 110);
+			statsWindow = subwin(stdscr, 5, 45, 1, 110);
 		}
 		wclear(statsWindow);
 		box(statsWindow, 0, 0);
 		mvwprintw(statsWindow, 1, 1, "x: %f    y: %f", getPosition().x, getPosition().y);
 		mvwprintw(statsWindow, 2, 1, "Direction X: %.2f    Direction Y: %.2f", getDirection().x, getDirection().y);
+
+		mvwprintw(statsWindow, 3, 1, "Relics: %d / 5", relicCount);
 	}
 }
 
@@ -97,6 +101,14 @@ void Player::roomCheck(Terrain *terrain, Vec2d &pos) {
 
 EntityTypes::Type Player::getType() const {
 	return EntityTypes::Type::Player;
+}
+
+void Player::addRelic() {
+	relicCount++;
+}
+
+int Player::getRelicCount() const {
+	return relicCount;
 }
 
 /*

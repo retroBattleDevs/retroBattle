@@ -20,6 +20,12 @@ public:
 	WINDOW *statsWindow;
 	int showStats;
 	int terrain_room_x, terrain_room_y;
+
+	// Sınıfın public: kısmına şunları ekle:
+	int relicCount;
+	void addRelic();
+	int getRelicCount() const;
+
 private:
 	std::shared_ptr<Animator> animation;
 	//int heigth, width = 3;

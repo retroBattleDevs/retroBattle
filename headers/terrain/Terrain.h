@@ -11,6 +11,13 @@ class Terrain {
 		virtual ~Terrain();
 
 		Room room[3][3];
+
+		GateKeeper* gateKeeper;
+		int gatekeeperRoomX;
+		int gatekeeperRoomY;
+
+		void positionGatekeeper();
+		void removeGatekeeper();
 	protected:
 
 	private:
