@@ -138,27 +138,6 @@ int main() {
 			mvprintw(0, 40, "Collision!!");
 		}
 		*/
-
-		//GateKeeper Collision Detection 
-		GateKeeper *gatekeeper = terrain.room[player->terrain_room_x][player->terrain_room_y].getGatekeeper();
-		if (gatekeeper != nullptr) {
-			if (circleCollisionDetection(terrain.room[player->terrain_room_x][player->terrain_room_y].entity_manager->getPlayer(), { gatekeeper }).size() > 0) {
-				int midY = _rows / 2;
-				int midX = _cols / 2;
-
-				mvprintw(midY, midX - 4, "YOU WON!");
-				mvprintw(midY + 1, midX - 15, "Press any key to restart...");
-				refresh();
-
-				nodelay(stdscr, false);
-				getch();
-				nodelay(stdscr, true);
-
-				terrain.room[player->terrain_room_x][player->terrain_room_y].entity_manager->getPlayer()->setPosition(Vec2d(30.0, 30.0));
-				gatekeeper->setPosition(Vec2d(gatekeeper->rng->getRandomNumber(5, _cols - 5), gatekeeper->rng->getRandomNumber(5, _rows - 5)));
-			    continue;
-			}
-		}
 		
 		// Relics Collision Detection
 		for (Item*& r : relics) {
@@ -178,6 +157,7 @@ int main() {
 				nodelay(stdscr, true);
 
 				player->setAttack(player->getAttack() + 20);
+				player->addRelic();
 
 				delete r;
 				r = nullptr;
@@ -185,6 +165,62 @@ int main() {
 				break;
 			}
 		}
+
+		//Gatekeeper win state
+		if (terrain.gateKeeper != nullptr &&
+			player->terrain_room_x == terrain.gatekeeperRoomX &&
+			player->terrain_room_y == terrain.gatekeeperRoomY) {
+
+			float distanceX = calculateAbsoluteDistance(player->getPosition().x, terrain.gateKeeper->getPosition().x);
+			float distanceY = calculateAbsoluteDistance(player->getPosition().y, terrain.gateKeeper->getPosition().y);
+
+		
+			if (distanceX < 4.0f && distanceY < 4.0f) {
+				clearScreen();
+				if (player->getRelicCount() >= 3) {
+				
+					mvprintw(15, 45, "GATEKEEPER: Access granted. You have proven yourself!");
+					mvprintw(17, 45, "CONGRATULATIONS, YOU HAVE WON THE GAME!");
+					mvprintw(20, 45, "Do you want to play again? [y/N]");
+					refresh();
+
+					nodelay(stdscr, false);
+					char input = getch();
+					if (input == 'y' || input == 'Y') {
+						
+						player->relicCount = 0;
+						player->setAttack(10);
+						terrain.removeGatekeeper();
+						terrain.positionGatekeeper();
+						for (Item*& r : relics) {
+							delete r;   
+							r = nullptr;
+						}
+
+						relics[0] = new Relic(Vec2d(10, 10), 5, RelicType::AttackBoost);
+						relics[1] = new Relic(Vec2d(20, 20), 5, RelicType::SpeedBoost);
+						relics[2] = new Relic(Vec2d(30, 30), 5, RelicType::HealthBoost);
+					}
+
+					else {
+						RUNNING = 0;
+					}
+					nodelay(stdscr, true);
+				}
+				else {
+					mvprintw(15, 40, "GATEKEEPER: No, you don't have enough relics.");
+					mvprintw(16, 40, "Bring me first enough relics to win! (Current: %d / 3)", player->getRelicCount());
+					player->setPosition(player->getPosition() - (player->getDirection() * 2));
+					refresh();
+
+					nodelay(stdscr, false);
+					getch();
+					nodelay(stdscr, true);
+				}
+				clearScreen();
+			}
+		}
+	
 
 		// BattleManager Collision Detection 
 		auto collider = circleCollisionDetection(terrain.room[player->terrain_room_x][player->terrain_room_y].entity_manager->getPlayer(), terrain.room[player->terrain_room_x][player->terrain_room_y].entity_manager->getEnemies());
