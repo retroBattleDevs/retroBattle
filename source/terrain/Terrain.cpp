@@ -28,13 +28,21 @@ Terrain::Terrain() {
 	Enemy* enemy6 = new Enemy(4, 5, 5, Vec2d(145.0, 15.0));
 	Snake* slySnake = new Snake(101, 8, 1, Vec2d(30.0, 25.0));
 
+	// Chase Movement Speed and Attack Radius can be modified via constructor!
+	/*
+		speed = how often is move method called without actually moving
+		aggressionRadius = size of Radius
+	*/
+	int speed = 4;
+	int aggressionRadius = 20;
+
 	//enemy1->movement = new ChaseMovement(player, enemy1);
 	enemy1->movement = new GuardingMovement(Vec2d(10, 5), Vec2d(123, 11));
-	enemy2->movement = new ChaseMovement(player, enemy2);
+	enemy2->movement = new ChaseMovement(player, enemy2, speed, aggressionRadius);
 	enemy3->movement = new GuardingMovement(Vec2d(15, 30), Vec2d(50, 30.0));
 	enemy4->movement = new GuardingMovement(Vec2d(5, 5), Vec2d(5, 30));
-	enemy5->movement = new ChaseMovement(player, enemy5);
-	enemy6->movement = new ChaseMovement(player, enemy6);
+	enemy5->movement = new ChaseMovement(player, enemy5, speed, aggressionRadius);
+	enemy6->movement = new ChaseMovement(player, enemy6, speed, aggressionRadius);
 	slySnake->movement = new GuardingMovement(Vec2d(30.0, 25.0), Vec2d(60.0, 25.0));
 
 	std::vector<Entity*> entities = { enemy1, enemy2, enemy3, enemy4, enemy5, enemy6, gatekeeper, player, slySnake };
@@ -84,7 +92,7 @@ Terrain::Terrain() {
 		new Enemy(2, 5, 5, Vec2d(10.0, 15.0))
 	};
 	rightRoomEntities[0]->movement = new RandomMovement();
-	rightRoomEntities[1]->movement = new ChaseMovement(player, rightRoomEntities[1]);
+	rightRoomEntities[1]->movement = new ChaseMovement(player, rightRoomEntities[1], speed, aggressionRadius);
 	room[2][1] = Room(_cols, _rows);
 	room[2][1].entity_manager = new EntityManager(rightRoomEntities);
 
@@ -96,7 +104,7 @@ Terrain::Terrain() {
 		new Enemy(2, 5, 5, Vec2d(10.0, 15.0))
 	};
 	roomEntities_0_0[0]->movement = new RandomMovement();
-	roomEntities_0_0[1]->movement = new ChaseMovement(player, roomEntities_0_0[1]);
+	roomEntities_0_0[1]->movement = new ChaseMovement(player, roomEntities_0_0[1], speed, aggressionRadius);
 	room[0][0] = Room(_cols, _rows);
 	room[0][0].entity_manager = new EntityManager(roomEntities_0_0);
 
@@ -108,7 +116,7 @@ Terrain::Terrain() {
 		new Enemy(2, 5, 5, Vec2d(10.0, 15.0))
 	};
 	roomEntities_0_2[1]->movement = new RandomMovement();
-	roomEntities_0_2[2]->movement = new ChaseMovement(player, roomEntities_0_2[1]);
+	roomEntities_0_2[2]->movement = new ChaseMovement(player, roomEntities_0_2[1], speed, aggressionRadius);
 	room[0][2] = Room(_cols, _rows);
 	room[0][2].entity_manager = new EntityManager(roomEntities_0_2);
 
@@ -120,7 +128,7 @@ Terrain::Terrain() {
 		new Enemy(2, 5, 5, Vec2d(10.0, 15.0))
 	};
 	roomEntities_2_0[0]->movement = new RandomMovement();
-	roomEntities_2_0[1]->movement = new ChaseMovement(player, roomEntities_2_0[1]);
+	roomEntities_2_0[1]->movement = new ChaseMovement(player, roomEntities_2_0[1], speed, aggressionRadius);
 	room[2][0] = Room(_cols, _rows);
 	room[2][0].entity_manager = new EntityManager(roomEntities_2_0);
 
@@ -132,7 +140,7 @@ Terrain::Terrain() {
 		new Enemy(2, 5, 5, Vec2d(10.0, 15.0))
 	};
 	roomEntities_2_2[0]->movement = new RandomMovement();
-	roomEntities_2_2[1]->movement = new ChaseMovement(player, roomEntities_2_2[1]);
+	roomEntities_2_2[1]->movement = new ChaseMovement(player, roomEntities_2_2[1], speed, aggressionRadius);
 	room[2][2] = Room(_cols, _rows);
 	room[2][2].entity_manager = new EntityManager(roomEntities_2_2);
 }

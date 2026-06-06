@@ -6,6 +6,8 @@
 #include "headers/MersenneTwister.h"
 #include "headers/movements/RandomMovement.h"
 
+#include "headers/textures/AsciiTexture.h"
+
 namespace EntityTypes {
 	enum Type {
 		Player,
@@ -104,6 +106,7 @@ public:
 	MersenneTwister* rng;
 
 	Movement* movement;
+	std::shared_ptr<AsciiTexture> texture;
 
 	void updateBoundingBox(const Vec2d difference);
 };
