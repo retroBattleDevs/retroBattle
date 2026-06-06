@@ -7,7 +7,7 @@
 class Player : public Entity {
 public:
 	Player();
-	Player(int id, const int width, const int height, Vec2d position);
+	Player(int id, const int width, const int height, Vec2d position, Animator* animation);
 	~Player();
 
 	void displayStats();
@@ -27,5 +27,6 @@ public:
 	int getRelicCount() const;
 
 private:
+	std::shared_ptr<Animator> animation;
 	//int heigth, width = 3;
 };

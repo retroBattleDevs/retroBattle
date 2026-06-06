@@ -7,8 +7,9 @@
 #include "headers/movements/RandomMovement.h"
 #include "headers/enemies/Spider.h"
 #include "headers/enemies/Snake.h"
+#include "headers/textures/Animator.h"
 
-Terrain::Terrain() {
+Terrain::Terrain(AnimatorManager& animatorManager) : animatorManager(animatorManager) {
 	int _rows = 0,
 		_cols = 0;
 	getmaxyx(stdscr, _rows, _cols);
@@ -19,7 +20,7 @@ Terrain::Terrain() {
 	//int randY = tempRng.getRandomNumber(5, _rows - 5);
 	
 
-	Player* player = new Player(1, 5, 5, Vec2d(75.0, 30.0));
+	Player* player = new Player(1, 5, 5, Vec2d(145.0, 30.0), animatorManager.getAnimator("player"));
 	Enemy* enemy1 = new Enemy(2, 5, 5, Vec2d(60.0, 20.0));
 	Enemy* enemy2 = new Enemy(3, 5, 5, Vec2d(40.0, 30.0));
 	Enemy* enemy3 = new Enemy(4, 5, 5, Vec2d(45.0, 15.0));

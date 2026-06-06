@@ -8,7 +8,8 @@ Player::Player() : Entity() {
 	relicCount = 0;
 }
 
-Player::Player(int id, const int width, const int height, Vec2d position) : Entity(id, width, height, position) {
+Player::Player(int id, const int width, const int height, Vec2d position, Animator* animation) 
+	: Entity(id, width, height, position), animation(animation) {
 	showStats = 0;
 	statsWindow = nullptr;
 	terrain_room_x = 1;
@@ -23,10 +24,15 @@ Player::~Player() {
 
 void Player::drawSelf() const {
 	attron(COLOR_PAIR(1));
-	mvprintw(position.y - 1, position.x - 1,  "\\O7");
-	mvprintw(position.y,     position.x,        "H");
-	mvprintw(position.y + 1, position.x - 1,  "/");
-	mvprintw(position.y + 1, position.x + 1,    "L");
+	if (animation != nullptr) {
+		animation->drawDirection(this->position,this->direction);
+	}
+	else {
+		mvprintw(position.y - 1, position.x - 1,  "\\O7");
+		mvprintw(position.y,     position.x,        "H");
+		mvprintw(position.y + 1, position.x - 1,  "/");
+		mvprintw(position.y + 1, position.x + 1,    "L");
+	}
 	attroff(COLOR_PAIR(1));
 }
 
