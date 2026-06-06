@@ -198,9 +198,9 @@ int main() {
 							r = nullptr;
 						}
 
-						relics[0] = new Relic(Vec2d(10, 10), 5, RelicType::AttackBoost);
-						relics[1] = new Relic(Vec2d(20, 20), 5, RelicType::SpeedBoost);
-						relics[2] = new Relic(Vec2d(30, 30), 5, RelicType::HealthBoost);
+						relics[0] = new Relic(Vec2d(10, 10), 5, RelicType::AttackBoost, animationManager.getAnimator("relic"));
+						relics[1] = new Relic(Vec2d(20, 20), 5, RelicType::SpeedBoost, animationManager.getAnimator("relic"));
+						relics[2] = new Relic(Vec2d(30, 30), 5, RelicType::HealthBoost, animationManager.getAnimator("relic"));
 					}
 
 					else {
