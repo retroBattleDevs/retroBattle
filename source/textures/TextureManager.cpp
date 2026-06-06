@@ -21,6 +21,13 @@ void TextureManager::loadDefaultTextures(){
 	addTexture("player", temp);
 
 	//more textures
+	auto neutralChaseEnemy = std::make_shared<AsciiTexture>(5, 5);
+	neutralChaseEnemy->fillRow(1, " ?O?");
+	addTexture("neutralChaseEnemy", neutralChaseEnemy);
+
+	auto aggressiveChaseEnemy = std::make_shared<AsciiTexture>(5, 5);
+	aggressiveChaseEnemy->fillRow(1, "!!W!!");
+	addTexture("aggressiveChaseEnemy", aggressiveChaseEnemy);
 }
 
 void TextureManager::addTexture(const std::string& key, std::shared_ptr<AsciiTexture> tex){
