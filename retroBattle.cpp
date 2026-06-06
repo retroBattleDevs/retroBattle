@@ -189,6 +189,7 @@ int main() {
 					if (input == 'y' || input == 'Y') {
 						
 						player->relicCount = 0;
+						player->setAttack(10);
 						terrain.removeGatekeeper();
 						terrain.positionGatekeeper();
 						for (Item*& r : relics) {
@@ -202,7 +203,6 @@ int main() {
 					}
 
 					else {
-					
 						RUNNING = 0;
 					}
 					nodelay(stdscr, true);
