@@ -138,7 +138,6 @@ int main() {
 			mvprintw(0, 40, "Collision!!");
 		}
 		*/
-
 		
 		// Relics Collision Detection
 		for (Item*& r : relics) {
@@ -209,9 +208,9 @@ int main() {
 					nodelay(stdscr, true);
 				}
 				else {
-				
 					mvprintw(15, 40, "GATEKEEPER: No, you don't have enough relics.");
 					mvprintw(16, 40, "Bring me first enough relics to win! (Current: %d / 3)", player->getRelicCount());
+					player->setPosition(player->getPosition() - (player->getDirection() * 2));
 					refresh();
 
 					nodelay(stdscr, false);

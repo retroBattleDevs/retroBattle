@@ -17,7 +17,6 @@ class Terrain {
 
 		void positionGatekeeper();
 		void removeGatekeeper();
-
 	protected:
 
 	private:

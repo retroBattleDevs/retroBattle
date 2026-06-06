@@ -140,7 +140,7 @@ Terrain::Terrain() {
 	positionGatekeeper();
 }
 
-	void Terrain::positionGatekeeper() {
+void Terrain::positionGatekeeper() {
 	MersenneTwister rng;
 	int x = rng.getRandomNumber(0, 2);
 	int y = rng.getRandomNumber(0, 2);
@@ -157,20 +157,20 @@ Terrain::Terrain() {
 	room[x][y].entity_manager->entities.push_back(gateKeeper);
 }
 
-	void Terrain::removeGatekeeper() {
-		if (gateKeeper == nullptr) return;  
+void Terrain::removeGatekeeper() {
+	if (gateKeeper == nullptr) return;  
 
-		auto& entityList = room[gatekeeperRoomX][gatekeeperRoomY].entity_manager->entities;
+	auto& entityList = room[gatekeeperRoomX][gatekeeperRoomY].entity_manager->entities;
 
-		for (int i = 0; i < entityList.size(); i++) {
-			if (entityList[i] == gateKeeper) {
-				entityList.erase(entityList.begin() + i);
-				break;
-			}
+	for (int i = 0; i < entityList.size(); i++) {
+		if (entityList[i] == gateKeeper) {
+			entityList.erase(entityList.begin() + i);
+			break;
 		}
-
-		delete gateKeeper;
-		gateKeeper = nullptr;
 	}
+
+	delete gateKeeper;
+	gateKeeper = nullptr;
+}
 
 Terrain::~Terrain() {}
