@@ -117,7 +117,7 @@ Terrain::Terrain(AnimatorManager& animatorManager) : animatorManager(animatorMan
 		new Enemy(2, 5, 5, Vec2d(10.0, 15.0))
 	};
 	roomEntities_0_2[1]->movement = new RandomMovement();
-	roomEntities_0_2[2]->movement = new ChaseMovement(player, roomEntities_0_2[1], speed, aggressionRadius);
+	roomEntities_0_2[2]->movement = new ChaseMovement(player, roomEntities_0_2[2], speed, aggressionRadius);
 	room[0][2] = Room(_cols, _rows);
 	room[0][2].entity_manager = new EntityManager(roomEntities_0_2);
 

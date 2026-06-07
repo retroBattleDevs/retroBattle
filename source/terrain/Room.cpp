@@ -5,6 +5,8 @@ Room::Room() {
 	height = 0;
     entity_manager = nullptr;
     room_init = 1;
+    seed_1 = rand() % 100;
+    seed_2 = rand() % 1000;
 }
 
 Room::Room(const int newWidth, const int newHeight) {
@@ -12,6 +14,8 @@ Room::Room(const int newWidth, const int newHeight) {
 	height = newHeight - 1;
     entity_manager = nullptr;
     room_init = 1;
+    seed_1 = rand() % 100;
+    seed_2 = rand() % 1000;
 }
 
 Room::~Room() {
@@ -81,7 +85,7 @@ void Room::drawSelf() const {
     mvprintw(3, 0, "                                                                       /___________\\");
     attroff(COLOR_PAIR(3));
 
-    std::srand(100);
+    std::srand(seed_1);
     for (int i = 0; i < 10; i++) {
         pos_x = std::rand() % 150 + 1;
         pos_y = std::rand() % 39 + 5;
@@ -96,7 +100,7 @@ void Room::drawSelf() const {
         attroff(COLOR_PAIR(7));
     }
 
-    std::srand(1000);
+    std::srand(seed_2);
     for (int i = 0; i < 7; i++) {
         pos_x = std::rand() % 145 + 1;
         pos_y = std::rand() % 39 + 8;

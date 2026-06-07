@@ -22,7 +22,7 @@ class Room {
 		EntityManager *entity_manager;
 
 		int room_init;
-		int width, height;
+		int width, height, seed_1, seed_2;
 	protected:
 
 	private:
