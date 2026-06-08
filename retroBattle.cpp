@@ -128,7 +128,7 @@ int main() {
 			}
 		}
 		terrain.room[player->terrain_room_x][player->terrain_room_y].entity_manager->renderAll();
-		mvprintw(_rows - 1, 0, "Player Stats [ Health: %d    Attack: %d    Defence: %d    Speed: %d ]", player->getHealth(), player->getAttack(), player->getDefence(), player->getSpeed());
+		mvprintw(_rows - 1, 0, "Player Stats [ Health: %d    Attack: %d    Defence: %d    Speed: %d ]  Room ID: %d", player->getHealth(), player->getAttack(), player->getDefence(), player->getSpeed(), terrain.room[player->terrain_room_x][player->terrain_room_y].room_id);
 		
 		displayMetrics(mtr);
 		static_cast<Player*>(player)->displayStats();
@@ -180,7 +180,7 @@ int main() {
 				clearScreen();
 				if (player->getRelicCount() >= 3) {
 				
-					mvprintw(15, 45, "GATEKEEPER: Access granted. You have proven yourself!");
+					mvprintw(15, 45, "GATEKEEPER: Access granted. You have proven yourself worthy!");
 					mvprintw(17, 45, "CONGRATULATIONS, YOU HAVE WON THE GAME!");
 					mvprintw(20, 45, "Do you want to play again? [y/N]");
 					refresh();
