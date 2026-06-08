@@ -50,6 +50,7 @@ Terrain::Terrain(AnimatorManager& animatorManager) : animatorManager(animatorMan
 	room[1][1] = Room(_cols, _rows);
 	room[1][1].entity_manager = new EntityManager(entities);
 	room[1][1].room_id = 11;
+	room[1][1].spawnRelics();
 
 	// ########################  Room [1][0] ###############################
 	Spider* venomSpider = new Spider(99, 7, 5, Vec2d(20.0, 15.0));
@@ -67,6 +68,7 @@ Terrain::Terrain(AnimatorManager& animatorManager) : animatorManager(animatorMan
 	room[1][0] = Room(_cols, _rows);
 	room[1][0].entity_manager = new EntityManager(upRoomEntities);
 	room[1][0].room_id = 10;
+	room[1][0].spawnRelics();
 
 	// ########################  Room [1][2] ###############################
 	std::vector<Entity*> downRoomEntities = {
@@ -78,6 +80,7 @@ Terrain::Terrain(AnimatorManager& animatorManager) : animatorManager(animatorMan
 	room[1][2] = Room(_cols, _rows);
 	room[1][2].entity_manager = new EntityManager(downRoomEntities);
 	room[1][2].room_id = 12;
+	room[1][2].spawnRelics();
 
 	// ########################  Room [0][1] ###############################
 	std::vector<Entity*> leftRoomEntities = {
@@ -89,6 +92,7 @@ Terrain::Terrain(AnimatorManager& animatorManager) : animatorManager(animatorMan
 	room[0][1] = Room(_cols, _rows);
 	room[0][1].entity_manager = new EntityManager(leftRoomEntities);
 	room[0][1].room_id = 1;
+	room[0][1].spawnRelics();
 
 	// ########################  Room [2][1] ###############################
 	std::vector<Entity*> rightRoomEntities = {
@@ -101,6 +105,7 @@ Terrain::Terrain(AnimatorManager& animatorManager) : animatorManager(animatorMan
 	room[2][1] = Room(_cols, _rows);
 	room[2][1].entity_manager = new EntityManager(rightRoomEntities);
 	room[2][1].room_id = 21;
+	room[2][1].spawnRelics();
 
 	// ########################  Room [0][0] ###############################
 	std::vector<Entity*> roomEntities_0_0 = {
@@ -114,6 +119,7 @@ Terrain::Terrain(AnimatorManager& animatorManager) : animatorManager(animatorMan
 	room[0][0] = Room(_cols, _rows);
 	room[0][0].entity_manager = new EntityManager(roomEntities_0_0);
 	room[0][0].room_id = 0;
+	room[0][0].spawnRelics();
 
 	// ########################  Room [0][2] ###############################
 	std::vector<Entity*> roomEntities_0_2 = {
@@ -127,6 +133,7 @@ Terrain::Terrain(AnimatorManager& animatorManager) : animatorManager(animatorMan
 	room[0][2] = Room(_cols, _rows);
 	room[0][2].entity_manager = new EntityManager(roomEntities_0_2);
 	room[0][2].room_id = 2;
+	room[0][2].spawnRelics();
 
 	// ########################  Room [2][0] ###############################
 	std::vector<Entity*> roomEntities_2_0 = {
@@ -140,6 +147,7 @@ Terrain::Terrain(AnimatorManager& animatorManager) : animatorManager(animatorMan
 	room[2][0] = Room(_cols, _rows);
 	room[2][0].entity_manager = new EntityManager(roomEntities_2_0);
 	room[2][0].room_id = 20;
+	room[2][0].spawnRelics();
 
 	// ########################  Room [2][2] ###############################
 	std::vector<Entity*> roomEntities_2_2 = {
@@ -153,6 +161,7 @@ Terrain::Terrain(AnimatorManager& animatorManager) : animatorManager(animatorMan
 	room[2][2] = Room(_cols, _rows);
 	room[2][2].entity_manager = new EntityManager(roomEntities_2_2);
 	room[2][2].room_id = 22;
+	room[2][2].spawnRelics();
 
 	gateKeeper = nullptr;
 	positionGatekeeper();

@@ -1,7 +1,7 @@
 #ifndef TERRAIN_H
 #define TERRAIN_H
 
-#include "Room.h"
+#include "headers/terrain/Room.h"
 #include "headers/GateKeeper.h"
 #include "headers/textures/AnimatorManager.h"
 
