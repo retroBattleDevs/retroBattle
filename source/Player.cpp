@@ -1,4 +1,5 @@
 #include "headers/Player.h"
+#include "headers/terrain/Terrain.h"
 
 Player::Player() : Entity() {
 	showStats = 0;

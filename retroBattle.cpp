@@ -105,15 +105,10 @@ int main() {
 
 	float time_diff = 0;
 
-	Terrain terrain(animationManager);
-	Player *player = static_cast<Player*>(terrain.room[1][1].entity_manager->getPlayer());
+	Terrain *terrain = new Terrain(animationManager);
+	Player *player = static_cast<Player*>(terrain->room[1][1].entity_manager->getPlayer());
 
 	BattleManager battleManager;
-
-	Item* relic1 = new Relic(Vec2d(10, 10), 5, RelicType::AttackBoost, animationManager.getAnimator("relic"));
-	Item* relic2 = new Relic(Vec2d(20, 20), 5, RelicType::SpeedBoost, animationManager.getAnimator("relic"));
-	Item* relic3 = new Relic(Vec2d(30, 30), 5, RelicType::HealthBoost, animationManager.getAnimator("relic"));
-	std::vector<Item*> relics = { relic1, relic2, relic3 };
 
 	while (RUNNING) {
 
@@ -121,14 +116,10 @@ int main() {
 		calculateFPS(mtr);
 
 		// Drawing of the Entities goes here.
-		terrain.room[player->terrain_room_x][player->terrain_room_y].drawSelf();
-		for (Item* r : relics) {
-			if (r) {
-				r->drawSelf();
-			}
-		}
-		terrain.room[player->terrain_room_x][player->terrain_room_y].entity_manager->renderAll();
-		mvprintw(_rows - 1, 0, "Player Stats [ Health: %d    Attack: %d    Defence: %d    Speed: %d ]  Room ID: %d", player->getHealth(), player->getAttack(), player->getDefence(), player->getSpeed(), terrain.room[player->terrain_room_x][player->terrain_room_y].room_id);
+		terrain->room[player->terrain_room_x][player->terrain_room_y].drawSelf();
+		terrain->room[player->terrain_room_x][player->terrain_room_y].drawRelics();
+		terrain->room[player->terrain_room_x][player->terrain_room_y].entity_manager->renderAll();
+		mvprintw(_rows - 1, 0, "Player Stats [ Health: %d    Attack: %d    Defence: %d    Speed: %d ]  Room ID: %d", player->getHealth(), player->getAttack(), player->getDefence(), player->getSpeed(), terrain->room[player->terrain_room_x][player->terrain_room_y].room_id);
 		
 		displayMetrics(mtr);
 		static_cast<Player*>(player)->displayStats();
@@ -141,8 +132,8 @@ int main() {
 		*/
 		
 		// Relics Collision Detection
-		for (Item*& r : relics) {
-			if (r && circleCollisionItem(terrain.room[player->terrain_room_x][player->terrain_room_y].entity_manager->getPlayer(), r, 5.0f)) {
+		for (Item*& r : terrain->room[player->terrain_room_x][player->terrain_room_y].relics) {
+			if (r && circleCollisionItem(terrain->room[player->terrain_room_x][player->terrain_room_y].entity_manager->getPlayer(), r, 5.0f)) {
 
 				Relic* relic = static_cast<Relic*>(r);
 				relic->onPickUp(*static_cast<Player*>(player));
@@ -157,9 +148,6 @@ int main() {
 				getch();
 				nodelay(stdscr, true);
 
-				player->setAttack(player->getAttack() + 20);
-				player->addRelic();
-
 				delete r;
 				r = nullptr;
 
@@ -168,12 +156,12 @@ int main() {
 		}
 
 		//Gatekeeper win state
-		if (terrain.gateKeeper != nullptr &&
-			player->terrain_room_x == terrain.gatekeeperRoomX &&
-			player->terrain_room_y == terrain.gatekeeperRoomY) {
+		if (terrain->gateKeeper != nullptr &&
+			player->terrain_room_x == terrain->gatekeeperRoomX &&
+			player->terrain_room_y == terrain->gatekeeperRoomY) {
 
-			float distanceX = calculateAbsoluteDistance(player->getPosition().x, terrain.gateKeeper->getPosition().x);
-			float distanceY = calculateAbsoluteDistance(player->getPosition().y, terrain.gateKeeper->getPosition().y);
+			float distanceX = calculateAbsoluteDistance(player->getPosition().x, terrain->gateKeeper->getPosition().x);
+			float distanceY = calculateAbsoluteDistance(player->getPosition().y, terrain->gateKeeper->getPosition().y);
 
 		
 			if (distanceX < 4.0f && distanceY < 4.0f) {
@@ -191,18 +179,12 @@ int main() {
 						
 						player->relicCount = 0;
 						player->setAttack(10);
-						terrain.removeGatekeeper();
-						terrain.positionGatekeeper();
-						for (Item*& r : relics) {
-							delete r;   
-							r = nullptr;
-						}
-
-						relics[0] = new Relic(Vec2d(10, 10), 5, RelicType::AttackBoost, animationManager.getAnimator("relic"));
-						relics[1] = new Relic(Vec2d(20, 20), 5, RelicType::SpeedBoost, animationManager.getAnimator("relic"));
-						relics[2] = new Relic(Vec2d(30, 30), 5, RelicType::HealthBoost, animationManager.getAnimator("relic"));
+						terrain->removeGatekeeper();
+						terrain->positionGatekeeper();
+						delete terrain;
+						terrain = new Terrain(animationManager);
+						player = static_cast<Player*>(terrain->room[1][1].entity_manager->getPlayer());
 					}
-
 					else {
 						RUNNING = 0;
 					}
@@ -224,18 +206,18 @@ int main() {
 	
 
 		// BattleManager Collision Detection 
-		auto collider = circleCollisionDetection(terrain.room[player->terrain_room_x][player->terrain_room_y].entity_manager->getPlayer(), terrain.room[player->terrain_room_x][player->terrain_room_y].entity_manager->getEnemies());
+		auto collider = circleCollisionDetection(terrain->room[player->terrain_room_x][player->terrain_room_y].entity_manager->getPlayer(), terrain->room[player->terrain_room_x][player->terrain_room_y].entity_manager->getEnemies());
 		if (collider.size() > 0) {
 
 			//start battle and save result
-			auto enemies = getEnemiesInRadius(terrain.room[player->terrain_room_x][player->terrain_room_y].entity_manager->getPlayer(), terrain.room[player->terrain_room_x][player->terrain_room_y].entity_manager->getEnemies(), 20);
-			int battleResult = battleManager.startBattle(terrain.room[player->terrain_room_x][player->terrain_room_y].entity_manager->getPlayer(), enemies);
+			auto enemies = getEnemiesInRadius(terrain->room[player->terrain_room_x][player->terrain_room_y].entity_manager->getPlayer(), terrain->room[player->terrain_room_x][player->terrain_room_y].entity_manager->getEnemies(), 20);
+			int battleResult = battleManager.startBattle(terrain->room[player->terrain_room_x][player->terrain_room_y].entity_manager->getPlayer(), enemies);
 
 			//battle won
 			if (battleResult == 1) {
 				for (Entity* enemy : enemies) {
 					if (enemy) {
-						terrain.room[player->terrain_room_x][player->terrain_room_y].entity_manager->removeEntity(enemy);
+						terrain->room[player->terrain_room_x][player->terrain_room_y].entity_manager->removeEntity(enemy);
 					}
 				}
 			}
@@ -250,7 +232,7 @@ int main() {
 		refresh();
 
 		int c = getch(stdin);
-		keyDispatcher(mtr, c, &terrain, terrain.room[player->terrain_room_x][player->terrain_room_y].entity_manager);
+		keyDispatcher(mtr, c, terrain, terrain->room[player->terrain_room_x][player->terrain_room_y].entity_manager);
 
 		// Sleep so much as we need to keep us at 60 fps. 
 		time_diff = mtr.deltaTime > 0.016666 ? 0 : (0.016666 - mtr.deltaTime) * 100000;
