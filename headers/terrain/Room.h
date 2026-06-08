@@ -27,7 +27,7 @@ class Room {
 		virtual void drawSelf() const;
 		EntityManager *entity_manager;
 
-		int room_init;
+		int room_init, room_id;
 		int width, height, seed_1, seed_2;
 
 		std::vector<Item*> relics;
