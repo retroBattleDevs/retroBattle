@@ -1,7 +1,7 @@
 
 #include "headers/Items/Item.h"
 #include "headers/Vec2D.h"
-
+#include "headers/Player.h"
 
 
 Item::Item(): position(0, 0) {

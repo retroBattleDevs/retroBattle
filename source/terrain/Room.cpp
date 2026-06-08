@@ -1,4 +1,7 @@
 #include "headers/terrain/Room.h"
+#include "headers/Vec2D.h"
+#include "headers/general_funcs.h"   
+
 
 Room::Room() {
 	width = 0;
@@ -135,4 +138,56 @@ void Room::drawSelf() const {
     mvprintw(height - 2, 72, "\\ _______ /");
 	mvprintw(height - 1, 0, " ------------------------------------------------------------------------|       |-------------------------------------------------------------------------");
 	attroff(COLOR_PAIR(3));
+}
+
+
+void Room::spawnRelics() {
+    //alte Relics aufräumen,falls vorhanden
+    for (Item* r : relics) {
+        delete r;       
+    }
+    relics.clear();
+
+    for (int i = 0; i < 3; i++) {
+        RelicType type;
+        int r = rand() % 3; 
+        if (r == 0) {
+            type = RelicType::AttackBoost;
+        }
+        else if (r == 1) {
+            type = RelicType::SpeedBoost;
+        }
+        else {
+            type = RelicType::HealthBoost;
+        }
+
+        Vec2d pos(0, 0); // pos ist eigentlich egal, wird in Item Konstruktor random gesetzt!
+
+        Relic* relic = new Relic(pos, type, nullptr);
+        relics.push_back(relic);
+    }
+
+    
+}
+void Room::drawRelics() const {
+    for (Item* r : relics) {
+        if (r) {
+            r->drawSelf();
+        }
+        
+    }
+}
+void Room::updateRelics(Player* player) {
+    for (Item*& r : relics) {
+        if (r && circleCollisionItem(entity_manager->getPlayer(), r, 5.0f)) {
+
+            Relic* relic = static_cast<Relic*>(r);
+            relic->onPickUp(*player);
+
+            delete r;
+            r = nullptr;
+            break;
+
+        }
+    }
 }

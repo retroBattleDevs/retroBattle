@@ -2,7 +2,8 @@
 
 #include <vector>
 #include "Entity.h"
-#include "headers/terrain/Terrain.h"
+#include "headers/textures/Animator.h"
+class Terrain;
 
 class Player : public Entity {
 public:

@@ -1,4 +1,7 @@
 ﻿#include "retroBattle.h"
+#include "headers/general_funcs.h"
+
+
 
 int RUNNING = 1;
 
@@ -110,10 +113,7 @@ int main() {
 
 	BattleManager battleManager;
 
-	Item* relic1 = new Relic(Vec2d(10, 10), 5, RelicType::AttackBoost, animationManager.getAnimator("relic"));
-	Item* relic2 = new Relic(Vec2d(20, 20), 5, RelicType::SpeedBoost, animationManager.getAnimator("relic"));
-	Item* relic3 = new Relic(Vec2d(30, 30), 5, RelicType::HealthBoost, animationManager.getAnimator("relic"));
-	std::vector<Item*> relics = { relic1, relic2, relic3 };
+	
 
 	while (RUNNING) {
 
@@ -121,13 +121,12 @@ int main() {
 		calculateFPS(mtr);
 
 		// Drawing of the Entities goes here.
-		terrain.room[player->terrain_room_x][player->terrain_room_y].drawSelf();
-		for (Item* r : relics) {
-			if (r) {
-				r->drawSelf();
-			}
-		}
-		terrain.room[player->terrain_room_x][player->terrain_room_y].entity_manager->renderAll();
+		Room& currentRoom = terrain.room[player->terrain_room_x][player->terrain_room_y];
+
+		currentRoom.drawSelf();
+		currentRoom.drawRelics();
+		currentRoom.entity_manager->renderAll();
+
 		mvprintw(_rows - 1, 0, "Player Stats [ Health: %d    Attack: %d    Defence: %d    Speed: %d ]", player->getHealth(), player->getAttack(), player->getDefence(), player->getSpeed());
 		
 		displayMetrics(mtr);
@@ -139,33 +138,29 @@ int main() {
 			mvprintw(0, 40, "Collision!!");
 		}
 		*/
+
+
 		
 		// Relics Collision Detection
-		for (Item*& r : relics) {
-			if (r && circleCollisionItem(terrain.room[player->terrain_room_x][player->terrain_room_y].entity_manager->getPlayer(), r, 5.0f)) {
+		
 
-				Relic* relic = static_cast<Relic*>(r);
-				relic->onPickUp(*static_cast<Player*>(player));
+		// vor dem Aufruf: merken, wie viele Relics der Spieler hatte
+		int relicsBefore = player->getRelicCount();
 
-				// Meldung anzeigen
-				int midY = _rows / 2;
-				int midX = _cols / 2;
-				mvprintw(midY, midX - 7, "RELIC COLLECTED!");
-				mvprintw(midY + 1, midX - 18, "Your stats have been increased.");
+		currentRoom.updateRelics(player);
 
-				nodelay(stdscr, false);
-				getch();
-				nodelay(stdscr, true);
+		// wenn sich RelicCount erhöht hat → Meldung anzeigen
+		if (player->getRelicCount() > relicsBefore) {
+			int midY = _rows / 2;
+			int midX = _cols / 2;
+			mvprintw(midY, midX - 7, "RELIC COLLECTED!");
+			mvprintw(midY + 1, midX - 18, "Your stats have been increased.");
 
-				player->setAttack(player->getAttack() + 20);
-				player->addRelic();
-
-				delete r;
-				r = nullptr;
-
-				break;
-			}
+			nodelay(stdscr, false);
+			getch();
+			nodelay(stdscr, true);
 		}
+
 
 		//Gatekeeper win state
 		if (terrain.gateKeeper != nullptr &&
@@ -193,14 +188,12 @@ int main() {
 						player->setAttack(10);
 						terrain.removeGatekeeper();
 						terrain.positionGatekeeper();
-						for (Item*& r : relics) {
-							delete r;   
-							r = nullptr;
+						for (int x = 0; x < 3; ++x) {
+							for (int y = 0; y < 3; ++y) {
+								terrain.room[x][y].spawnRelics();
+							}
 						}
 
-						relics[0] = new Relic(Vec2d(10, 10), 5, RelicType::AttackBoost, animationManager.getAnimator("relic"));
-						relics[1] = new Relic(Vec2d(20, 20), 5, RelicType::SpeedBoost, animationManager.getAnimator("relic"));
-						relics[2] = new Relic(Vec2d(30, 30), 5, RelicType::HealthBoost, animationManager.getAnimator("relic"));
 					}
 
 					else {

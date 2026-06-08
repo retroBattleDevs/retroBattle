@@ -1,9 +1,10 @@
 #pragma once
 #include <iostream>
 #include "headers/Vec2D.h"
-#include "headers/Player.h"
 #include "headers/MersenneTwister.h"
 #include "external_libraries/PDCurses/curses.h"
+
+class Player;
 
 class Item {
 protected:

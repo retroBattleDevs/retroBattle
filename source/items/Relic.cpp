@@ -1,33 +1,36 @@
-#include "headers/Items/Relic.h"
-#include "headers/Items/Item.h"
+#include "headers/items/Relic.h"
+#include "headers/items/Item.h"
 #include "headers/Vec2D.h"
 #include "headers/Player.h"
 
-Relic::Relic(const Vec2d& pos, int bonus, RelicType type, Animator* animation)
-    : Item(pos), bonusAmount(bonus) , type(type) {
-    this->animation = std::make_shared<Animator>(*animation);
+
+
+Relic::Relic (){}
+
+Relic::Relic(const Vec2d& pos, RelicType type, std::shared_ptr<Animator> animation)
+    : Item(pos), type(type), animation(std::move(animation)) {
 }
 
 Relic::Relic(const Relic& other)
-    : Item(other), bonusAmount(other.bonusAmount), type(other.type), animation(other.animation) {
+    : Item(other), type(other.type), animation(other.animation) {
 }
 
 Relic& Relic::operator=(const Relic& other) {
     if (this != &other) {
         Item::operator=(other);
-        bonusAmount = other.bonusAmount;
+        
     }
     return *this;
 }
 
 Relic::Relic(Relic&& other) noexcept
-    : Item(std::move(other)), bonusAmount(other.bonusAmount), type(other.type), animation(other.animation) {
+    : Item(std::move(other)), type(other.type), animation(other.animation) {
 }
 
 Relic& Relic::operator=(Relic&& other) noexcept {
     if (this != &other) {
         Item::operator=(std::move(other));
-        bonusAmount = other.bonusAmount;
+        
     }
     return *this;
 }
@@ -65,6 +68,7 @@ void Relic::onPickUp(Player& player) {
         player.heal(20);   
         break;
     }
+    player.addRelic();
 }
 
 
