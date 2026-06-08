@@ -78,11 +78,16 @@ GateKeeper *Room::getGatekeeper() {
 void Room::drawSelf() const {
     
     int pos_x = 0, pos_y = 0;
-	attron(COLOR_PAIR(3));
-	mvprintw(0, 0, " ------------------------------------------------------------------------|       |-------------------------------------------------------------------------");
-    mvprintw(1, 0, "                                                                        /_________\\");
-    mvprintw(2, 0, "                                                                        |_________|");
-    mvprintw(3, 0, "                                                                       /___________\\");
+
+    attron(COLOR_PAIR(3));
+    if (room_id == 0 || room_id == 10 || room_id == 20) {
+        mvprintw(0, 0, " ----------------------------------------------------------------------------------------------------------------------------------------------------------");
+    } else {
+        mvprintw(0, 0, " ------------------------------------------------------------------------|       |-------------------------------------------------------------------------");
+        mvprintw(1, 0, "                                                                        /_________\\");
+        mvprintw(2, 0, "                                                                        |_________|");
+        mvprintw(3, 0, "                                                                       /___________\\");
+    }
     attroff(COLOR_PAIR(3));
 
     std::srand(seed_1);
@@ -117,22 +122,54 @@ void Room::drawSelf() const {
     }
 
     attron(COLOR_PAIR(3));
-	for (int i = 1; i < height; i++) {
-		mvprintw(i, 0, "|");
-        if (i == 17) {
-            mvprintw(i, 0, "--");
-            mvprintw(i, width - 1, "--");
-            i += 6;
-            mvprintw(i, 0, "--");
-            mvprintw(i, width - 1, "--");
-            continue;
+    if (room_id == 10 || room_id == 11 || room_id == 12) {
+        for (int i = 1; i < height - 1; i++) {
+            mvprintw(i, 0, "|");
+            if (i == 17) {
+                mvprintw(i, 0, "--");
+                mvprintw(i, width - 1, "--");
+                i += 6;
+                mvprintw(i, 0, "--");
+                mvprintw(i, width - 1, "--");
+                continue;
+            }
+            mvprintw(i, width, "|");
         }
-		mvprintw(i, width, "|");
-	}
+    } else if (room_id == 0 || room_id == 1 || room_id == 2) {
+        for (int i = 1; i < height - 1; i++) {
+            mvprintw(i, 0, "|");
+        }
+        for (int i = 1; i < height - 1; i++) {
+            if (i == 17) {
+                mvprintw(i, width - 1, "--");
+                i += 6;
+                mvprintw(i, width - 1, "--");
+                continue;
+            }
+            mvprintw(i, width, "|");
+        }
+    } else if (room_id == 20 || room_id == 21 || room_id == 22) {
+        for (int i = 1; i < height - 1; i++) {
+            mvprintw(i, width, "|");
+        }
+        for (int i = 1; i < height - 1; i++) {
+            if (i == 17) {
+                mvprintw(i, 0, "--");
+                i += 6;
+                mvprintw(i, 0, "--");
+                continue;
+            }
+            mvprintw(i, 0, "|");
+        }
+    }
 
-    mvprintw(height - 4, 70, "\\_____________/");
-    mvprintw(height - 3, 71, "\\___________/");
-    mvprintw(height - 2, 72, "\\ _______ /");
-	mvprintw(height - 1, 0, " ------------------------------------------------------------------------|       |-------------------------------------------------------------------------");
-	attroff(COLOR_PAIR(3));
+    if (room_id == 2 || room_id == 12 || room_id == 22) {
+        mvprintw(height - 1, 0, " ----------------------------------------------------------------------------------------------------------------------------------------------------------");
+    } else {
+        mvprintw(height - 4, 70, "\\_____________/");
+        mvprintw(height - 3, 71, "\\___________/");
+        mvprintw(height - 2, 72, "\\ _______ /");
+        mvprintw(height - 1, 0, " ------------------------------------------------------------------------|       |-------------------------------------------------------------------------");
+    }
+    attroff(COLOR_PAIR(3));
 }
