@@ -84,6 +84,7 @@ int main() {
 
 	//textureManager
 	TextureManager textureManager;
+	AnimatorManager animationManager(textureManager);
 
 	//color pairs
 	init_pair(1, COLOR_GREEN, COLOR_BLACK);
@@ -104,15 +105,10 @@ int main() {
 
 	float time_diff = 0;
 
-	Terrain terrain;
-	Player *player = static_cast<Player*>(terrain.room[1][1].entity_manager->getPlayer());
+	Terrain *terrain = new Terrain(animationManager);
+	Player *player = static_cast<Player*>(terrain->room[1][1].entity_manager->getPlayer());
 
 	BattleManager battleManager;
-
-	Item* relic1 = new Relic(Vec2d(10, 10), 5, RelicType::AttackBoost);
-	Item* relic2 = new Relic(Vec2d(20, 20), 5, RelicType::SpeedBoost);
-	Item* relic3 = new Relic(Vec2d(30, 30), 5, RelicType::HealthBoost);
-	std::vector<Item*> relics = { relic1, relic2, relic3 };
 
 	while (RUNNING) {
 
@@ -120,13 +116,10 @@ int main() {
 		calculateFPS(mtr);
 
 		// Drawing of the Entities goes here.
-		terrain.room[player->terrain_room_x][player->terrain_room_y].drawSelf();
-		for (Item* r : relics) {
-			if (r) {
-				r->drawSelf();
-			}
-		}
-		terrain.room[player->terrain_room_x][player->terrain_room_y].entity_manager->renderAll();
+		terrain->room[player->terrain_room_x][player->terrain_room_y].drawSelf();
+		terrain->room[player->terrain_room_x][player->terrain_room_y].drawRelics();
+		terrain->room[player->terrain_room_x][player->terrain_room_y].entity_manager->renderAll();
+		mvprintw(_rows - 1, 0, "Player Stats [ Health: %d    Attack: %d    Defence: %d    Speed: %d ]  Room ID: %d", player->getHealth(), player->getAttack(), player->getDefence(), player->getSpeed(), terrain->room[player->terrain_room_x][player->terrain_room_y].room_id);
 		
 		displayMetrics(mtr);
 		static_cast<Player*>(player)->displayStats();
@@ -137,31 +130,10 @@ int main() {
 			mvprintw(0, 40, "Collision!!");
 		}
 		*/
-
-		//GateKeeper Collision Detection 
-		GateKeeper *gatekeeper = terrain.room[player->terrain_room_x][player->terrain_room_y].getGatekeeper();
-		if (gatekeeper != nullptr) {
-			if (circleCollisionDetection(terrain.room[player->terrain_room_x][player->terrain_room_y].entity_manager->getPlayer(), { gatekeeper }).size() > 0) {
-				int midY = _rows / 2;
-				int midX = _cols / 2;
-
-				mvprintw(midY, midX - 4, "YOU WON!");
-				mvprintw(midY + 1, midX - 15, "Press any key to restart...");
-				refresh();
-
-				nodelay(stdscr, false);
-				getch();
-				nodelay(stdscr, true);
-
-				terrain.room[player->terrain_room_x][player->terrain_room_y].entity_manager->getPlayer()->setPosition(Vec2d(30.0, 30.0));
-				gatekeeper->setPosition(Vec2d(gatekeeper->rng->getRandomNumber(5, _cols - 5), gatekeeper->rng->getRandomNumber(5, _rows - 5)));
-			    continue;
-			}
-		}
 		
 		// Relics Collision Detection
-		for (Item*& r : relics) {
-			if (r && circleCollisionItem(terrain.room[player->terrain_room_x][player->terrain_room_y].entity_manager->getPlayer(), r, 5.0f)) {
+		for (Item*& r : terrain->room[player->terrain_room_x][player->terrain_room_y].relics) {
+			if (r && circleCollisionItem(terrain->room[player->terrain_room_x][player->terrain_room_y].entity_manager->getPlayer(), r, 5.0f)) {
 
 				Relic* relic = static_cast<Relic*>(r);
 				relic->onPickUp(*static_cast<Player*>(player));
@@ -176,8 +148,6 @@ int main() {
 				getch();
 				nodelay(stdscr, true);
 
-				player->setAttack(player->getAttack() + 20);
-
 				delete r;
 				r = nullptr;
 
@@ -185,16 +155,71 @@ int main() {
 			}
 		}
 
+		//Gatekeeper win state
+		if (terrain->gateKeeper != nullptr &&
+			player->terrain_room_x == terrain->gatekeeperRoomX &&
+			player->terrain_room_y == terrain->gatekeeperRoomY) {
+
+			float distanceX = calculateAbsoluteDistance(player->getPosition().x, terrain->gateKeeper->getPosition().x);
+			float distanceY = calculateAbsoluteDistance(player->getPosition().y, terrain->gateKeeper->getPosition().y);
+
+		
+			if (distanceX < 4.0f && distanceY < 4.0f) {
+				clearScreen();
+				if (player->getRelicCount() >= 3) {
+				
+					mvprintw(15, 45, "GATEKEEPER: Access granted. You have proven yourself worthy!");
+					mvprintw(17, 45, "CONGRATULATIONS, YOU HAVE WON THE GAME!");
+					mvprintw(20, 45, "Do you want to play again? [y/N]");
+					refresh();
+
+					nodelay(stdscr, false);
+					char input = getch();
+					if (input == 'y' || input == 'Y') {
+						
+						player->relicCount = 0;
+						player->setAttack(10);
+						terrain->removeGatekeeper();
+						terrain->positionGatekeeper();
+						delete terrain;
+						terrain = new Terrain(animationManager);
+						player = static_cast<Player*>(terrain->room[1][1].entity_manager->getPlayer());
+					}
+					else {
+						RUNNING = 0;
+					}
+					nodelay(stdscr, true);
+				}
+				else {
+					mvprintw(15, 40, "GATEKEEPER: No, you don't have enough relics.");
+					mvprintw(16, 40, "Bring me first enough relics to win! (Current: %d / 3)", player->getRelicCount());
+					player->setPosition(player->getPosition() - (player->getDirection() * 2));
+					refresh();
+
+					nodelay(stdscr, false);
+					getch();
+					nodelay(stdscr, true);
+				}
+				clearScreen();
+			}
+		}
+	
+
 		// BattleManager Collision Detection 
-		auto collider = circleCollisionDetection(terrain.room[player->terrain_room_x][player->terrain_room_y].entity_manager->getPlayer(), terrain.room[player->terrain_room_x][player->terrain_room_y].entity_manager->getEnemies());
+		auto collider = circleCollisionDetection(terrain->room[player->terrain_room_x][player->terrain_room_y].entity_manager->getPlayer(), terrain->room[player->terrain_room_x][player->terrain_room_y].entity_manager->getEnemies());
 		if (collider.size() > 0) {
 
 			//start battle and save result
-			int battleResult = battleManager.startBattle(terrain.room[player->terrain_room_x][player->terrain_room_y].entity_manager->getPlayer(), collider.front(), 1);
+			auto enemies = getEnemiesInRadius(terrain->room[player->terrain_room_x][player->terrain_room_y].entity_manager->getPlayer(), terrain->room[player->terrain_room_x][player->terrain_room_y].entity_manager->getEnemies(), 20);
+			int battleResult = battleManager.startBattle(terrain->room[player->terrain_room_x][player->terrain_room_y].entity_manager->getPlayer(), enemies);
 
 			//battle won
 			if (battleResult == 1) {
-				terrain.room[player->terrain_room_x][player->terrain_room_y].entity_manager->removeEntity(collider.front());
+				for (Entity* enemy : enemies) {
+					if (enemy) {
+						terrain->room[player->terrain_room_x][player->terrain_room_y].entity_manager->removeEntity(enemy);
+					}
+				}
 			}
 			//battle lost
 			else {
@@ -207,7 +232,7 @@ int main() {
 		refresh();
 
 		int c = getch(stdin);
-		keyDispatcher(mtr, c, &terrain, terrain.room[player->terrain_room_x][player->terrain_room_y].entity_manager);
+		keyDispatcher(mtr, c, terrain, terrain->room[player->terrain_room_x][player->terrain_room_y].entity_manager);
 
 		// Sleep so much as we need to keep us at 60 fps. 
 		time_diff = mtr.deltaTime > 0.016666 ? 0 : (0.016666 - mtr.deltaTime) * 100000;

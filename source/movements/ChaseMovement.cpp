@@ -1,11 +1,14 @@
 #include "headers/movements/ChaseMovement.h"
 #include "headers/general_funcs.h"
+#include "headers/textures/TextureManager.h"
+#include "headers/textures/AsciiTexture.h"
 
-ChaseMovement::ChaseMovement(Entity* targetPlayer, Entity* self) : target(targetPlayer), self(self) {
+ChaseMovement::ChaseMovement(Entity* targetPlayer, Entity* self, int speed, int aggressionRadius) : target(targetPlayer), self(self), speed(speed), aggressionRadius(aggressionRadius) {
     type = chase_movement;
     movementName = "chaseMovement";
-    counter = 0;
+    speedCounter = 0;
     simpleMovementCounter = 0;
+    state = MovementState::IDLE;
     initializeWalkable();
 }
 
@@ -24,9 +27,31 @@ void ChaseMovement::initializeWalkable() {
     minHeight = 0;
 }
 
+void ChaseMovement::setTextureForState() {
+    TextureManager texManager;
+    auto position = self->getPosition();
+    std::shared_ptr<AsciiTexture> tex;
+
+    switch (state) {
+    case IDLE:
+        tex = texManager.getTexture("neutralChaseEnemy");
+        attron(COLOR_PAIR(3));
+        tex->printTexture(position.y, position.x);
+        attroff(COLOR_PAIR(3));
+        break;
+    case AGGRESSIVE:
+        tex = texManager.getTexture("aggressiveChaseEnemy");
+        attron(COLOR_PAIR(4));
+        tex->printTexture(position.y, position.x);
+        attroff(COLOR_PAIR(4));
+        break;
+    }
+}
+
 // Min Max Terrain Grenzen ueberpruefen
 void ChaseMovement::movingPatern(Vec2d& pos, Vec2d& min, Vec2d& max, int moveAmountX, int moveAmountY) {
-    if (counter == 3) {
+    setTextureForState();
+    if (speedCounter == speed) {
 
         int realX = pos.x;
         int realY = pos.y;
@@ -34,8 +59,9 @@ void ChaseMovement::movingPatern(Vec2d& pos, Vec2d& min, Vec2d& max, int moveAmo
         Vec2d pos_cache = pos;
         Vec2d desired_Point = target->getPosition();
 
-        if (inAggressionRadius(target, self, 15)) {
+        if (inAggressionRadius(target, self, 20)) {
             // if in aggression radius follow player
+            state = AGGRESSIVE;
 
             int xDistance = std::abs(desired_Point.x - realX);
             int yDistance = std::abs(desired_Point.y - realY);
@@ -66,6 +92,7 @@ void ChaseMovement::movingPatern(Vec2d& pos, Vec2d& min, Vec2d& max, int moveAmo
             }
         }
         else {
+            state = IDLE;
             // else simple movement
             switch (simpleMovementCounter) {
             case 0:
@@ -99,9 +126,9 @@ void ChaseMovement::movingPatern(Vec2d& pos, Vec2d& min, Vec2d& max, int moveAmo
         Vec2d diff = pos - pos_cache;
         min += diff;
         max += diff;
-        counter = 0;
+        speedCounter = 0;
     }
     else {
-        counter++;
+        speedCounter++;
     }
 }

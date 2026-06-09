@@ -55,6 +55,6 @@ private:
 
 public:
 	BattleManager();
-	int startBattle(Entity* hero, Entity* enemy, int enemyCount);
+	int startBattle(Entity* hero, std::vector<Entity*>& enemies);
 };
 #endif

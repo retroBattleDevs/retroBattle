@@ -14,25 +14,31 @@ BattleManager::BattleManager(){
 	availableMoves.push_back(new AttackMove("Risky Punch", 30, 50));
 	availableMoves.push_back(new HealMove("Weak Heal", 100, 15));
 	availableMoves.push_back(new HealMove("Strong Heal", 30, 50));
-	availableMoves.push_back(new BuffMove("Focus", 100, 2, TargetStat::ATTACK, true));   // Buff
-	availableMoves.push_back(new BuffMove("Sprint", 100, 2, TargetStat::SPEED, true));    // Buff
-	availableMoves.push_back(new BuffMove("Armor Break", 85, 1, TargetStat::DEFENSE, false));  // Debuff
+	availableMoves.push_back(new BuffMove("Attack Buff", 100, 2, TargetStat::ATTACK, true));   // Buff
+	availableMoves.push_back(new BuffMove("Speed DeBuff", 100, 2, TargetStat::SPEED, true));    // Buff
+	availableMoves.push_back(new BuffMove("Dfns Debuff", 85, 1, TargetStat::DEFENSE, false));  // Debuff
 }
 
-int BattleManager::startBattle(Entity* hero, Entity* enemy, int enemyCount) {
+int BattleManager::startBattle(Entity* hero, std::vector<Entity*>& enemies) {
 
 	hero->resetBuffStages();
-	enemy->resetBuffStages();
+	for (Entity* enemy : enemies) {
+		if (enemy) {
+			enemy->resetBuffStages();
+		}
+	}
 
 	entityList.push_back(hero);
 
-	entityList.push_back(enemy);
-	for (int i = 1;i < enemyCount;i++) {
-		turnCounter++;
-		entityList.push_back(enemy);
+	for (Entity* enemy : enemies) {
+		if (enemy) {
+			entityList.push_back(enemy);
+			turnCounter++;
+		}
 	}
 
-	totalEntities += enemyCount;
+
+	totalEntities += 1 + static_cast<int>(enemies.size()) - 1;
 	calculateTurnOrder();
 
 	wclear(stdscr);
@@ -105,9 +111,12 @@ void BattleManager::calculateTurnOrder(){
 	});
 }
 
-void BattleManager::moveSelectAction(int& selectedMove,int input){
+void BattleManager::moveSelectAction(int& selectedMove, int input){
 	//heros turn
 	if (isHerosTurn()) {
+		if (input == -1) {
+			
+		}
 		attron(COLOR_PAIR(1));
 		mvprintw(23, 2, "Heros turn:");
 		attroff(COLOR_PAIR(1));
@@ -141,11 +150,11 @@ void BattleManager::moveSelectAction(int& selectedMove,int input){
 		attron(COLOR_PAIR(2));
 		mvprintw(23, 2, "Enemys turn:");
 		attroff(COLOR_PAIR(2));
-		printELog("Chossing move");
+		printELog("Choosing move");
 		refresh();
 		Sleep(2000);
 		int randomIdx = rand() % availableMoves.size();
-		selectedMove = (randomIdx + 1);
+		selectedMove = (randomIdx);
 		changeState(targetSelect);
 	}
 }
@@ -191,8 +200,9 @@ void BattleManager::targetSelectAction(int& selectedMove, int& selectedTarget,in
 				}
 				break;
 			case ' ':
-				if (selectedMove != -1);
-				changeState(performSelectedMove);
+				if (selectedTarget != -1) {
+					changeState(performSelectedMove);
+				}
 			default:
 				break;
 			}
@@ -327,10 +337,6 @@ bool BattleManager::isHerosTurn() const{
 }
 
 void BattleManager::resetForNextBattle(){
-	for (int i = 2;i < totalEntities;i++) {
-		delete(entityList[i]);
-	}
-	
 	entityList = {};
 	turnCounter = 0;
 	currentTurn = 0;
@@ -389,7 +395,9 @@ void BattleManager::DrawUI(int selectedMove,int selectedTarget) {
 	printHeroMoves(selectedMove);
 	printEnemyStats(selectedTarget);
 	drawBackGround(15,40);
-	drawEnemy(12,120);
+	for (int i = 1;i < totalEntities;i++) {
+		drawEnemy(12, 90 + (15 * i));
+	}
 	drawHero(3,14);
 }
 

@@ -42,6 +42,8 @@ add_executable (
 	"source/movements/GuardingMovement.cpp"
 	"source/enemies/Spider.cpp" 
 	"source/enemies/Snake.cpp"
+	"source/textures/animator.cpp"
+	"source/textures/animationManager.cpp"
 )
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)

@@ -115,7 +115,7 @@ void EntityManager::initializeWalkable() {
 bool EntityManager::canWalkTo(Entity *e, Vec2d newPosition) const {
 	Vec2d newMin = e->min - (e->getPosition() - newPosition);
 	Vec2d newMax = e->max - (e->getPosition() - newPosition);
-	if (newMin.x < this->minWidth || newMax.x >= this->maxWidth || newMin.y < this->minHeight || newMax.y >= maxHeight) {
+	if (newMin.x < this->minWidth || newMax.x >= this->maxWidth || newMin.y < this->minHeight || newMax.y >= maxHeight - 1) {
 		return false;
 	}
 	return true;

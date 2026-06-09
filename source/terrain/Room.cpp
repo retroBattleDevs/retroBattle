@@ -1,10 +1,17 @@
 #include "headers/terrain/Room.h"
+#include "headers/Vec2D.h"
+#include "headers/general_funcs.h"
+#include "headers/textures/TextureManager.h"
+#include "headers/textures/AnimatorManager.h"
+
 
 Room::Room() {
 	width = 0;
 	height = 0;
     entity_manager = nullptr;
     room_init = 1;
+    seed_1 = rand() % 100;
+    seed_2 = rand() % 1000;
 }
 
 Room::Room(const int newWidth, const int newHeight) {
@@ -12,6 +19,8 @@ Room::Room(const int newWidth, const int newHeight) {
 	height = newHeight - 1;
     entity_manager = nullptr;
     room_init = 1;
+    seed_1 = rand() % 100;
+    seed_2 = rand() % 1000;
 }
 
 Room::~Room() {
@@ -74,14 +83,19 @@ GateKeeper *Room::getGatekeeper() {
 void Room::drawSelf() const {
     
     int pos_x = 0, pos_y = 0;
-	attron(COLOR_PAIR(3));
-	mvprintw(0, 0, " ------------------------------------------------------------------------|       |-------------------------------------------------------------------------");
-    mvprintw(1, 0, "                                                                        /_________\\");
-    mvprintw(2, 0, "                                                                        |_________|");
-    mvprintw(3, 0, "                                                                       /___________\\");
+
+    attron(COLOR_PAIR(3));
+    if (room_id == 0 || room_id == 10 || room_id == 20) {
+        mvprintw(0, 0, " ----------------------------------------------------------------------------------------------------------------------------------------------------------");
+    } else {
+        mvprintw(0, 0, " ------------------------------------------------------------------------|       |-------------------------------------------------------------------------");
+        mvprintw(1, 0, "                                                                        /_________\\");
+        mvprintw(2, 0, "                                                                        |_________|");
+        mvprintw(3, 0, "                                                                       /___________\\");
+    }
     attroff(COLOR_PAIR(3));
 
-    std::srand(100);
+    std::srand(seed_1);
     for (int i = 0; i < 10; i++) {
         pos_x = std::rand() % 150 + 1;
         pos_y = std::rand() % 39 + 5;
@@ -96,7 +110,7 @@ void Room::drawSelf() const {
         attroff(COLOR_PAIR(7));
     }
 
-    std::srand(1000);
+    std::srand(seed_2);
     for (int i = 0; i < 7; i++) {
         pos_x = std::rand() % 145 + 1;
         pos_y = std::rand() % 39 + 8;
@@ -113,22 +127,110 @@ void Room::drawSelf() const {
     }
 
     attron(COLOR_PAIR(3));
-	for (int i = 1; i < height; i++) {
-		mvprintw(i, 0, "|");
-        if (i == 17) {
-            mvprintw(i, 0, "--");
-            mvprintw(i, width - 1, "--");
-            i += 6;
-            mvprintw(i, 0, "--");
-            mvprintw(i, width - 1, "--");
-            continue;
+    if (room_id == 10 || room_id == 11 || room_id == 12) {
+        for (int i = 1; i < height - 1; i++) {
+            mvprintw(i, 0, "|");
+            if (i == 17) {
+                mvprintw(i, 0, "--");
+                mvprintw(i, width - 1, "--");
+                i += 6;
+                mvprintw(i, 0, "--");
+                mvprintw(i, width - 1, "--");
+                continue;
+            }
+            mvprintw(i, width, "|");
         }
-		mvprintw(i, width, "|");
-	}
+    } else if (room_id == 0 || room_id == 1 || room_id == 2) {
+        for (int i = 1; i < height - 1; i++) {
+            mvprintw(i, 0, "|");
+        }
+        for (int i = 1; i < height - 1; i++) {
+            if (i == 17) {
+                mvprintw(i, width - 1, "--");
+                i += 6;
+                mvprintw(i, width - 1, "--");
+                continue;
+            }
+            mvprintw(i, width, "|");
+        }
+    } else if (room_id == 20 || room_id == 21 || room_id == 22) {
+        for (int i = 1; i < height - 1; i++) {
+            mvprintw(i, width, "|");
+        }
+        for (int i = 1; i < height - 1; i++) {
+            if (i == 17) {
+                mvprintw(i, 0, "--");
+                i += 6;
+                mvprintw(i, 0, "--");
+                continue;
+            }
+            mvprintw(i, 0, "|");
+        }
+    }
 
-    mvprintw(height - 3, 70, "\\_____________/");
-    mvprintw(height - 2, 71, "\\___________/");
-    mvprintw(height - 1, 72, "\\ _______ /");
-	mvprintw(height, 0, " ------------------------------------------------------------------------|       |-------------------------------------------------------------------------");
-	attroff(COLOR_PAIR(3));
+    if (room_id == 2 || room_id == 12 || room_id == 22) {
+        mvprintw(height - 1, 0, " ----------------------------------------------------------------------------------------------------------------------------------------------------------");
+    } else {
+        mvprintw(height - 4, 70, "\\_____________/");
+        mvprintw(height - 3, 71, "\\___________/");
+        mvprintw(height - 2, 72, "\\ _______ /");
+        mvprintw(height - 1, 0, " ------------------------------------------------------------------------|       |-------------------------------------------------------------------------");
+    }
+    attroff(COLOR_PAIR(3));
+}
+
+void Room::spawnRelics() {
+    TextureManager textureManager;
+    AnimatorManager animationManager(textureManager);
+    //alte Relics aufräumen,falls vorhanden
+    for (Item* r : relics) {
+        delete r;       
+    }
+    relics.clear();
+
+    for (int i = 0; i < 3; i++) {
+        RelicType type;
+        int r = rand() % 4; 
+        if (r == 0) {
+            type = RelicType::AttackBoost;
+        }
+        else if (r == 1) {
+            type = RelicType::SpeedBoost;
+        }
+        else if (r == 2) {
+            type = RelicType::HealthBoost;
+        }
+        else {
+            type = RelicType::DefenceBoost;
+        }
+
+        Vec2d pos(0, 0); // pos ist eigentlich egal, wird in Item Konstruktor random gesetzt!
+
+        Relic* relic = new Relic(pos, 5, type, animationManager.getAnimator("relic"));
+        relics.push_back(relic);
+    }
+}
+
+void Room::drawRelics() const {
+    for (Item* r : relics) {
+        if (r) {
+            r->drawSelf();
+        }
+        
+    }
+}
+
+void Room::updateRelics(Player* player) {
+    for (Item*& r : relics) {
+        if (r && circleCollisionItem(entity_manager->getPlayer(), r, 5.0f)) {
+
+            Relic* relic = static_cast<Relic*>(r);
+            relic->onPickUp(*player);
+
+            delete r;
+            r = nullptr;
+            break;
+
+        }
+    }
 }
