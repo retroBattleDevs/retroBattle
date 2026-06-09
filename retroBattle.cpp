@@ -109,6 +109,7 @@ int main() {
 	Player *player = static_cast<Player*>(terrain->room[1][1].entity_manager->getPlayer());
 
 	BattleManager battleManager;
+	int wantRelics = (rand() % 7) + 3;
 
 	while (RUNNING) {
 
@@ -119,8 +120,8 @@ int main() {
 		terrain->room[player->terrain_room_x][player->terrain_room_y].drawSelf();
 		terrain->room[player->terrain_room_x][player->terrain_room_y].drawRelics();
 		terrain->room[player->terrain_room_x][player->terrain_room_y].entity_manager->renderAll();
-		mvprintw(_rows - 1, 0, "Player Stats [ Health: %d    Attack: %d    Defence: %d    Speed: %d ]  Room ID: %d", player->getHealth(), player->getAttack(), player->getDefence(), player->getSpeed(), terrain->room[player->terrain_room_x][player->terrain_room_y].room_id);
-		
+		mvprintw(_rows - 1, 0, "Player Stats [ Health: %d    Attack: %d    Defence: %d    Speed: %d    Relics: %d ]  Room ID: %d", player->getHealth(), player->getAttack(), player->getDefence(), player->getSpeed(), player->getRelicCount(), terrain->room[player->terrain_room_x][player->terrain_room_y].room_id);
+
 		displayMetrics(mtr);
 		static_cast<Player*>(player)->displayStats();
 
@@ -163,37 +164,41 @@ int main() {
 			float distanceX = calculateAbsoluteDistance(player->getPosition().x, terrain->gateKeeper->getPosition().x);
 			float distanceY = calculateAbsoluteDistance(player->getPosition().y, terrain->gateKeeper->getPosition().y);
 
-		
 			if (distanceX < 4.0f && distanceY < 4.0f) {
 				clearScreen();
-				if (player->getRelicCount() >= 3) {
+				if (player->getRelicCount() >= wantRelics) {
 				
-					mvprintw(15, 45, "GATEKEEPER: Access granted. You have proven yourself worthy!");
-					mvprintw(17, 45, "CONGRATULATIONS, YOU HAVE WON THE GAME!");
-					mvprintw(20, 45, "Do you want to play again? [y/N]");
+					mvprintw(14, 45, "GATEKEEPER: Access granted. You have proven yourself worthy!");
+					mvprintw(16, 45, "CONGRATULATIONS, YOU HAVE WON THE GAME!");
+					mvprintw(18, 45, "Do you want to play again? [y/N]");
 					refresh();
 
 					nodelay(stdscr, false);
-					char input = getch();
-					if (input == 'y' || input == 'Y') {
-						
-						player->relicCount = 0;
-						player->setAttack(10);
-						terrain->removeGatekeeper();
-						terrain->positionGatekeeper();
-						delete terrain;
-						terrain = new Terrain(animationManager);
-						player = static_cast<Player*>(terrain->room[1][1].entity_manager->getPlayer());
+					char input;
+					while (input = getch()) {
+						if (input == 'y' || input == 'Y') {
+							restartGameAnimation((int)(_rows * 0.5f), (int)(_cols * 0.5f));
+							player->relicCount = 0;
+							player->setAttack(10);
+							terrain->removeGatekeeper();
+							terrain->positionGatekeeper();
+							delete terrain;
+							terrain = new Terrain(animationManager);
+							player = static_cast<Player*>(terrain->room[1][1].entity_manager->getPlayer());
+							wantRelics = (rand() % 7) + 3;
+							nodelay(stdscr, true);
+							break;
+						} else if (input == 'n' || input == 'N') {
+							RUNNING = 0;
+							nodelay(stdscr, true);
+							break;
+						}
 					}
-					else {
-						RUNNING = 0;
-					}
-					nodelay(stdscr, true);
 				}
 				else {
 					mvprintw(15, 40, "GATEKEEPER: No, you don't have enough relics.");
-					mvprintw(16, 40, "Bring me first enough relics to win! (Current: %d / 3)", player->getRelicCount());
-					player->setPosition(player->getPosition() - (player->getDirection() * 2));
+					mvprintw(16, 40, "Bring me first enough relics to win! (Current: %d / %d)", player->getRelicCount(), wantRelics);
+					player->setPosition(player->getPosition() - player->getDirection());
 					refresh();
 
 					nodelay(stdscr, false);

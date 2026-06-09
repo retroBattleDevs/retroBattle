@@ -2,6 +2,7 @@
 
 #include <cmath>
 #include <vector>
+#include <Windows.h>
 
 int displayDialog() {
 	mvprintw(20, 60, "Are you sure you want to quit? [y/N]");
@@ -153,6 +154,49 @@ bool circleCollisionItem(Entity* player, Item* item, float radius) {
 	float distance = sqrt(dx * dx + dy * dy);
 
 	return distance < radius;
+}
+
+void restartGameAnimation(int row, int col) {
+	col -= 6;
+
+	refresh();
+    mvprintw(row - 3, col, " :::::::: "); 
+    mvprintw(row - 2, col, ":+:    :+:"); 
+    mvprintw(row - 1, col, "       +:+"); 
+    mvprintw(row, col,     "    +#++: "); 
+    mvprintw(row + 1, col, "       +#+"); 
+    mvprintw(row + 2, col, "#+#    #+#"); 
+    mvprintw(row + 3, col, " ######## ");
+
+	refresh();
+	Sleep(1000);
+    mvprintw(row - 3, col, " :::::::: ");
+    mvprintw(row - 2, col, ":+:    :+:");
+    mvprintw(row - 1, col, "      +:+ ");
+    mvprintw(row, col,     "    +#+   ");
+    mvprintw(row + 1, col, "  +#+     ");
+    mvprintw(row + 2, col, " #+#      ");
+    mvprintw(row + 3, col, "##########");
+
+	refresh();
+	Sleep(1000);
+	mvprintw(row - 3, col, "    :::  ");
+	mvprintw(row - 2, col, "  :+:+:  ");
+	mvprintw(row - 1, col, "    +:+  ");
+	mvprintw(row, col,     "    +#+  ");
+	mvprintw(row + 1, col, "    +#+  ");
+	mvprintw(row + 2, col, "    #+#  ");
+	mvprintw(row + 3, col, "  #######");
+
+	refresh();
+	Sleep(1000);
+	mvprintw(row - 3, col, "  ::::::: ");
+	mvprintw(row - 2, col, " :+:   :+:");
+	mvprintw(row - 1, col, " +:+  :+:+");
+	mvprintw(row, col,     " +#+ + +:+");
+	mvprintw(row + 1, col, " +#+#  +#+");
+	mvprintw(row + 2, col, " #+#   #+#");
+	mvprintw(row + 3, col, "  ####### ");
 }
 
 
