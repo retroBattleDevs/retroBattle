@@ -1,16 +1,13 @@
 #ifndef ROOM_H
 #define ROOM_H
 
-#include "headers/MersenneTwister.h"
 #include "external_libraries/PDCurses/curses.h"
 #include "headers/EntityManager.h"
+#include "headers/Player.h"
 #include "headers/GateKeeper.h"
 #include <vector>
 #include "headers/items/Item.h"
 #include "headers/items/Relic.h"
-
-class Player;
-
 
 class Room {
 	public:
@@ -35,9 +32,7 @@ class Room {
 		void drawRelics() const;
 		void updateRelics(Player* player);
 
-
 	protected:
-		
 
 	private:
 };

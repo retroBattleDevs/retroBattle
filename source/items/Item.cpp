@@ -7,7 +7,7 @@ Item::Item(): position(0, 0) {
 
 Item::Item(const Vec2d& pos): position(pos) {
     position.x = rng.getRandomNumber(2, 153);
-    position.y = rng.getRandomNumber(2, 37);
+    position.y = rng.getRandomNumber(3, 37);
 
 }
 

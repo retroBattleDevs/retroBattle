@@ -11,7 +11,7 @@ public:
 	Player(int id, const int width, const int height, Vec2d position, Animator* animation);
 	~Player();
 
-	void displayStats();
+	void displayStats(const int x, const int y);
 	void hideStats();
 	virtual void drawSelf() const override;
 	void roomCheck(Terrain *terrain, Vec2d &pos);
