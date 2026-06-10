@@ -82,16 +82,24 @@ GateKeeper *Room::getGatekeeper() {
 
 void Room::drawSelf() const {
     
-    int pos_x = 0, pos_y = 0;
+    int pos_x = 0, pos_y = 0, half_height = height * 0.5, half_width = width * 0.5;
 
     attron(COLOR_PAIR(3));
     if (room_id == 0 || room_id == 10 || room_id == 20) {
-        mvprintw(0, 0, " ----------------------------------------------------------------------------------------------------------------------------------------------------------");
+        for (int i = 1; i < width; i++) {
+            mvprintw(0, i, "-");
+        }
     } else {
-        mvprintw(0, 0, " ------------------------------------------------------------------------|       |-------------------------------------------------------------------------");
-        mvprintw(1, 0, "                                                                        /_________\\");
-        mvprintw(2, 0, "                                                                        |_________|");
-        mvprintw(3, 0, "                                                                       /___________\\");
+        for (int i = 1; i < width; i++) {
+            mvprintw(0, i, "-");
+            if (i == half_width - 4) {
+                mvprintw(0, i, "|       |");
+                mvprintw(1, i - 1, "/_________\\");
+                mvprintw(2, i - 1, "|_________|");
+                mvprintw(3, i - 2, "/___________\\");
+                i += 8;
+            }
+        }
     }
     attroff(COLOR_PAIR(3));
 
@@ -130,7 +138,7 @@ void Room::drawSelf() const {
     if (room_id == 10 || room_id == 11 || room_id == 12) {
         for (int i = 1; i < height - 1; i++) {
             mvprintw(i, 0, "|");
-            if (i == 17) {
+            if (i == half_height - 3) {
                 mvprintw(i, 0, "--");
                 mvprintw(i, width - 1, "--");
                 i += 6;
@@ -145,7 +153,7 @@ void Room::drawSelf() const {
             mvprintw(i, 0, "|");
         }
         for (int i = 1; i < height - 1; i++) {
-            if (i == 17) {
+            if (i == half_height - 3) {
                 mvprintw(i, width - 1, "--");
                 i += 6;
                 mvprintw(i, width - 1, "--");
@@ -158,7 +166,7 @@ void Room::drawSelf() const {
             mvprintw(i, width, "|");
         }
         for (int i = 1; i < height - 1; i++) {
-            if (i == 17) {
+            if (i == half_height - 3) {
                 mvprintw(i, 0, "--");
                 i += 6;
                 mvprintw(i, 0, "--");
@@ -169,12 +177,20 @@ void Room::drawSelf() const {
     }
 
     if (room_id == 2 || room_id == 12 || room_id == 22) {
-        mvprintw(height - 1, 0, " ----------------------------------------------------------------------------------------------------------------------------------------------------------");
+        for (int i = 1; i < width; i++) {
+            mvprintw(height - 1, i, "-");
+        }
     } else {
-        mvprintw(height - 4, 70, "\\_____________/");
-        mvprintw(height - 3, 71, "\\___________/");
-        mvprintw(height - 2, 72, "\\ _______ /");
-        mvprintw(height - 1, 0, " ------------------------------------------------------------------------|       |-------------------------------------------------------------------------");
+        for (int i = 1; i < width; i++) {
+            mvprintw(height - 1, i, "-");
+            if (i == half_width - 4) {
+                mvprintw(height - 4, i - 3, "\\_____________/");
+                mvprintw(height - 3, i - 2, "\\___________/");
+                mvprintw(height - 2, i - 1, "\\ _______ /");
+                mvprintw(height - 1, i, "|       |");
+                i += 8;
+            }
+        }
     }
     attroff(COLOR_PAIR(3));
 }

@@ -58,17 +58,20 @@ void Player::hideStats() {
 }
 
 void Player::roomCheck(Terrain *terrain, Vec2d &pos) {
-	if ((pos.x >= 73 && pos.x <= 81) && pos.y == 1) {
+	int width = terrain->room[terrain_room_x][terrain_room_y].width;
+	int height = terrain->room[terrain_room_x][terrain_room_y].height;
+
+	if ((pos.x >= (width * 0.5) - 4 && pos.x <= (width * 0.5) + 4) && pos.y == 1) {
 		if (terrain_room_y > 0) {
 
 			terrain->room[terrain_room_x][terrain_room_y].entity_manager->removePlayer();
 
 			terrain_room_y -= 1;
-			pos.y = terrain->room[terrain_room_x][terrain_room_y].height - 3;
+			pos.y = height - 3;
 			terrain->room[terrain_room_x][terrain_room_y].entity_manager->add(this);
 		}
 	}
-	if ((pos.x >= 73 && pos.x <= 81) && (pos.y == terrain->room[terrain_room_x][terrain_room_y].height - 2)) {
+	if ((pos.x >= (width * 0.5) - 4 && pos.x <= (width * 0.5) + 4) && (pos.y == height - 2)) {
 		if (terrain_room_y < 2) {
 
 			terrain->room[terrain_room_x][terrain_room_y].entity_manager->removePlayer();
@@ -78,17 +81,17 @@ void Player::roomCheck(Terrain *terrain, Vec2d &pos) {
 			terrain->room[terrain_room_x][terrain_room_y].entity_manager->add(this);
 		}
 	}
-	if (pos.x == 1 && (pos.y >= 19 && pos.y <= 21)) {
+	if (pos.x == 1 && (pos.y >= (height * 0.5) - 1 && pos.y <= (height * 0.5) + 1)) {
 		if (terrain_room_x > 0) {
 
 			terrain->room[terrain_room_x][terrain_room_y].entity_manager->removePlayer();
 
 			terrain_room_x -= 1;
-			pos.x = 153;
+			pos.x = width - 2;
 			terrain->room[terrain_room_x][terrain_room_y].entity_manager->add(this);
 		}
 	}
-	if (pos.x == 154 && (pos.y >= 19 && pos.y <= 21)) {
+	if (pos.x == width - 1 && (pos.y >= (height * 0.5) - 1 && pos.y <= (height * 0.5) + 1)) {
 		if (terrain_room_x < 2) {
 
 			terrain->room[terrain_room_x][terrain_room_y].entity_manager->removePlayer();
