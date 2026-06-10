@@ -40,7 +40,7 @@ void keyDispatcher(metrics& mtr, const char c, Terrain *terrain, EntityManager *
 		case 'i':
 			if (!player->showStats) {
 				player->showStats = 1;
-				player->displayStats();
+				//player->displayStats(1, 156-16);
 			} else {
 				player->hideStats();
 			}
@@ -123,7 +123,7 @@ int main() {
 		mvprintw(_rows - 1, 0, "Player Stats [ Health: %d    Attack: %d    Defence: %d    Speed: %d    Relics: %d ]  Room ID: %d", player->getHealth(), player->getAttack(), player->getDefence(), player->getSpeed(), player->getRelicCount(), terrain->room[player->terrain_room_x][player->terrain_room_y].room_id);
 
 		displayMetrics(mtr);
-		static_cast<Player*>(player)->displayStats();
+		static_cast<Player*>(player)->displayStats(1, _cols - 46);
 
 		// Collision detection and response goes here
 		/*

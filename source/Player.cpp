@@ -37,17 +37,17 @@ void Player::drawSelf() const {
 	attroff(COLOR_PAIR(1));
 }
 
-void Player::displayStats() {
+void Player::displayStats(const int x, const int y) {
 	if (showStats) {
 		if (statsWindow == nullptr) {
-			statsWindow = subwin(stdscr, 5, 45, 1, 110);
+			statsWindow = subwin(stdscr, 5, 45, x, y);
 		}
 		wclear(statsWindow);
 		box(statsWindow, 0, 0);
 		mvwprintw(statsWindow, 1, 1, "x: %f    y: %f", getPosition().x, getPosition().y);
 		mvwprintw(statsWindow, 2, 1, "Direction X: %.2f    Direction Y: %.2f", getDirection().x, getDirection().y);
 
-		mvwprintw(statsWindow, 3, 1, "Relics: %d / 5", relicCount);
+		mvwprintw(statsWindow, 3, 1, "Relics: %d", relicCount);
 	}
 }
 
@@ -114,21 +114,3 @@ void Player::addRelic() {
 int Player::getRelicCount() const {
 	return relicCount;
 }
-
-/*
-void Player::drawSelf(std::vector<std::vector<char*>> texture) {
-	for (int y = 0; y < getHeigth(); y++) {
-		for (int x = 0; x < getWidth(); x++) {
-			std::cout << texture[x][y];
-		}
-		std::cout << std::endl;
-	}
-}
-int Player::getHeigth() const {
-	return this->heigth;
-}
-
-int Player::getWidth() const {
-	return this->width;
-}
-*/

@@ -103,10 +103,13 @@ void Room::drawSelf() const {
     }
     attroff(COLOR_PAIR(3));
 
-    std::srand(seed_1);
+    std::mt19937 rg(seed_1);
     for (int i = 0; i < 10; i++) {
-        pos_x = std::rand() % 150 + 1;
-        pos_y = std::rand() % 39 + 5;
+        std::uniform_int_distribution<int>dist_1(1, width - 11);
+        pos_x = dist_1(rg);
+        std::uniform_int_distribution<int>dist_2(5, height - 2);
+        pos_y = dist_2(rg);
+
         attron(COLOR_PAIR(10));
         mvprintw(pos_y - 4, pos_x, "  .-\"\"\"-.");
         mvprintw(pos_y - 3, pos_x, " /* * * *\\");
@@ -118,10 +121,13 @@ void Room::drawSelf() const {
         attroff(COLOR_PAIR(7));
     }
 
-    std::srand(seed_2);
+    rg.seed(seed_2);
     for (int i = 0; i < 7; i++) {
-        pos_x = std::rand() % 145 + 1;
-        pos_y = std::rand() % 39 + 8;
+        std::uniform_int_distribution<int>dist_3(1, width - 12);
+        pos_x = dist_3(rg);
+        std::uniform_int_distribution<int>dist_4(9, height - 1);
+        pos_y = dist_4(rg);
+
         attron(COLOR_PAIR(8));
         mvprintw(pos_y - 8, pos_x + 4, ",*-.");
         mvprintw(pos_y - 7, pos_x + 4, "|  |");
