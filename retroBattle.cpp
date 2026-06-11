@@ -40,7 +40,6 @@ void keyDispatcher(metrics& mtr, const char c, Terrain *terrain, EntityManager *
 		case 'i':
 			if (!player->showStats) {
 				player->showStats = 1;
-				//player->displayStats(1, 156-16);
 			} else {
 				player->hideStats();
 			}
@@ -131,7 +130,7 @@ int main() {
 			mvprintw(0, 40, "Collision!!");
 		}
 		*/
-		
+
 		// Relics Collision Detection
 		for (Item*& r : terrain->room[player->terrain_room_x][player->terrain_room_y].relics) {
 			if (r && circleCollisionItem(terrain->room[player->terrain_room_x][player->terrain_room_y].entity_manager->getPlayer(), r, 5.0f)) {
@@ -194,10 +193,9 @@ int main() {
 							break;
 						}
 					}
-				}
-				else {
-					mvprintw(15, 40, "GATEKEEPER: No, you don't have enough relics.");
-					mvprintw(16, 40, "Bring me first enough relics to win! (Current: %d / %d)", player->getRelicCount(), wantRelics);
+				} else {
+					mvprintw(15, 40, "GATEKEEPER: You don't have enough relics.");
+					mvprintw(16, 40, "Bring me first enough relics to grant Access! (Current: %d / %d)", player->getRelicCount(), wantRelics);
 					player->setPosition(player->getPosition() - player->getDirection());
 					refresh();
 
@@ -208,7 +206,6 @@ int main() {
 				clearScreen();
 			}
 		}
-	
 
 		// BattleManager Collision Detection 
 		auto collider = circleCollisionDetection(terrain->room[player->terrain_room_x][player->terrain_room_y].entity_manager->getPlayer(), terrain->room[player->terrain_room_x][player->terrain_room_y].entity_manager->getEnemies());
@@ -225,12 +222,12 @@ int main() {
 						terrain->room[player->terrain_room_x][player->terrain_room_y].entity_manager->removeEntity(enemy);
 					}
 				}
-			}
-			//battle lost
-			else {
-				//end the program
+			} else {
+				wclear(stdscr);
+				mvprintw((int)(_rows * 0.5f) - 5, (int)(_cols * 0.5f) - 6, "Game Over!");
+				restartGameAnimation((int)(_rows * 0.5f), (int)(_cols * 0.5f));
 				clearScreen();
-				return 0;
+				RUNNING = 0;
 			}
 		}
 
