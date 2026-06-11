@@ -194,4 +194,6 @@ void restartGameAnimation(int row, int col) {
 	mvprintw(row + 1, col, " +#+#  +#+");
 	mvprintw(row + 2, col, " #+#   #+#");
 	mvprintw(row + 3, col, "  ####### ");
+	refresh();
+	Sleep(1000);
 }
