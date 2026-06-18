@@ -3,34 +3,29 @@
 #include "headers/Vec2D.h"
 #include "headers/Player.h"
 
-
-
-Relic::Relic (){}
-
-Relic::Relic(const Vec2d& pos, RelicType type, std::shared_ptr<Animator> animation)
-    : Item(pos), type(type), animation(std::move(animation)) {
+Relic::Relic(const Vec2d& pos, int bonus, RelicType type, Animator* animation)
+    : Item(pos), bonusAmount(bonus), type(type) {
+    this->animation = std::make_shared<Animator>(*animation);
 }
 
 Relic::Relic(const Relic& other)
-    : Item(other), type(other.type), animation(other.animation) {
-}
+    : Item(other), bonusAmount(other.bonusAmount), type(other.type), animation(other.animation) {}
 
 Relic& Relic::operator=(const Relic& other) {
     if (this != &other) {
         Item::operator=(other);
-        
+        bonusAmount = other.bonusAmount;
     }
     return *this;
 }
 
 Relic::Relic(Relic&& other) noexcept
-    : Item(std::move(other)), type(other.type), animation(other.animation) {
-}
+    : Item(std::move(other)), bonusAmount(other.bonusAmount), type(other.type), animation(other.animation) {}
 
 Relic& Relic::operator=(Relic&& other) noexcept {
     if (this != &other) {
         Item::operator=(std::move(other));
-        
+        bonusAmount = other.bonusAmount;
     }
     return *this;
 }
@@ -56,17 +51,21 @@ void Relic::drawSelf() const {
 
 void Relic::onPickUp(Player& player) {
     switch (type) {
-    case RelicType::AttackBoost:
-        player.modifyAttackBuffStage(+1);
-        break;
+        case RelicType::AttackBoost:
+            player.setAttack(player.getAttack() + 10);
+            break;
 
-    case RelicType::SpeedBoost:
-        player.modifySpeedBuffStage(+1);
-        break;
+        case RelicType::SpeedBoost:
+            player.setSpeed(player.getSpeed() + 5);
+            break;
 
-    case RelicType::HealthBoost:
-        player.heal(20);   
-        break;
+        case RelicType::HealthBoost:
+            player.heal(20);   
+            break;
+
+        case RelicType::DefenceBoost:
+            player.setDefence(player.getDefence() + 1);
+            break;
     }
     player.addRelic();
 }

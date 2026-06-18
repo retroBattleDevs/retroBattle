@@ -9,10 +9,7 @@ class Player;
 class Item {
 protected:
     Vec2d position;
-   
-
 public:
- 
     Item();
     Item(const Vec2d& pos);
 
@@ -23,13 +20,11 @@ public:
     Item& operator=(Item&& other) noexcept;  
     virtual ~Item();                         
 
-  
     Vec2d getPosition() const;   
     
     virtual void drawSelf() const = 0;
     virtual void onPickUp(Player& player) = 0;
     MersenneTwister rng;
-
 };
 
 

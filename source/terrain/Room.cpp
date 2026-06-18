@@ -1,6 +1,8 @@
 #include "headers/terrain/Room.h"
 #include "headers/Vec2D.h"
-#include "headers/general_funcs.h"   
+#include "headers/general_funcs.h"
+#include "headers/textures/TextureManager.h"
+#include "headers/textures/AnimatorManager.h"
 
 
 Room::Room() {
@@ -179,6 +181,8 @@ void Room::drawSelf() const {
 }
 
 void Room::spawnRelics() {
+    TextureManager textureManager;
+    AnimatorManager animationManager(textureManager);
     //alte Relics aufräumen,falls vorhanden
     for (Item* r : relics) {
         delete r;       
@@ -187,25 +191,27 @@ void Room::spawnRelics() {
 
     for (int i = 0; i < 3; i++) {
         RelicType type;
-        int r = rand() % 3; 
+        int r = rand() % 4; 
         if (r == 0) {
             type = RelicType::AttackBoost;
         }
         else if (r == 1) {
             type = RelicType::SpeedBoost;
         }
-        else {
+        else if (r == 2) {
             type = RelicType::HealthBoost;
+        }
+        else {
+            type = RelicType::DefenceBoost;
         }
 
         Vec2d pos(0, 0); // pos ist eigentlich egal, wird in Item Konstruktor random gesetzt!
 
-        Relic* relic = new Relic(pos, type, nullptr);
+        Relic* relic = new Relic(pos, 5, type, animationManager.getAnimator("relic"));
         relics.push_back(relic);
     }
-
-    
 }
+
 void Room::drawRelics() const {
     for (Item* r : relics) {
         if (r) {
@@ -214,6 +220,7 @@ void Room::drawRelics() const {
         
     }
 }
+
 void Room::updateRelics(Player* player) {
     for (Item*& r : relics) {
         if (r && circleCollisionItem(entity_manager->getPlayer(), r, 5.0f)) {
@@ -228,6 +235,4 @@ void Room::updateRelics(Player* player) {
         }
     }
 }
-
-    
 
