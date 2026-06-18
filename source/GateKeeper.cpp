@@ -21,7 +21,6 @@ GateKeeper& GateKeeper::operator=(const GateKeeper& other) {
 
 GateKeeper::GateKeeper(GateKeeper&& other) noexcept : Entity(std::move(other)) {}
 
-
 GateKeeper& GateKeeper::operator=(GateKeeper&& other) noexcept {
     if (this != &other) {
         Entity::operator=(std::move(other));}
@@ -29,7 +28,6 @@ GateKeeper& GateKeeper::operator=(GateKeeper&& other) noexcept {
 }
 
 // --- Overridden Methods ---
-
 
 void GateKeeper::drawSelf() const {
     attron(COLOR_PAIR(4));

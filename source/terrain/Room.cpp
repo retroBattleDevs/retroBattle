@@ -82,23 +82,34 @@ GateKeeper *Room::getGatekeeper() {
 
 void Room::drawSelf() const {
     
-    int pos_x = 0, pos_y = 0;
+    int pos_x = 0, pos_y = 0, half_height = height * 0.5, half_width = width * 0.5;
 
     attron(COLOR_PAIR(3));
     if (room_id == 0 || room_id == 10 || room_id == 20) {
-        mvprintw(0, 0, " ----------------------------------------------------------------------------------------------------------------------------------------------------------");
+        for (int i = 1; i < width; i++) {
+            mvprintw(0, i, "-");
+        }
     } else {
-        mvprintw(0, 0, " ------------------------------------------------------------------------|       |-------------------------------------------------------------------------");
-        mvprintw(1, 0, "                                                                        /_________\\");
-        mvprintw(2, 0, "                                                                        |_________|");
-        mvprintw(3, 0, "                                                                       /___________\\");
+        for (int i = 1; i < width; i++) {
+            mvprintw(0, i, "-");
+            if (i == half_width - 4) {
+                mvprintw(0, i, "|       |");
+                mvprintw(1, i - 1, "/_________\\");
+                mvprintw(2, i - 1, "|_________|");
+                mvprintw(3, i - 2, "/___________\\");
+                i += 8;
+            }
+        }
     }
     attroff(COLOR_PAIR(3));
 
-    std::srand(seed_1);
+    std::mt19937 rg(seed_1);
     for (int i = 0; i < 10; i++) {
-        pos_x = std::rand() % 150 + 1;
-        pos_y = std::rand() % 39 + 5;
+        std::uniform_int_distribution<int>dist_1(1, width - 11);
+        pos_x = dist_1(rg);
+        std::uniform_int_distribution<int>dist_2(5, height - 2);
+        pos_y = dist_2(rg);
+
         attron(COLOR_PAIR(10));
         mvprintw(pos_y - 4, pos_x, "  .-\"\"\"-.");
         mvprintw(pos_y - 3, pos_x, " /* * * *\\");
@@ -110,10 +121,13 @@ void Room::drawSelf() const {
         attroff(COLOR_PAIR(7));
     }
 
-    std::srand(seed_2);
+    rg.seed(seed_2);
     for (int i = 0; i < 7; i++) {
-        pos_x = std::rand() % 145 + 1;
-        pos_y = std::rand() % 39 + 8;
+        std::uniform_int_distribution<int>dist_3(1, width - 12);
+        pos_x = dist_3(rg);
+        std::uniform_int_distribution<int>dist_4(9, height - 1);
+        pos_y = dist_4(rg);
+
         attron(COLOR_PAIR(8));
         mvprintw(pos_y - 8, pos_x + 4, ",*-.");
         mvprintw(pos_y - 7, pos_x + 4, "|  |");
@@ -130,7 +144,7 @@ void Room::drawSelf() const {
     if (room_id == 10 || room_id == 11 || room_id == 12) {
         for (int i = 1; i < height - 1; i++) {
             mvprintw(i, 0, "|");
-            if (i == 17) {
+            if (i == half_height - 3) {
                 mvprintw(i, 0, "--");
                 mvprintw(i, width - 1, "--");
                 i += 6;
@@ -145,7 +159,7 @@ void Room::drawSelf() const {
             mvprintw(i, 0, "|");
         }
         for (int i = 1; i < height - 1; i++) {
-            if (i == 17) {
+            if (i == half_height - 3) {
                 mvprintw(i, width - 1, "--");
                 i += 6;
                 mvprintw(i, width - 1, "--");
@@ -158,7 +172,7 @@ void Room::drawSelf() const {
             mvprintw(i, width, "|");
         }
         for (int i = 1; i < height - 1; i++) {
-            if (i == 17) {
+            if (i == half_height - 3) {
                 mvprintw(i, 0, "--");
                 i += 6;
                 mvprintw(i, 0, "--");
@@ -169,6 +183,7 @@ void Room::drawSelf() const {
     }
 
     if (room_id == 2 || room_id == 12 || room_id == 22) {
+<<<<<<< HEAD
         mvprintw(height - 1, 0, " ----------------------------------------------------------------------------------------------------------------------------------------------------------");
     }
     else {
@@ -176,6 +191,22 @@ void Room::drawSelf() const {
         mvprintw(height - 3, 71, "\\___________/");
         mvprintw(height - 2, 72, "\\ _______ /");
         mvprintw(height - 1, 0, " ------------------------------------------------------------------------|       |-------------------------------------------------------------------------");
+=======
+        for (int i = 1; i < width; i++) {
+            mvprintw(height - 1, i, "-");
+        }
+    } else {
+        for (int i = 1; i < width; i++) {
+            mvprintw(height - 1, i, "-");
+            if (i == half_width - 4) {
+                mvprintw(height - 4, i - 3, "\\_____________/");
+                mvprintw(height - 3, i - 2, "\\___________/");
+                mvprintw(height - 2, i - 1, "\\ _______ /");
+                mvprintw(height - 1, i, "|       |");
+                i += 8;
+            }
+        }
+>>>>>>> f0614032eb204b04f78a3167ca41945a5dce6a3b
     }
     attroff(COLOR_PAIR(3));
 }

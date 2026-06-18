@@ -15,12 +15,7 @@ Terrain::Terrain(AnimatorManager& animatorManager) : animatorManager(animatorMan
 	getmaxyx(stdscr, _rows, _cols);
 
 	// ########################  Main Room [1][1] ###############################
-	//MersenneTwister tempRng;
-	//int randX = tempRng.getRandomNumber(5, _cols - 5);
-	//int randY = tempRng.getRandomNumber(5, _rows - 5);
-	
-
-	Player* player = new Player(1, 5, 5, Vec2d(145.0, 30.0), animatorManager.getAnimator("player"));
+	Player* player = new Player(1, 5, 5, Vec2d((int)(_cols * 0.5), (int)(_rows * 0.5)), animatorManager.getAnimator("player"));
 	Enemy* enemy1 = new Enemy(2, 5, 5, Vec2d(60.0, 20.0));
 	Enemy* enemy2 = new Enemy(3, 5, 5, Vec2d(40.0, 30.0));
 	Enemy* enemy3 = new Enemy(4, 5, 5, Vec2d(45.0, 15.0));
@@ -120,7 +115,7 @@ Terrain::Terrain(AnimatorManager& animatorManager) : animatorManager(animatorMan
 	std::vector<Entity*> roomEntities_0_0 = {
 		new Enemy(2, 5, 5, Vec2d(60.0, 20.0)),
 		new Enemy(2, 5, 5, Vec2d(100.0, 30.0)),
-		new Enemy(2, 5, 5, Vec2d(120.0, 38.0)),
+		new Enemy(2, 5, 5, Vec2d(120.0, 37.0)),
 		new Enemy(2, 5, 5, Vec2d(10.0, 15.0))
 	};
 	roomEntities_0_0[0]->movement = new RandomMovement();
@@ -136,7 +131,7 @@ Terrain::Terrain(AnimatorManager& animatorManager) : animatorManager(animatorMan
 	std::vector<Entity*> roomEntities_0_2 = {
 		new Enemy(2, 5, 5, Vec2d(60.0, 20.0)),
 		new Enemy(2, 5, 5, Vec2d(100.0, 30.0)),
-		new Enemy(2, 5, 5, Vec2d(120.0, 38.0)),
+		new Enemy(2, 5, 5, Vec2d(120.0, 37.0)),
 		new Enemy(2, 5, 5, Vec2d(10.0, 15.0))
 	};
 	roomEntities_0_2[1]->movement = new RandomMovement();
@@ -152,7 +147,7 @@ Terrain::Terrain(AnimatorManager& animatorManager) : animatorManager(animatorMan
 	std::vector<Entity*> roomEntities_2_0 = {
 		new Enemy(2, 5, 5, Vec2d(60.0, 20.0)),
 		new Enemy(2, 5, 5, Vec2d(100.0, 30.0)),
-		new Enemy(2, 5, 5, Vec2d(120.0, 38.0)),
+		new Enemy(2, 5, 5, Vec2d(120.0, 37.0)),
 		new Enemy(2, 5, 5, Vec2d(10.0, 15.0))
 	};
 	roomEntities_2_0[0]->movement = new RandomMovement();
@@ -169,7 +164,7 @@ Terrain::Terrain(AnimatorManager& animatorManager) : animatorManager(animatorMan
 	std::vector<Entity*> roomEntities_2_2 = {
 		new Enemy(2, 5, 5, Vec2d(60.0, 20.0)),
 		new Enemy(2, 5, 5, Vec2d(100.0, 30.0)),
-		new Enemy(2, 5, 5, Vec2d(120.0, 38.0)),
+		new Enemy(2, 5, 5, Vec2d(120.0, 37.0)),
 		new Enemy(2, 5, 5, Vec2d(10.0, 15.0))
 	};
 	roomEntities_2_2[0]->movement = new RandomMovement();

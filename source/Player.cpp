@@ -37,17 +37,17 @@ void Player::drawSelf() const {
 	attroff(COLOR_PAIR(1));
 }
 
-void Player::displayStats() {
+void Player::displayStats(const int x, const int y) {
 	if (showStats) {
 		if (statsWindow == nullptr) {
-			statsWindow = subwin(stdscr, 5, 45, 1, 110);
+			statsWindow = subwin(stdscr, 5, 45, x, y);
 		}
 		wclear(statsWindow);
 		box(statsWindow, 0, 0);
 		mvwprintw(statsWindow, 1, 1, "x: %f    y: %f", getPosition().x, getPosition().y);
 		mvwprintw(statsWindow, 2, 1, "Direction X: %.2f    Direction Y: %.2f", getDirection().x, getDirection().y);
 
-		mvwprintw(statsWindow, 3, 1, "Relics: %d / 5", relicCount);
+		mvwprintw(statsWindow, 3, 1, "Relics: %d", relicCount);
 	}
 }
 
@@ -58,17 +58,20 @@ void Player::hideStats() {
 }
 
 void Player::roomCheck(Terrain *terrain, Vec2d &pos) {
-	if ((pos.x >= 73 && pos.x <= 81) && pos.y == 1) {
+	int width = terrain->room[terrain_room_x][terrain_room_y].width;
+	int height = terrain->room[terrain_room_x][terrain_room_y].height;
+
+	if ((pos.x >= (width * 0.5) - 4 && pos.x <= (width * 0.5) + 4) && pos.y == 1) {
 		if (terrain_room_y > 0) {
 
 			terrain->room[terrain_room_x][terrain_room_y].entity_manager->removePlayer();
 
 			terrain_room_y -= 1;
-			pos.y = terrain->room[terrain_room_x][terrain_room_y].height - 3;
+			pos.y = height - 3;
 			terrain->room[terrain_room_x][terrain_room_y].entity_manager->add(this);
 		}
 	}
-	if ((pos.x >= 73 && pos.x <= 81) && (pos.y == terrain->room[terrain_room_x][terrain_room_y].height - 2)) {
+	if ((pos.x >= (width * 0.5) - 4 && pos.x <= (width * 0.5) + 4) && (pos.y == height - 2)) {
 		if (terrain_room_y < 2) {
 
 			terrain->room[terrain_room_x][terrain_room_y].entity_manager->removePlayer();
@@ -78,17 +81,17 @@ void Player::roomCheck(Terrain *terrain, Vec2d &pos) {
 			terrain->room[terrain_room_x][terrain_room_y].entity_manager->add(this);
 		}
 	}
-	if (pos.x == 1 && (pos.y >= 19 && pos.y <= 21)) {
+	if (pos.x == 1 && (pos.y >= (height * 0.5) - 1 && pos.y <= (height * 0.5) + 1)) {
 		if (terrain_room_x > 0) {
 
 			terrain->room[terrain_room_x][terrain_room_y].entity_manager->removePlayer();
 
 			terrain_room_x -= 1;
-			pos.x = 153;
+			pos.x = width - 2;
 			terrain->room[terrain_room_x][terrain_room_y].entity_manager->add(this);
 		}
 	}
-	if (pos.x == 154 && (pos.y >= 19 && pos.y <= 21)) {
+	if (pos.x == width - 1 && (pos.y >= (height * 0.5) - 1 && pos.y <= (height * 0.5) + 1)) {
 		if (terrain_room_x < 2) {
 
 			terrain->room[terrain_room_x][terrain_room_y].entity_manager->removePlayer();
@@ -111,21 +114,3 @@ void Player::addRelic() {
 int Player::getRelicCount() const {
 	return relicCount;
 }
-
-/*
-void Player::drawSelf(std::vector<std::vector<char*>> texture) {
-	for (int y = 0; y < getHeigth(); y++) {
-		for (int x = 0; x < getWidth(); x++) {
-			std::cout << texture[x][y];
-		}
-		std::cout << std::endl;
-	}
-}
-int Player::getHeigth() const {
-	return this->heigth;
-}
-
-int Player::getWidth() const {
-	return this->width;
-}
-*/
