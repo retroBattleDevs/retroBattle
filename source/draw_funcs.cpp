@@ -72,3 +72,19 @@ void drawLogo(const int x, const int y) {
 	std::cout << "\x1b[" << y + 6 << ";" << x << "H" << "\x1b[8m";
 	if (getchar()) return;
 }
+
+void drawCollisionAnimation(){
+	int _rows = 0;
+	int _cols = 0;
+	getmaxyx(stdscr, _rows, _cols);
+	attron(COLOR_PAIR(3));
+	for(int i = 1; i < _rows - 2; i++){
+		mvprintw(i, 1, std::string(_cols - 2, '#').c_str());
+		refresh();
+		Sleep(15);
+
+	}
+	attroff(COLOR_PAIR(3));
+	//emty the input stream
+	while(getch(stdin) != -1){}
+}

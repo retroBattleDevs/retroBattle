@@ -211,6 +211,7 @@ int main() {
 		auto collider = circleCollisionDetection(terrain->room[player->terrain_room_x][player->terrain_room_y].entity_manager->getPlayer(), terrain->room[player->terrain_room_x][player->terrain_room_y].entity_manager->getEnemies());
 		if (collider.size() > 0) {
 
+			drawCollisionAnimation();
 			//start battle and save result
 			auto enemies = getEnemiesInRadius(terrain->room[player->terrain_room_x][player->terrain_room_y].entity_manager->getPlayer(), terrain->room[player->terrain_room_x][player->terrain_room_y].entity_manager->getEnemies(), 20);
 			int battleResult = battleManager.startBattle(terrain->room[player->terrain_room_x][player->terrain_room_y].entity_manager->getPlayer(), enemies);
