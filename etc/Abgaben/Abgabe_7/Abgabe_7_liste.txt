@@ -1,0 +1,10 @@
+Upload of artefacts:
+
+upload all the artefacts you created during your project in one single ZIP archive. 
+Upload all your files in an editable format (pptx, doc,...) use this folder structure:
+
+/application [folder containing your application form]
+/protocols [e.g. review protocol,...]
+/documentation [every type of documentation you created; e.g. architectureal description]
+/SourceCode [sourcecode or link to public repo]
+/presentation [editable file of your presentation]
