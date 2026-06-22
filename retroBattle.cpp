@@ -120,14 +120,9 @@ int main() {
 		terrain->room[player->terrain_room_x][player->terrain_room_y].drawSelf();
 		terrain->room[player->terrain_room_x][player->terrain_room_y].drawRelics();
 		terrain->room[player->terrain_room_x][player->terrain_room_y].entity_manager->renderAll();
-<<<<<<< HEAD
-		mvprintw(_rows - 1, 0, "Player Stats [ Health: %d    Attack: %d    Defence: %d    Speed: %d ]  Room ID: %d", player->getHealth(), player->getAttack(), player->getDefence(), player->getSpeed(), terrain->room[player->terrain_room_x][player->terrain_room_y].room_id);
 
-		
-=======
 		mvprintw(_rows - 1, 0, "Player Stats [ Health: %d    Attack: %d    Defence: %d    Speed: %d    Relics: %d ]  Room ID: %d", player->getHealth(), player->getAttack(), player->getDefence(), player->getSpeed(), player->getRelicCount(), terrain->room[player->terrain_room_x][player->terrain_room_y].room_id);
 
->>>>>>> f0614032eb204b04f78a3167ca41945a5dce6a3b
 		displayMetrics(mtr);
 		static_cast<Player*>(player)->displayStats(1, _cols - 46);
 
