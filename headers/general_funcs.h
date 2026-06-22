@@ -16,6 +16,7 @@ std::vector<Entity*> collisionDetectionBoundinBox(Entity* player, std::vector<En
 std::vector<Entity*> circleCollisionDetection(Entity* player, std::vector<Entity*> enemies);
 float getRadius(Entity *entity);
 bool circleCollisionItem(Entity* player, Item* item, float radius);
+void restartGameAnimation(int row, int col);
 
 std::vector<Entity*> circleCollisionDetectionAggressionRadius(Entity* player, std::vector<Entity*> enemies, int radius);
 std::vector<Entity*> getEnemiesInRadius(Entity* player, std::vector<Entity*> enemies, int radius);
